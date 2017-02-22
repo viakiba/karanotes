@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="haust.vk.dao.UserinfoDao" >
+	<!-- 注册 -->
+	<insert id="registerUserInfo" parameterType="java.util.Map">
+		insert into userinfo(user_id,user_email,user_name,user_password,user_path) values(#{user_id},#{user_email},#{user_name},#{user_password},#{user_path})
+	</insert>
+	<!-- 登录 -->
+	<select id="loginUserInfo" parameterType="java.util.Map" resultType="haust.vk.entity.Userinfo">
+		select * from userinfo where user_email= #{user_email} AND user_password= #{user_password}
+	</select>
+	<!-- 查找用户 -->
+	<select id="selectUserByEmail" parameterType="String" resultType="haust.vk.entity.Userinfo">
+		select * from userinfo where user_email=#{user_email} limit 0,1
+	</select>
+	
+</mapper>

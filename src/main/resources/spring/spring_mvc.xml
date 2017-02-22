@@ -12,7 +12,15 @@
 	
 	<!-- 本配置文件 mvc-dispatcher的DispatcherServlet使用， 提供其相关的Spring MVC配置-->
 	<context:annotation-config />   
-	
+	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
+	  <property name="messageConverters">
+	   <list>
+	    <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter" >
+	    	<property name="supportedMediaTypes" value="application/json;charset=UTF-8">  	</property>
+	    </bean>
+	   </list>
+	  </property>
+ 	</bean>
 	<!--  注册controller DispatcherServlet上下文， 只管理@Controller类型的bean， 忽略其他型的bean, 如@Service -->
 	<context:component-scan base-package="haust.vk.*">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
@@ -20,7 +28,7 @@
 	
 	<!-- HandlerMapping, 无需配置， Spring MVC可以默认启动。 DefaultAnnotationHandlerMappingannotation-driven HandlerMapping -->
 	<!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 -->
-	<mvc:annotation-driven /> 
+	<mvc:annotation-driven />
 	
 	<!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->
 	<!-- 视图解析器 -->
@@ -43,7 +51,7 @@
                 <!-- 遇到MaxUploadSizeExceededException异常时，自动跳转到/WEB-INF/error_fileupload.jsp页面 -->  
                 <prop key="org.springframework.web.multipart.MaxUploadSizeExceededException">WEB-INF/error_fileupload</prop>  
                 <!-- 处理其它异常(包括Controller抛出的) -->  
-                <prop key="java.lang.Throwable">WEB-INF/500</prop>  
+                <!-- <prop key="java.lang.Throwable">WEB-INF/500</prop>  --> 
             </props>  
         </property>  
     </bean>  

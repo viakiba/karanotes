@@ -22,8 +22,14 @@
 	  <!-- 开启注解 -->
     <context:annotation-config></context:annotation-config>
     <!-- 导入外部的properties配置文件 -->
-	<context:property-placeholder location="classpath:db.properties"/>
-	
+	<!-- <context:property-placeholder location="classpath:db.properties"/> -->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">    
+	    <property name="locations">    
+	        <list>    
+	            <value>classpath*:db.properties</value>    
+	        </list>    
+	    </property>    
+	</bean> 
     <!-- 配置后 mybatis的数据库配置失效 -->
     <bean id="pooledDataSource" class="com.alibaba.druid.pool.DruidDataSource">
     	<!-- 数据库的连接配置 -->

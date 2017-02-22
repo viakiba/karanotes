@@ -6,7 +6,6 @@ public class Userinfo {
     private String user_email;           
     private String user_name;            
     private String user_password;        
-    private String user_salt;          
     private String user_github;     
     private String user_sex;          
     private String user_path;          
@@ -55,14 +54,6 @@ public class Userinfo {
 		this.user_password = user_password;
 	}
 
-	public String getUser_salt() {
-		return user_salt;
-	}
-
-	public void setUser_salt(String user_salt) {
-		this.user_salt = user_salt;
-	}
-
 	public String getUser_github() {
 		return user_github;
 	}
@@ -102,16 +93,15 @@ public class Userinfo {
 	public void setUser_extra(String user_extra) {
 		this.user_extra = user_extra;
 	}
-   	
+
 	@Override
 	public String toString() {
 		return "Userinfo [user_id=" + user_id + ", user_headimg="
-				+ user_headimg + ", user_email=" + user_email
-				+ ", user_name=" + user_name + ", user_password="
-				+ user_password + ", user_salt=" + user_salt
+				+ user_headimg + ", user_email=" + user_email + ", user_name="
+				+ user_name + ", user_password=" + user_password
 				+ ", user_github=" + user_github + ", user_sex=" + user_sex
 				+ ", user_path=" + user_path + ", user_signature="
 				+ user_signature + ", user_extra=" + user_extra + "]";
 	}
-	   
+   	
 }
