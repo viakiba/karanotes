@@ -9,7 +9,7 @@
     	timeToLiveSeconds="30" 
     	overflowToDisk="true"
     	memoryStoreEvictionPolicy="LRU"/> 
-     <cache name="testCache"           
+     <!-- <cache name="testCache"           
 		    maxElementsInMemory="10000" 
 		    maxElementsOnDisk="1000"          
 		    eternal="true"          
@@ -17,5 +17,5 @@
 		    timeToIdleSeconds="0"           
 		    timeToLiveSeconds="600"          
 		    memoryStoreEvictionPolicy="LFU">
-	</cache>
+	</cache> -->
 </ehcache>

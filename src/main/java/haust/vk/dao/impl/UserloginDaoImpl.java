@@ -1,0 +1,25 @@
+package haust.vk.dao.impl;
+
+import javax.annotation.Resource;
+
+import org.apache.ibatis.session.SqlSession;
+import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
+
+import haust.vk.dao.UserloginDao;
+import haust.vk.entity.Userlogin;
+
+@Repository
+public class UserloginDaoImpl implements UserloginDao{
+	
+	@Resource
+	private SqlSessionFactory sqlSessionFactory;
+	
+	@Override
+	public void insertUserlogin(Userlogin userlogin) {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.insert("insertUserlogin", userlogin);
+		os.close();
+	}
+
+}

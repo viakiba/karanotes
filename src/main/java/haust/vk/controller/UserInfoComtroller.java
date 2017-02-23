@@ -37,18 +37,14 @@ public class UserInfoComtroller {
 		System.out.println(userinfoMap.get("user_email"));
 		System.out.println(userinfoMap.get("user_password"));
 		
-		userinfoServiceImpl.registerUser(userinfoMap);
+		userinfoMap = userinfoServiceImpl.registerUser(userinfoMap);
 		
-		Map map = new HashMap<String, String>();
-		map.put("name", "里斯");
-		map.put("sex", "男");
-		
-		return map;
+		return userinfoMap;
 	}
 	
 	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
-	public @ResponseBody Userinfo loginUserinfo(@RequestBody String userinfo){
+	public @ResponseBody Map loginUserinfo(@RequestBody String userinfo){
 		System.out.println(userinfo);
 		try {
 			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
@@ -57,12 +53,12 @@ public class UserInfoComtroller {
 		}
 		System.out.println(userinfo);
 		Map userinfoMap = JSON.parseObject(userinfo, Map.class);
-		Userinfo loginUser = userinfoServiceImpl.loginUser(userinfoMap);
-		if(loginUser == null){
-			return new Userinfo();
+		userinfoMap = userinfoServiceImpl.loginUser(userinfoMap);
+		if(userinfoMap == null){
+			userinfoMap = new HashMap();
+			userinfoMap.put("loginerror", "error");
+			return userinfoMap;
 		}
-		loginUser.setUser_password("");
-		System.out.println("haha");
-		return loginUser;
+		return userinfoMap;
 	}
 }
