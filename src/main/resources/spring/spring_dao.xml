@@ -61,8 +61,8 @@
     <!-- 配置事务切面 即让指定的包下的类需要事务 -->
     <aop:config>
     	<!-- 这里的controller 要按照 上面的find* 等的规范进行命名，以便事务管理 -->
-    	<aop:pointcut expression="bean(*Service)" id="serviceOperation"/>
-    	<!-- <aop:pointcut expression="execution(* haust.vk.service.*.*(..))" id="serviceOperation"/> -->
+    	<!-- <aop:pointcut expression="bean(*Service)" id="serviceOperation"/> -->
+    	<aop:pointcut expression="execution(* haust.vk.service.*.*(..))" id="serviceOperation"/> 
     	<aop:advisor advice-ref="tx" pointcut-ref="serviceOperation"/>
     </aop:config>
     

@@ -30,10 +30,4 @@
       http://www.springframework.org/schema/cache/spring-cache.xsd
       ">
     <context:annotation-config></context:annotation-config>
-   	<!-- 注册Service -->
-	<!-- <bean id="userService" class="haust.vk.service.impl.UserServiceImpl">
-		<property name="userDao" ref="userDao"></property>
-	</bean> -->
-	
-	<!-- <bean id="snowflakeIdGen" class="haust.vk.utils.SnowflakeIdGen" scope="singleton"></bean> -->
 </beans>

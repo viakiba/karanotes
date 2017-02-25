@@ -1,5 +1,6 @@
 package haust.vk.service.impl;
 
+import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -68,7 +69,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userlogin.setToken_id(String.valueOf(token_id));
 		userlogin.setUser_id(String.valueOf(user_id));
 		userlogin.setLogin_device_type( (String) userinfoMap.get("login_device_type"));
-		userlogin.setUser_login_time(String.valueOf( (new Date()).getTime()));
+		userlogin.setUser_login_time(String.valueOf(new Timestamp( (new Date()).getTime())));
 		userloginDaoImpl.insertUserlogin(userlogin);
 		
 		//返回响应的数据
@@ -96,7 +97,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 			userlogin.setToken_id(String.valueOf(token_id));
 			userlogin.setUser_id(loginUserInfo.get(0).getUser_id());
 			userlogin.setLogin_device_type( (String) userinfoMap.get("login_device_type"));
-			userlogin.setUser_login_time(String.valueOf( (new Date()).getTime()));
+			userlogin.setUser_login_time(String.valueOf( new Timestamp( (new Date()).getTime()) ));
 			userloginDaoImpl.insertUserlogin(userlogin);
 			
 			Map userinfomap = new HashMap();

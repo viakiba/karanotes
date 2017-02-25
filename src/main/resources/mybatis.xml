@@ -11,5 +11,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 	</settings>
 	<mappers>
 		<mapper resource="haust/vk/entity/mapper/UserinfoMapper.xml" />
+		<mapper resource="haust/vk/entity/mapper/UserloginMapper.xml" />
 	</mappers>
 </configuration>

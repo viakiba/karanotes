@@ -22,4 +22,11 @@ public class UserloginDaoImpl implements UserloginDao{
 		os.close();
 	}
 
+	@Override
+	public String selectUseridByTokenid(String token_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		String user_id = (String) os.selectOne("", token_id);
+		return user_id;
+	}
+
 }

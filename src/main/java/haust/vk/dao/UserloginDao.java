@@ -10,4 +10,11 @@ public interface UserloginDao {
 	 * @return
 	 */
 	public void insertUserlogin(Userlogin userlogin);
+	
+	/**
+	 * 查找用户id user_id
+	 * @param token_id
+	 * @return
+	 */
+	public String selectUseridByTokenid(String token_id);
 }
