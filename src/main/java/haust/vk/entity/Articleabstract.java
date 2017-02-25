@@ -5,6 +5,7 @@ import java.util.Date;
 public class Articleabstract {
 	private String article_id;
 	private String article_title;
+	private String article_show_img;
 	private String classify_id;
 	private String abstract_content;
 	private String user_id;
@@ -33,7 +34,15 @@ public class Articleabstract {
 	public void setArticle_title(String article_title) {
 		this.article_title = article_title;
 	}
-
+	
+	public void setArticle_show_img(String article_show_img) {
+		this.article_show_img = article_show_img;
+	}
+	
+	public String getArticle_show_img() {
+		return article_show_img;
+	}
+	
 	public String getClassify_id() {
 		return classify_id;
 	}
@@ -117,11 +126,11 @@ public class Articleabstract {
 	@Override
 	public String toString() {
 		return "Articleabstract [article_id=" + article_id + ", article_title="
-				+ article_title + ", classify_id=" + classify_id
-				+ ", abstract_content=" + abstract_content + ", user_id="
-				+ user_id + ", collect_num=" + collect_num + ", read_num="
-				+ read_num + ", praise_num=" + praise_num
-				+ ", article_attachment=" + article_attachment
+				+ article_title + ", article_show_img=" + article_show_img
+				+ ", classify_id=" + classify_id + ", abstract_content="
+				+ abstract_content + ", user_id=" + user_id + ", collect_num="
+				+ collect_num + ", read_num=" + read_num + ", praise_num="
+				+ praise_num + ", article_attachment=" + article_attachment
 				+ ", article_create_time=" + article_create_time
 				+ ", article_update_time=" + article_update_time + ", extra="
 				+ extra + "]";

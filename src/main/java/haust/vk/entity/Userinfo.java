@@ -3,6 +3,7 @@ package haust.vk.entity;
 public class Userinfo {
     private String user_id;              
     private String user_headimg;        
+    private String user_background_img;        
     private String user_email;           
     private String user_name;            
     private String user_password;        
@@ -29,7 +30,15 @@ public class Userinfo {
 	public void setUser_headimg(String user_headimg) {
 		this.user_headimg = user_headimg;
 	}
-
+	
+	public String getUser_background_img() {
+		return user_background_img;
+	}
+	
+	public void setUser_background_img(String user_background_img) {
+		this.user_background_img = user_background_img;
+	}
+	
 	public String getUser_email() {
 		return user_email;
 	}
@@ -97,11 +106,12 @@ public class Userinfo {
 	@Override
 	public String toString() {
 		return "Userinfo [user_id=" + user_id + ", user_headimg="
-				+ user_headimg + ", user_email=" + user_email + ", user_name="
-				+ user_name + ", user_password=" + user_password
-				+ ", user_github=" + user_github + ", user_sex=" + user_sex
-				+ ", user_path=" + user_path + ", user_signature="
-				+ user_signature + ", user_extra=" + user_extra + "]";
+				+ user_headimg + ", user_background_img=" + user_background_img
+				+ ", user_email=" + user_email + ", user_name=" + user_name
+				+ ", user_password=" + user_password + ", user_github="
+				+ user_github + ", user_sex=" + user_sex + ", user_path="
+				+ user_path + ", user_signature=" + user_signature
+				+ ", user_extra=" + user_extra + "]";
 	}
-   	
+
 }

@@ -52,10 +52,11 @@ post提交 <br />
 {
   "tag_content":["tagname1","tagname2","tagname3"],
   "token_id":"456468731321445",
-  "article_content":"正文内容"，
+  "article_content":"正文内容",
   " article_abstract ":{
              " article_title":"文章标题",
-             "classify_id":"文章分类的ID"，
+             "classify_id":"文章分类的ID",
+             "article_show_img":"文章摘要图片",
              "abstract_content":"文章摘要内容"
    }
 }
@@ -65,4 +66,4 @@ post提交 <br />
 {
   "article_id":"834280982847684608"
 }
-```	
+```
