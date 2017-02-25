@@ -13,4 +13,16 @@
 	<insert id="insertArticletag" parameterType="haust.vk.entity.Articletag">
 		insert into articletag(article_id,user_id,tag_content) values(#{article_id},#{user_id},#{tag_content})
 	</insert>
+	
+	<delete id="deleteArticleabstract" parameterType="string">
+		delete from articleabstract where article_id = #{article_id}
+	</delete>
+	
+	<delete id="deleteArticlecontent" parameterType="string">
+		delete from articleabstract where article_id = #{article_id}
+	</delete>
+	
+	<delete id="deleteArticletag" parameterType="string">
+		delete from articleabstract where article_id = #{article_id}
+	</delete>
 </mapper>

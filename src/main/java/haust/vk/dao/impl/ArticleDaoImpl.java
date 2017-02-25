@@ -37,4 +37,25 @@ public class ArticleDaoImpl implements ArticleDao{
 		os.close();
 	}
 
+	@Override
+	public void deleteArticleabstract(String article_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteArticleabstract", article_id);
+		os.close();
+	}
+
+	@Override
+	public void deleteArticlecontent(String article_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteArticlecontent",article_id);
+		os.close();
+	}
+
+	@Override
+	public void deleteArticletag(String article_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteArticletag", article_id);
+		os.close();
+	}
+
 }

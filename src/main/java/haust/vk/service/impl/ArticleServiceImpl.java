@@ -93,15 +93,32 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map deleteArticle(String articleMap) {
-
-		return null;
+		Map articlemap = JSON.parseObject(articleMap, Map.class);
+		
+		Object token_id = articlemap.get("token_id");
+		Object article_id = articlemap.get("article_id");
+		
+		String userid = userloginDaoImpl.selectUseridByTokenid(token_id.toString());
+		
+		articlemap = new HashMap();
+		if(userid != null){
+			try{
+				articleDaoImpl.deleteArticleabstract(article_id.toString());
+				articleDaoImpl.deleteArticlecontent(article_id.toString());
+				articleDaoImpl.deleteArticletag(article_id.toString());
+			}catch(Exception e){
+				articlemap.put("error", "true");
+				return articlemap;
+			}
+		}
+		articlemap.put("error", "flase");
+		return articlemap;
 	}
 
 	@Override
 	public Map selectArticleTitle(String articleMap) {
-
+		
 		return null;
 	}
-	
-	
+
 }

@@ -27,5 +27,11 @@ public class ArticleController {
 		return articleMap;
 	}
 	
+	@RequestMapping(value="/delete",method=RequestMethod.POST)
+	public Map deleteArticle(@RequestBody String deleteinfo){
+		System.out.println(deleteinfo);
+		Map articleMap = articleServiceImpl.deleteArticle(deleteinfo);
+		return articleMap;
+	}
 	
 }

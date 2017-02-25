@@ -67,3 +67,18 @@ post提交 <br />
   "article_id":"834280982847684608"
 }
 ```
+###删除文章
+post提交 <br />
+` http://viakiba.cn:8080/KaraNotes/article/delete` 
+```json
+{
+  "token_id":"834280982847684608",
+  "article_id":"834280982847684608"
+}
+```
+响应
+```json
+{
+  "article_id":"834280982847684608"
+}
+```
