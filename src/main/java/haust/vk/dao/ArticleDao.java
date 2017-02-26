@@ -1,5 +1,6 @@
 package haust.vk.dao;
 
+import java.util.List;
 import java.util.Map;
 
 import haust.vk.entity.Articleabstract;
@@ -37,5 +38,25 @@ public interface ArticleDao {
 	 * @param string
 	 */
 	public void deleteArticletag(String string);
+	/**
+	 * 更新文章标签
+	 * @param article_tag
+	 */
+	public void updateArticletag(Articletag article_tag);
+	/**
+	 * 更新文章摘要
+	 * @param article_abstract
+	 */
+	public void updateArticleabstract(Articleabstract article_abstract);
+	/**
+	 * 更新文章正文
+	 * @param articlecontentmap
+	 */
+	public void updateArticlecontent(Map articlecontentmap);
+	/**
+	 * 查找文章标题
+	 * @param articletitle
+	 */
+	public List<Map> selectArticleLikeTitle(String articletitle);
 	
 }

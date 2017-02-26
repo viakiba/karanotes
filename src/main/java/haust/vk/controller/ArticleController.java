@@ -34,4 +34,10 @@ public class ArticleController {
 		return articleMap;
 	}
 	
+	@RequestMapping(value="/update",method=RequestMethod.POST)
+	public Map updateArticle(@RequestBody String deleteinfo){
+		System.out.println(deleteinfo);
+		Map articleMap = articleServiceImpl.updateArticle(deleteinfo,"m");
+		return articleMap;
+	}
 }

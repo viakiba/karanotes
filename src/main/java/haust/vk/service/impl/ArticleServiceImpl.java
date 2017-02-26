@@ -3,6 +3,7 @@ package haust.vk.service.impl;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -51,9 +52,6 @@ public class ArticleServiceImpl implements ArticleService{
 		//生成articleid  绑定userid  初始化简介的参数
 		long article_id = snowflakeIdUtil.nextId();
 		
-		//生成article_create_time
-		Timestamp article_create_time = new Timestamp((new Date()).getTime());
-		
 		//根据tokenid 查找user_id
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id_object.toString());
 		
@@ -86,12 +84,6 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Map updateArticle(String articleMap) {
-
-		return null;
-	}
-
-	@Override
 	public Map deleteArticle(String articleMap) {
 		Map articlemap = JSON.parseObject(articleMap, Map.class);
 		
@@ -116,9 +108,60 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Map selectArticleTitle(String articleMap) {
+	public Map updateArticle(String deleteinfo, String devicetype) {
+		//处理接收的数据   文章标题    分类   标签   正文     用户token_id  article_id
+		Map parseObject = JSON.parseObject(deleteinfo, Map.class );
 		
-		return null;
+		//标签
+		Object tag_content_object = parseObject.get("tag_content");
+		String articletag = "{\"tag_content\":"+tag_content_object+"}";
+		//正文
+		Object article_content_object = parseObject.get("article_content");
+		String article_content = article_content_object.toString();
+		
+		//token_id
+		Object token_id_object = parseObject.get("token_id");
+		
+		//简要
+		Object article_abstract_object =  parseObject.get("article_abstract");
+		Articleabstract article_abstract = JSON.parseObject(article_abstract_object.toString(), Articleabstract.class);
+		
+		//生成article_update_time
+		Timestamp article_update_time = new Timestamp((new Date()).getTime());
+		
+		//根据tokenid 查找user_id
+		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id_object.toString());
+		
+		//处理实际存入数据库的数据  `articleabstract` `articlecontent` `articletag`
+		//articleabstract  article_create_time使用默认值
+		article_abstract.setUser_id(user_id);
+		//articlecontent 使用Map
+		Map articlecontentmap = new HashMap();
+		articlecontentmap.put("article_id", article_abstract.getArticle_id());
+		articlecontentmap.put("article_content", String.valueOf(article_content));
+		//articletag 
+		Articletag article_tag = new Articletag();
+		article_tag.setArticle_id(article_abstract.getArticle_id());
+		article_tag.setUser_id(user_id);
+		article_tag.setTag_content(articletag);
+		//存入数据库
+		Map mesmap = new HashMap();
+		try{
+			articleDaoImpl.updateArticletag(article_tag);
+			articleDaoImpl.updateArticleabstract(article_abstract);
+			articleDaoImpl.updateArticlecontent(articlecontentmap);
+		}catch(Exception e){
+			//反馈信息
+			mesmap.put("error", "添加失败");
+			return mesmap;
+		}
+		mesmap.put("article_id", article_abstract.getArticle_id());
+		return mesmap;
 	}
 
+	@Override
+	public List<Map> selectArticleTitle(String articletitleMap) {
+		List<Map> articlemap = articleDaoImpl.selectArticleLikeTitle(articletitleMap);
+		return articlemap;
+	}
 }

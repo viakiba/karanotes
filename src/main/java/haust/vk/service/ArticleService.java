@@ -1,5 +1,6 @@
 package haust.vk.service;
 
+import java.util.List;
 import java.util.Map;
 
 public interface ArticleService {
@@ -12,22 +13,23 @@ public interface ArticleService {
 	 */
 	public Map insertArticle(String articleMap,String device_type);
 	/**
-	 * 更新文章
-	 * @param articleMap
-	 * @return
-	 */
-	public Map updateArticle(String articleMap);
-	/**
 	 * 删除文章
 	 * @param articleMap
 	 * @return
 	 */
 	public Map deleteArticle(String articleMap);
 	/**
-	 * 标题
+	 * 更新文章
+	 * @param deleteinfo
+	 * @param string
+	 * @return
+	 */
+	public Map updateArticle(String deleteinfo, String devicetype);
+	/**
+	 * 标题搜索  使用分页
 	 * @param articleMap
 	 * @return
 	 */
-	public Map selectArticleTitle(String articleMap);
+	public List<Map> selectArticleTitle(String articleMap);
 	
 }
