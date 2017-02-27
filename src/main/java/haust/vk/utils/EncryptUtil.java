@@ -43,21 +43,16 @@ public class EncryptUtil {
 	    return hexDigits[d1] + hexDigits[d2];
     }
 
-    public static String MD5Encode(String origin) {
+    public static String MD5Encode(String origin) throws Exception{
 	    String resultString = null;
-	    try {
 	    resultString = new String(origin);
 	    MessageDigest md = MessageDigest.getInstance("MD5");
 	    resultString = byteArrayToHexString(md.digest(resultString.getBytes()));
-	    }
-	    catch (Exception ex) {
-	    ex.printStackTrace();
-	    }
 	    return resultString;
     }
     
     //测试
-    public static void main(String args[]) throws UnsupportedEncodingException {
+    public static void main(String args[]) throws Exception {
         //待加密内容
     	EncryptUtil md5 = new EncryptUtil();
     	String test = md5.MD5Encode("123457");

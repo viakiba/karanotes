@@ -75,7 +75,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 		//返回响应的数据
 		Map userinfo = new HashMap();
 		
-		userinfo.put("token_id", token_id);
+		userinfo.put("token_id", String.valueOf(token_id));
 		userinfo.put("user_name", user_email);
 		userinfo.put("user_path", user_path);
 		
@@ -118,11 +118,14 @@ public class UserinfoServiceImpl implements UserinfoService{
 	public Map selectByEmail(String email) throws Exception {
 		Map map = new HashMap();
 		List<Userinfo> userlist = userinfoDaoImpl.selectUserByEmail(email);
-		if(userlist == null & userlist.size() == 0){
-			map.put("success", 1);
+		if(userlist == null | userlist.size() == 0){
+			map.put("success", -1);
+			map.put("messcode", 1);
 			return map;
 		}
 		Userinfo userinfo = userlist.get(0);
+		map.put("success", 1);
+		map.put("messcode", 2);
 		map.put("user_name", userinfo.getUser_name());
 		return map;
 	}

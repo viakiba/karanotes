@@ -32,21 +32,29 @@ public class UserInfoComtroller {
 			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
 			System.out.println(userinfo);
 			userinfoMap = JSON.parseObject(userinfo, Map.class);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
 			userinfoMap.clear();
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 1);
+			return userinfoMap;
 		}
 		
 		try {
 			userinfoMap = userinfoServiceImpl.registerUser(userinfoMap);
 		} catch (Exception e) {
 			userinfoMap.clear();
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 2);
+			return userinfoMap;
 		}
+		
 		if(userinfoMap == null){
 			userinfoMap = new HashMap();
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 3);
+			return userinfoMap;
 		}
+		userinfoMap.put("success", 1);
 		return userinfoMap;
 	}
 	
@@ -56,7 +64,8 @@ public class UserInfoComtroller {
 		try {
 			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
 			userinfoMap = JSON.parseObject(userinfo, Map.class);
-		} catch (UnsupportedEncodingException e) {
+		} catch (Exception e) {
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 1);
 			return userinfoMap;
 		}
@@ -64,31 +73,33 @@ public class UserInfoComtroller {
 		try {
 			userinfoMap = userinfoServiceImpl.loginUser(userinfoMap);
 		} catch (Exception e) {
+			userinfoMap.clear();
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 2);
 			return userinfoMap;
 		}
 		
 		if(userinfoMap == null ){
 			userinfoMap = new HashMap();
+			userinfoMap.put("success", -1);
 			userinfoMap.put("error", 3);
 			return userinfoMap;
 		}
+		userinfoMap.put("success", 1);
 		return userinfoMap;
 	}
 	
 	@RequestMapping(value="/checkemail")
-	public @ResponseBody Map checkemail(String email){
+	public @ResponseBody Map checkemail(String email) throws UnsupportedEncodingException{
 		Map infoMap = new HashMap();
-		try{
-			email = new String(email.getBytes("ISO-8859-1"),"UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			infoMap.put("error", 1);
-		}
+		email = new String(email.getBytes("ISO-8859-1"),"UTF-8");
 		
 		try{
 			infoMap = userinfoServiceImpl.selectByEmail(email);
 		}catch(Exception e){
-			infoMap.put("error", 2);
+			e.printStackTrace();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 3);
 		}
 		return infoMap;
 	}
