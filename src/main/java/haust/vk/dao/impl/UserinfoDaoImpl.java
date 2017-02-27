@@ -22,14 +22,14 @@ public class UserinfoDaoImpl implements UserinfoDao{
 	}
 	
 	@Override
-	public void registerUserInfo(Map userinfomap) {
+	public void registerUserInfo(Map userinfomap) throws Exception{
 		SqlSession openSession = sqlSessionFactory.openSession();
 		openSession.insert("registerUserInfo", userinfomap);
 		openSession.close();
 	}
 
 	@Override
-	public List<Userinfo> loginUserInfo(Map userinfomap) {
+	public List<Userinfo> loginUserInfo(Map userinfomap) throws Exception {
 		SqlSession openSession = sqlSessionFactory.openSession();
 		List<Userinfo> userList = openSession.selectList("loginUserInfo",userinfomap);
 		openSession.close();
@@ -37,7 +37,7 @@ public class UserinfoDaoImpl implements UserinfoDao{
 	}
 
 	@Override
-	public List<Userinfo> selectUserByEmail(String user_email) {
+	public List<Userinfo> selectUserByEmail(String user_email) throws Exception {
 		SqlSession openSession = sqlSessionFactory.openSession();
 		System.out.println(user_email);
 		List<Userinfo> userList = openSession.selectList("selectUserByEmail",user_email);

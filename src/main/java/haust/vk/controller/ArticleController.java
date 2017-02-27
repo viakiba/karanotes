@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import com.alibaba.fastjson.JSON;
 
 @Controller
-@RequestMapping(value="/article")
+@RequestMapping(value="article")
 public class ArticleController {
 	
 	@Resource
@@ -36,6 +36,13 @@ public class ArticleController {
 	
 	@RequestMapping(value="/update",method=RequestMethod.POST)
 	public Map updateArticle(@RequestBody String deleteinfo){
+		System.out.println(deleteinfo);
+		Map articleMap = articleServiceImpl.updateArticle(deleteinfo,"m");
+		return articleMap;
+	}
+	
+	@RequestMapping(value="/comment",method=RequestMethod.POST)
+	public Map insertCommentArticle(@RequestBody String deleteinfo){
 		System.out.println(deleteinfo);
 		Map articleMap = articleServiceImpl.updateArticle(deleteinfo,"m");
 		return articleMap;

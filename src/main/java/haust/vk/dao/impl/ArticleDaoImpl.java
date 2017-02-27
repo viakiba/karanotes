@@ -7,6 +7,7 @@ import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
 
 import com.alibaba.fastjson.JSON;
 
@@ -14,6 +15,7 @@ import haust.vk.dao.ArticleDao;
 import haust.vk.entity.Articleabstract;
 import haust.vk.entity.Articletag;
 
+@Repository
 public class ArticleDaoImpl implements ArticleDao{
 	
 	@Resource

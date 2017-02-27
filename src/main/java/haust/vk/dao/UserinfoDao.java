@@ -11,18 +11,20 @@ public interface UserinfoDao {
 	 * 注册用户 
 	 * @param userinfo
 	 */
-	public void registerUserInfo(Map userinfomap);
+	public void registerUserInfo(Map userinfomap) throws Exception;
 	
 	/**
 	 * 登录用户
 	 * @param userinfomap
 	 */
-	public List<Userinfo> loginUserInfo(Map userinfomap);
+	public List<Userinfo> loginUserInfo(Map userinfomap) throws Exception;
 	
 	/**
 	 * 通过邮箱查找用户
 	 * @param userinfomap
 	 * @return
 	 */
-	public List<Userinfo> selectUserByEmail(String user_email);
+	public List<Userinfo> selectUserByEmail(String user_email) throws Exception;
+	
+	
 }

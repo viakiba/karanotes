@@ -31,7 +31,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 	private UserloginDao userloginDaoImpl;
 	
 	@Override
-	public Map registerUser(Map userinfoMap) {
+	public Map registerUser(Map userinfoMap) throws Exception{
 		System.out.println("--------------");
 		String user_email = (String) userinfoMap.get("user_email");
 		System.out.println(user_email);
@@ -83,7 +83,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 	}
 
 	@Override
-	public Map loginUser(Map userinfoMap) {
+	public Map loginUser(Map userinfoMap) throws Exception{
 		String user_password =(String) userinfoMap.get("user_password");
 		user_password = encryptUtil.MD5Encode(user_password);
 		userinfoMap.remove("user_password");
@@ -101,7 +101,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 			userloginDaoImpl.insertUserlogin(userlogin);
 			
 			Map userinfomap = new HashMap();
-			userinfomap.put("token_id", token_id);
+			userinfomap.put("token_id", String.valueOf(token_id));
 			userinfomap.put("user_headimg", loginUserInfo.get(0).getUser_headimg());
 			userinfomap.put("user_email", loginUserInfo.get(0).getUser_email());
 			userinfomap.put("user_sex", loginUserInfo.get(0).getUser_sex());
@@ -112,6 +112,19 @@ public class UserinfoServiceImpl implements UserinfoService{
 			return userinfomap;
 		}
 			return null;
+	}
+
+	@Override
+	public Map selectByEmail(String email) throws Exception {
+		Map map = new HashMap();
+		List<Userinfo> userlist = userinfoDaoImpl.selectUserByEmail(email);
+		if(userlist == null & userlist.size() == 0){
+			map.put("success", 1);
+			return map;
+		}
+		Userinfo userinfo = userlist.get(0);
+		map.put("user_name", userinfo.getUser_name());
+		return map;
 	}
 
 	

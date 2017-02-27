@@ -27,38 +27,69 @@ public class UserInfoComtroller {
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public @ResponseBody Map registerUserinfo(@RequestBody String userinfo){
 		System.out.println(userinfo);
+		Map userinfoMap = new HashMap();
 		try {
 			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
+			System.out.println(userinfo);
+			userinfoMap = JSON.parseObject(userinfo, Map.class);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			userinfoMap.clear();
+			userinfoMap.put("error", 1);
 		}
-		System.out.println(userinfo);
-		Map userinfoMap = JSON.parseObject(userinfo, Map.class);
-		System.out.println(userinfoMap.get("user_email"));
-		System.out.println(userinfoMap.get("user_password"));
 		
-		userinfoMap = userinfoServiceImpl.registerUser(userinfoMap);
-		
+		try {
+			userinfoMap = userinfoServiceImpl.registerUser(userinfoMap);
+		} catch (Exception e) {
+			userinfoMap.clear();
+			userinfoMap.put("error", 2);
+		}
+		if(userinfoMap == null){
+			userinfoMap = new HashMap();
+			userinfoMap.put("error", 3);
+		}
 		return userinfoMap;
 	}
 	
-	
 	@RequestMapping(value="/login",method=RequestMethod.POST)
 	public @ResponseBody Map loginUserinfo(@RequestBody String userinfo){
-		System.out.println(userinfo);
+		Map userinfoMap = new HashMap();
 		try {
 			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
+			userinfoMap = JSON.parseObject(userinfo, Map.class);
 		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
+			userinfoMap.put("error", 1);
+			return userinfoMap;
 		}
-		System.out.println(userinfo);
-		Map userinfoMap = JSON.parseObject(userinfo, Map.class);
-		userinfoMap = userinfoServiceImpl.loginUser(userinfoMap);
-		if(userinfoMap == null){
+		
+		try {
+			userinfoMap = userinfoServiceImpl.loginUser(userinfoMap);
+		} catch (Exception e) {
+			userinfoMap.put("error", 2);
+			return userinfoMap;
+		}
+		
+		if(userinfoMap == null ){
 			userinfoMap = new HashMap();
-			userinfoMap.put("loginerror", "error");
+			userinfoMap.put("error", 3);
 			return userinfoMap;
 		}
 		return userinfoMap;
+	}
+	
+	@RequestMapping(value="/checkemail")
+	public @ResponseBody Map checkemail(String email){
+		Map infoMap = new HashMap();
+		try{
+			email = new String(email.getBytes("ISO-8859-1"),"UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			infoMap.put("error", 1);
+		}
+		
+		try{
+			infoMap = userinfoServiceImpl.selectByEmail(email);
+		}catch(Exception e){
+			infoMap.put("error", 2);
+		}
+		return infoMap;
 	}
 }
