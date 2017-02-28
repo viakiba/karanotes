@@ -151,6 +151,29 @@ public class UserinfoServiceImpl implements UserinfoService{
 		map.put("user_name", userinfo.getUser_name());
 		return map;
 	}
+	
+	@Override
+	public Map selectUserloginByTokenid(String token_id) throws Exception {
+		Map map = new HashMap();
+		
+		if(token_id == null | token_id.length() == 0){
+			map.put("success", -1);
+			map.put("messcode", 1);
+			return map;
+		}
+		
+		Userlogin userlogin = userloginDaoImpl.selectUserloginByTokenid(token_id);
+		if(userlogin == null ){
+			map.put("success", -1);
+			map.put("messcode", 1);
+			return map;
+		}
+		
+		map.put("success", 1);
+		map.put("messcode", 2);
+		map.put("failtime", userlogin.getUser_login_time()+15*24*60*60*1000);
+		return map;
+	}
 
 	
 	

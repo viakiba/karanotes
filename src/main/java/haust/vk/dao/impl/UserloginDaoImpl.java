@@ -29,5 +29,13 @@ public class UserloginDaoImpl implements UserloginDao{
 		os.close();
 		return user_id;
 	}
+	
+	@Override
+	public Userlogin selectUserloginByTokenid(String token_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		Userlogin userlogin = (Userlogin) os.selectOne("selectUserloginByTokenid", token_id);
+		os.close();
+		return userlogin;
+	}
 
 }

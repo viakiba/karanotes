@@ -90,7 +90,7 @@ public class UserInfoComtroller {
 	}
 	
 	@RequestMapping(value="/checkemail")
-	public @ResponseBody Map checkemail(String email) throws UnsupportedEncodingException{
+	public @ResponseBody Map checkEmail(String email) throws UnsupportedEncodingException{
 		Map infoMap = new HashMap();
 		email = new String(email.getBytes("ISO-8859-1"),"UTF-8");
 		
@@ -100,6 +100,21 @@ public class UserInfoComtroller {
 			e.printStackTrace();
 			infoMap.put("success", -1);
 			infoMap.put("messcode", 3);
+		}
+		return infoMap;
+	}
+	
+	@RequestMapping(value="/checktoken")
+	public @ResponseBody Map checkToken(String token_id) throws UnsupportedEncodingException{
+		Map infoMap = new HashMap();
+		token_id = new String(token_id.getBytes("ISO-8859-1"),"UTF-8");
+		try{
+			infoMap = userinfoServiceImpl.selectByEmail(token_id);
+		}catch(Exception e){
+			infoMap.put("success", -1);
+			infoMap.put("messcode", "5 不可预见的 异常");
+			e.printStackTrace();
+			return infoMap;
 		}
 		return infoMap;
 	}
