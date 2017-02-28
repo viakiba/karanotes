@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="haust.vk.dao.ClassifyDao" >
+	
+	<insert id="insertClassify" parameterType="haust.vk.entity.Articleclassify">
+		insert into articleclassify(classify_id,user_id,classify_content) values (#{classify_id},#{user_id},#{classify_content})
+	</insert>
+	
+	<delete id="deleteClassify" parameterType="string">
+		delete from articleclassify where classify_id = #{classify_id}
+	</delete>
+	
+	<select id="getallClassify" parameterType="java.util.Map" resultType="haust.vk.entity.Articleclassify">
+		select * from articleclassify where user_id = #{user_id} LIMIT 0,10
+	</select>
+	
+	<select id="getClassifyByContentAndUserid" parameterType="java.util.Map" resultType="string">
+		select classify_content from articleclassify where user_id = #{user_id} and classify_content = #{classify_content} LIMIT 0,1
+	</select>
+	
+	<update id="updateClassify" parameterType="haust.vk.entity.Articleclassify">
+		update articleclassify set classify_content = #{classify_content} where classify_id = #{classify_id}
+	</update>
+</mapper>

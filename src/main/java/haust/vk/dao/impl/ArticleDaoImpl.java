@@ -92,5 +92,12 @@ public class ArticleDaoImpl implements ArticleDao{
 		return articleTitle;
 	}
 
+	@Override
+	public void updateArticleClassify(Map classifyids) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> articleTitle = os.selectList("selectArticleLikeTitle", classifyids);
+		os.close();
+	}
+
 	
 }

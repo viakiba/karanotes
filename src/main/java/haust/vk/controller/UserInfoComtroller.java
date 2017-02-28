@@ -8,6 +8,7 @@ import javax.annotation.Resource;
 
 import haust.vk.entity.Userinfo;
 import haust.vk.service.UserinfoService;
+import haust.vk.utils.JsonToMap;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -24,18 +25,18 @@ public class UserInfoComtroller {
 	@Resource
 	private UserinfoService userinfoServiceImpl;
 	
+	@Resource
+	private JsonToMap jsonToMap;
+	
 	@RequestMapping(value="/register",method=RequestMethod.POST)
 	public @ResponseBody Map registerUserinfo(@RequestBody String userinfo){
-		System.out.println(userinfo);
 		Map userinfoMap = new HashMap();
 		try {
-			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
-			System.out.println(userinfo);
-			userinfoMap = JSON.parseObject(userinfo, Map.class);
+			userinfoMap = jsonToMap.jsonToMapUtil(userinfo);
 		} catch (Exception e) {
 			userinfoMap.clear();
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 1);
+			userinfoMap.put("messcode", 3);
 			return userinfoMap;
 		}
 		
@@ -44,17 +45,18 @@ public class UserInfoComtroller {
 		} catch (Exception e) {
 			userinfoMap.clear();
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 2);
+			userinfoMap.put("messcode", "5 不可预知错误");
 			return userinfoMap;
 		}
 		
 		if(userinfoMap == null){
 			userinfoMap = new HashMap();
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 3);
+			userinfoMap.put("messcode", 1);
 			return userinfoMap;
 		}
 		userinfoMap.put("success", 1);
+		userinfoMap.put("messcode", 2);
 		return userinfoMap;
 	}
 	
@@ -62,11 +64,10 @@ public class UserInfoComtroller {
 	public @ResponseBody Map loginUserinfo(@RequestBody String userinfo){
 		Map userinfoMap = new HashMap();
 		try {
-			userinfo = new String(userinfo.getBytes("ISO-8859-1"),"UTF-8");
-			userinfoMap = JSON.parseObject(userinfo, Map.class);
+			userinfoMap = jsonToMap.jsonToMapUtil(userinfo);
 		} catch (Exception e) {
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 1);
+			userinfoMap.put("messcode", 3);
 			return userinfoMap;
 		}
 		
@@ -75,17 +76,16 @@ public class UserInfoComtroller {
 		} catch (Exception e) {
 			userinfoMap.clear();
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 2);
+			userinfoMap.put("messcode", 2);
 			return userinfoMap;
 		}
 		
 		if(userinfoMap == null ){
 			userinfoMap = new HashMap();
 			userinfoMap.put("success", -1);
-			userinfoMap.put("error", 3);
+			userinfoMap.put("messcode", 1);
 			return userinfoMap;
 		}
-		userinfoMap.put("success", 1);
 		return userinfoMap;
 	}
 	

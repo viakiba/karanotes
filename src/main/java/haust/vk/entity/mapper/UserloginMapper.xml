@@ -4,4 +4,8 @@
 	<insert id="insertUserlogin" parameterType="haust.vk.entity.Userlogin">
 		insert into userlogin(token_id,user_id,login_device_type,user_login_time) values(#{token_id},#{user_id},#{login_device_type},#{user_login_time})
 	</insert>
+	
+	<select id="selectUseridByTokenid" parameterType="string" resultType="string">
+		select user_id from userlogin where token_id = #{token_id}
+	</select>
 </mapper>

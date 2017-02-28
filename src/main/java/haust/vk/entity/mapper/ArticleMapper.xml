@@ -30,6 +30,10 @@
 		update articletag set tag_content=#{tag_content} where article_id = #{article_id}
 	</update>
 	
+	<update id="updateArticleClassify" parameterType="java.util.Map">
+		update articleabstract set classify_id=#{classify_id_new} where classify_id = #{classify_id_old}
+	</update>
+	
 	<update id="updateArticleabstract" parameterType="haust.vk.entity.Articleabstract">
 		update 
 			articleabstract 
@@ -41,7 +45,7 @@
 			article_id = #{article_id}
 	</update>
 	
-	<update id="updateArticleabstract" parameterType="java.util.Map">
+	<update id="updateArticleabstractAtta" parameterType="java.util.Map">
 		update articleabstract set article_attachment = #{article_attachment} where article_id = #{article_id}
 	</update>
 	
@@ -59,4 +63,5 @@
 		LIMIT
 			#{START},#{END}
 	</select>
+	
 </mapper>
