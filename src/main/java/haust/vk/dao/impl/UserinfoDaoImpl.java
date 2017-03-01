@@ -39,10 +39,17 @@ public class UserinfoDaoImpl implements UserinfoDao{
 	@Override
 	public List<Userinfo> selectUserByEmail(String user_email) throws Exception {
 		SqlSession openSession = sqlSessionFactory.openSession();
-		System.out.println(user_email);
 		List<Userinfo> userList = openSession.selectList("selectUserByEmail",user_email);
 		openSession.close();
 		return userList;
+	}
+
+	@Override
+	public Userinfo selectByUserpath(String user_path) throws Exception {
+		SqlSession openSession = sqlSessionFactory.openSession();
+		Userinfo userinfo = openSession.selectOne("selectUserByUserpath",user_path);
+		openSession.close();
+		return userinfo;
 	}
 	
 	

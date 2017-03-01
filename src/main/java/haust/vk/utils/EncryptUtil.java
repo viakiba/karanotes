@@ -1,13 +1,6 @@
 package haust.vk.utils;
 
-import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
-import java.security.SecureRandom;
-
-import javax.crypto.spec.DESKeySpec;
-import javax.crypto.SecretKeyFactory;
-import javax.crypto.SecretKey;
-import javax.crypto.Cipher;
 
 import org.springframework.stereotype.Component;
 

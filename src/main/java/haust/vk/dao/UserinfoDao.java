@@ -25,6 +25,14 @@ public interface UserinfoDao {
 	 * @return
 	 */
 	public List<Userinfo> selectUserByEmail(String user_email) throws Exception;
+
+	/**
+	 * 通过user_path查找用户
+	 * @param user_path
+	 * @return
+	 * @throws Exception
+	 */
+	public Userinfo selectByUserpath(String user_path) throws Exception;
 	
 	
 }

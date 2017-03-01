@@ -13,5 +13,9 @@
 	<select id="selectUserByEmail" parameterType="String" resultType="haust.vk.entity.Userinfo">
 		select * from userinfo where user_email=#{user_email} limit 0,1
 	</select>
+	<!-- 查找用户 -->
+	<select id="selectUserByUserpath" parameterType="String" resultType="haust.vk.entity.Userinfo">
+		select * from userinfo where user_path=#{user_path} limit 0,1
+	</select>
 	
 </mapper>

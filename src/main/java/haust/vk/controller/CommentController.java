@@ -81,9 +81,27 @@ public class CommentController {
 	 */
 	@RequestMapping(value="/selectbyarticleid",method=RequestMethod.POST)
 	public @ResponseBody Map selectCommentByArticleid(@RequestBody String comment){
+		/*Map commentMap = null;
+		try {
+			commentMap = jsonToMap.jsonToMapUtil(comment);
+		} catch (Exception e1) {
+			commentMap = new HashMap();
+			commentMap.put("success", -1);
+			commentMap.put("messcode", 3);
+			e1.printStackTrace();
+			return commentMap;
+		}
 		
-		
-		
+		try {
+			commentMap = commentServiceImpl.deleteComment(commentMap);
+		} catch (Exception e) {
+			commentMap = new HashMap();
+			commentMap.put("success", -1);
+			commentMap.put("messcode", "5 不可预知错误");
+			e.printStackTrace();
+			return commentMap;
+		}
+		return commentMap;*/
 		return null;
 	}
 	

@@ -118,4 +118,36 @@ public class UserInfoComtroller {
 		}
 		return infoMap;
 	}
+	
+	@RequestMapping(value="/checkpath")
+	public @ResponseBody Map checkPath(String user_path) throws UnsupportedEncodingException{
+		Map infoMap = null;
+		user_path = new String(user_path.getBytes("ISO-8859-1"),"UTF-8");
+		try{
+			infoMap = userinfoServiceImpl.selectByUserpath(user_path);
+		}catch(Exception e){
+			infoMap = new HashMap();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", "5 不可预见的 异常");
+			e.printStackTrace();
+			return infoMap;
+		}
+		return infoMap;
+	}
+	
+	@RequestMapping(value="/updateuserinfo")
+	public @ResponseBody Map updateUserinfo(@RequestBody String user_path) throws UnsupportedEncodingException{
+		Map infoMap = null;
+		user_path = new String(user_path.getBytes("ISO-8859-1"),"UTF-8");
+		try{
+			infoMap = userinfoServiceImpl.updateUserinfo(user_path);
+		}catch(Exception e){
+			infoMap = new HashMap();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", "5 不可预见的 异常");
+			e.printStackTrace();
+			return infoMap;
+		}
+		return infoMap;
+	}
 }

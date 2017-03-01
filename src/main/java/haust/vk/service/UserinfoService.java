@@ -34,4 +34,20 @@ public interface UserinfoService {
 	 * @throws Exception
 	 */
 	public Map selectUserloginByTokenid(String token_id) throws Exception;
+	
+	/**
+	 * user_path唯一性检查
+	 * @param user_path
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectByUserpath(String user_path) throws Exception;
+
+	/**
+	 * 修改用户基本信息
+	 * @param user_path
+	 * @return
+	 * @throws Exception
+	 */
+	public Map updateUserinfo(String userinfo) throws Exception;
 }

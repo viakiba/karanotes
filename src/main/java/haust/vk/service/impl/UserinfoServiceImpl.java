@@ -30,6 +30,9 @@ public class UserinfoServiceImpl implements UserinfoService{
 	@Resource
 	private UserloginDao userloginDaoImpl;
 	
+	/**
+	 * 注册
+	 */
 	@Override
 	public Map registerUser(Map userinfoMap) throws Exception{
 		System.out.println("--------------");
@@ -88,6 +91,9 @@ public class UserinfoServiceImpl implements UserinfoService{
 		return userinfo;
 	}
 
+	/**
+	 * 登录
+	 */
 	@Override
 	public Map loginUser(Map userinfoMap) throws Exception{
 		String user_email = userinfoMap.get("user_email").toString();
@@ -135,7 +141,10 @@ public class UserinfoServiceImpl implements UserinfoService{
 		
 		return userinfoMap;
 	}
-
+	
+	/**
+	 * 检查email唯一性
+	 */
 	@Override
 	public Map selectByEmail(String email) throws Exception {
 		Map map = new HashMap();
@@ -152,6 +161,9 @@ public class UserinfoServiceImpl implements UserinfoService{
 		return map;
 	}
 	
+	/**
+	 * 检查token_id有效性
+	 */
 	@Override
 	public Map selectUserloginByTokenid(String token_id) throws Exception {
 		Map map = new HashMap();
@@ -174,7 +186,40 @@ public class UserinfoServiceImpl implements UserinfoService{
 		map.put("failtime", Integer.valueOf(userlogin.getUser_login_time())+15*24*60*60*1000);
 		return map;
 	}
-
 	
+	/**
+	 * 检查user_path唯一性
+	 */
+	@Override
+	public Map selectByUserpath(String user_path) throws Exception {
+		Map map = new HashMap();;
+		if(user_path == null){
+			map.put("success", -1);
+			map.put("messcode", 4);
+			return map;
+		}
+		
+		Userinfo user_name = userinfoDaoImpl.selectByUserpath(user_path);
+		
+		if(user_name == null){
+			map.put("success", 1);
+			map.put("messcode", 2);
+			return map;
+		}
+		
+		map.put("success", -1);
+		map.put("messcode", 1);
+		map.put("user_name", user_name.getUser_name());
+		
+		return map;
+	}
+
+	@Override
+	public Map updateUserinfo(String userinfo) throws Exception {
+		
+		return null;
+	}
+
+
 	
 }
