@@ -171,7 +171,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 		
 		map.put("success", 1);
 		map.put("messcode", 2);
-		map.put("failtime", userlogin.getUser_login_time()+15*24*60*60*1000);
+		map.put("failtime", Integer.valueOf(userlogin.getUser_login_time())+15*24*60*60*1000);
 		return map;
 	}
 

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="haust.vk.dao.CommentDao" >
+	<insert id="insertComment" parameterType="haust.vk.entity.Commentinfo">
+		insert into commentinfo(comment_id ,user_id ,article_id ,comment_content ,reply_id ) values( #{comment_id}, #{user_id}, #{article_id} , #{comment_content}, #{reply_id})
+	</insert>
+	
+	<delete id="deleteComment" parameterType="string">
+		delete from commentinfo where comment_id = #{comment_id} or reply_id = #{comment_id}
+	</delete>
+</mapper>

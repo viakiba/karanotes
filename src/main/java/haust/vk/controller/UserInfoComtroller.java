@@ -109,7 +109,7 @@ public class UserInfoComtroller {
 		Map infoMap = new HashMap();
 		token_id = new String(token_id.getBytes("ISO-8859-1"),"UTF-8");
 		try{
-			infoMap = userinfoServiceImpl.selectByEmail(token_id);
+			infoMap = userinfoServiceImpl.selectUserloginByTokenid(token_id);
 		}catch(Exception e){
 			infoMap.put("success", -1);
 			infoMap.put("messcode", "5 不可预见的 异常");
