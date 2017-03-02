@@ -135,12 +135,68 @@ public class UserInfoComtroller {
 		return infoMap;
 	}
 	
-	@RequestMapping(value="/updateuserinfo")
+	@RequestMapping(value="/updateuserinfo",method=RequestMethod.POST)
 	public @ResponseBody Map updateUserinfo(@RequestBody String user_path) throws UnsupportedEncodingException{
 		Map infoMap = null;
-		user_path = new String(user_path.getBytes("ISO-8859-1"),"UTF-8");
+		try {
+			infoMap = jsonToMap.jsonToMapUtil(user_path);
+		} catch (Exception e1) {
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 3);
+			e1.printStackTrace();
+			return infoMap;
+		}
+
 		try{
-			infoMap = userinfoServiceImpl.updateUserinfo(user_path);
+			infoMap = userinfoServiceImpl.updateUserinfo(infoMap);
+		}catch(Exception e){
+			infoMap = new HashMap();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", "5 不可预见的 异常");
+			e.printStackTrace();
+			return infoMap;
+		}
+		return infoMap;
+	}
+	
+	@RequestMapping(value="/updateuseremail",method=RequestMethod.POST)
+	public @ResponseBody Map updateUserEmail(@RequestBody String useremail) throws UnsupportedEncodingException{
+		Map infoMap = null;
+		try {
+			infoMap = jsonToMap.jsonToMapUtil(useremail);
+		} catch (Exception e1) {
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 3);
+			e1.printStackTrace();
+			return infoMap;
+		}
+		
+		try{
+			infoMap = userinfoServiceImpl.updateUseremail(infoMap);
+		}catch(Exception e){
+			infoMap = new HashMap();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", "5 不可预见的 异常");
+			e.printStackTrace();
+			return infoMap;
+		}
+		return infoMap;
+	}
+	
+	@RequestMapping(value="/updateuserpass",method=RequestMethod.POST)
+	public @ResponseBody Map updateUserPass(@RequestBody String userpass) throws UnsupportedEncodingException{
+		Map infoMap = null;
+		try {
+			infoMap = jsonToMap.jsonToMapUtil(userpass);
+		} catch (Exception e1) {
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 3);
+			e1.printStackTrace();
+			return infoMap;
+		}
+		
+		try{
+			infoMap = userinfoServiceImpl.updateUserpass(infoMap);
 		}catch(Exception e){
 			infoMap = new HashMap();
 			infoMap.put("success", -1);

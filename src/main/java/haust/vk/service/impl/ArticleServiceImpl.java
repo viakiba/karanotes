@@ -248,4 +248,20 @@ public class ArticleServiceImpl implements ArticleService{
 		}
 		return articlemap;
 	}
+
+	@Override
+	public Map selectArticleDetail(String articleid) {
+		/**
+		 * 文章简要  文章正文
+		 */
+		
+		return null;
+	}
+
+
+	@Override
+	public Map selectArticleListByUserpath(String user_path) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

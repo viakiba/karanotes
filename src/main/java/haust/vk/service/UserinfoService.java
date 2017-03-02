@@ -49,5 +49,18 @@ public interface UserinfoService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map updateUserinfo(String userinfo) throws Exception;
+	public Map updateUserinfo(Map infoMap) throws Exception;
+	
+	/**
+	 * 更新用户密码
+	 * @param infoMap
+	 * @return
+	 */
+	public Map updateUseremail(Map infoMap);
+	/**
+	 * 更新用户邮箱
+	 * @param infoMap
+	 * @return
+	 */
+	public Map updateUserpass(Map infoMap);
 }

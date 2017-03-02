@@ -34,5 +34,32 @@ public interface UserinfoDao {
 	 */
 	public Userinfo selectByUserpath(String user_path) throws Exception;
 	
+	/**
+	 * 更改用户头像/背景图
+	 * @param user_path
+	 * @return
+	 * @throws Exception
+	 */
+	public void updateUserimg(Map img) throws Exception;
 	
+	/**
+	 * 更改用户基本信息
+	 * @param user
+	 * @throws Exception
+	 */
+	public void updateUserBaseinfo(Userinfo user) throws Exception;
+	
+	/**
+	 * 更改用户邮箱
+	 * @param user
+	 * @throws Exception
+	 */
+	public int updateUseremail(Map infoMap) throws Exception;
+	
+	/**
+	 * 更改用户密码
+	 * @param infoMap
+	 * @throws Exception
+	 */
+	public int updateUserpass(Map infoMap) throws Exception;
 }

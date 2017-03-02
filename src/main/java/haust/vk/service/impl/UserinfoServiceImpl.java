@@ -215,11 +215,124 @@ public class UserinfoServiceImpl implements UserinfoService{
 	}
 
 	@Override
-	public Map updateUserinfo(String userinfo) throws Exception {
+	public Map updateUserinfo(Map userinfo) throws Exception {
+		String token_id = userinfo.get("token_id").toString();
+		String user_name = userinfo.get("user_name").toString();
+		String user_sex = userinfo.get("user_sex").toString();
+		String user_path = userinfo.get("user_path").toString();
+		String user_signature = userinfo.get("user_signature").toString();
 		
+		if(token_id == null | user_name == null | user_sex == null | user_path == null  ){
+			userinfo.clear();
+			userinfo.put("success", -1);
+			userinfo.put("messcode", 4);
+			return userinfo;
+		}
+		
+		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
+		
+		if(user_id == null){
+			userinfo.clear();
+			userinfo.put("success", -1);
+			userinfo.put("messcode", 1);
+			return userinfo;
+		}
+		
+		Userinfo user = new Userinfo();
+		
+		user.setUser_id(user_id);
+		user.setUser_name(user_name);
+		user.setUser_sex(user_sex);
+		user.setUser_path(user_path);
+		user.setUser_signature(user_signature);
+		
+		userinfoDaoImpl.updateUserBaseinfo(user);
 		return null;
 	}
 
+	@Override
+	public Map updateUseremail(Map infoMap) {
+		String token_id = infoMap.get("token_id").toString();
+		String user_email = infoMap.get("user_email").toString();
+		String user_password = infoMap.get("user_password").toString();
+		
+		if(token_id == null | user_email == null | user_password == null ){
+			infoMap.clear();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 4);
+			return infoMap;
+		}
+		
+		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
+		
+		if(user_id == null){
+			infoMap.clear();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 1);
+			return infoMap;
+		}
+		
+		infoMap.put("user_id", user_id);
+		
+		try {
+			int i = userinfoDaoImpl.updateUseremail(infoMap);
+			if(i == 1){
+				infoMap.put("success", 1);
+				infoMap.put("messcode", 2);
+				return infoMap;
+			}
+		} catch (Exception e) {
+			infoMap.put("success", 1);
+			infoMap.put("messcode", "5 不可描述的错误");
+			e.printStackTrace();
+			return infoMap;
+		}
+		infoMap.put("success", 1);
+		infoMap.put("messcode", "6 未更新");
+		return infoMap;
+	}
+	
+	@Override
+	public Map updateUserpass(Map infoMap) {
+		String token_id = infoMap.get("token_id").toString();
+		String user_password_old = infoMap.get("user_password_old").toString();
+		String user_password_new = infoMap.get("user_password_new").toString();
+		
+		if(token_id == null | user_password_old == null | user_password_new == null ){
+			infoMap.clear();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 4);
+			return infoMap;
+		}
+		
+		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
+		
+		if(user_id == null){
+			infoMap.clear();
+			infoMap.put("success", -1);
+			infoMap.put("messcode", 1);
+			return infoMap;
+		}
+		
+		infoMap.put("user_id", user_id);
+		
+		try {
+			int i = userinfoDaoImpl.updateUserpass(infoMap);
+			if(i == 1){
+				infoMap.put("success", 1);
+				infoMap.put("messcode", 2);
+				return infoMap;
+			}
+		} catch (Exception e) {
+			infoMap.put("success", 1);
+			infoMap.put("messcode", "5 不可描述的错误");
+			e.printStackTrace();
+			return infoMap;
+		}
+		infoMap.put("success", 1);
+		infoMap.put("messcode", "6 未更新");
+		return infoMap;
+	}
 
 	
 }

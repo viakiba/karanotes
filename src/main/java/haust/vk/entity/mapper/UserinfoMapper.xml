@@ -17,6 +17,28 @@
 	<select id="selectUserByUserpath" parameterType="String" resultType="haust.vk.entity.Userinfo">
 		select * from userinfo where user_path=#{user_path} limit 0,1
 	</select>
-	
-	
+	<!-- 更新用户头像/背景图 -->
+	<update id="updateUserimg" parameterType="java.util.Map">
+		update userinfo set 
+			<if test="backimg != null"> user_background_img = #{backimg} </if>
+			<if test="title != null"> user_headimg = #{headimg} </if>
+		where user_id = #{user_id}
+	</update>
+	<!-- 更改用户基本信息 -->
+	<update id="updateUserBaseinfo" parameterType="haust.vk.entity.Userinfo">
+		update userinfo set 
+			user_name = #{user_name},user_sex = #{user_sex},user_path = #{user_path},user_signature=#{user_signature}
+		where user_id = #{user_id}
+	</update>
+	<!-- 更改用户邮箱 -->
+	<update id="updateUseremail" parameterType="haust.vk.entity.Userinfo">
+		update userinfo set 
+			user_name = #{user_name},user_sex = #{user_sex},user_path = #{user_path},user_signature=#{user_signature}
+		where user_id = #{user_id}
+	</update>
+	<!-- 更改用户密码 -->
+	<update id="updateUserpass" parameterType="haust.vk.entity.Userinfo">
+		update userinfo set user_password = #{user_password_new}
+		where user_id = #{user_id} AND user_password = #{user_password_old}
+	</update>
 </mapper>

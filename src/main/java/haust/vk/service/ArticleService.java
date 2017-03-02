@@ -31,5 +31,18 @@ public interface ArticleService {
 	 * @return
 	 */
 	public List<Map> selectArticleTitle(String articleMap) throws Exception;
+	/**
+	 * 拿到文章的详情内容
+	 * @param articleid
+	 * @return
+	 */
+	public Map selectArticleDetail(String articleid) throws Exception;
+	/**
+	 * 拿到个人文章列表
+	 * @param user_path
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectArticleListByUserpath(String user_path) throws Exception;
 	
 }

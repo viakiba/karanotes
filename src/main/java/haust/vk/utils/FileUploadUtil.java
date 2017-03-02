@@ -23,14 +23,14 @@ public class FileUploadUtil {
 	 */
 	public String uploadUserImage(MultipartFile file ,String filetype) throws IOException{
 		String path=null;
-		String imgid = null;
+		String imgname = null;
         if(file != null){  
             //重命名上传后的文件名  
-    		imgid = String.valueOf(snowflakeIdUtil.nextId());
-            path = "d:/images/"+filetype+"/" + imgid;  
+        	imgname = String.valueOf(snowflakeIdUtil.nextId())+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
+            path = "d:/images/"+filetype+"/" + imgname;  
             File localFile = new File(path);
 			file.transferTo(localFile);
         }
-		return imgid;  
+		return imgname;  
 	}
 }

@@ -23,33 +23,63 @@ public class UserinfoDaoImpl implements UserinfoDao{
 	
 	@Override
 	public void registerUserInfo(Map userinfomap) throws Exception{
-		SqlSession openSession = sqlSessionFactory.openSession();
-		openSession.insert("registerUserInfo", userinfomap);
-		openSession.close();
+		SqlSession os = sqlSessionFactory.openSession();
+		os.insert("registerUserInfo", userinfomap);
+		os.close();
 	}
 
 	@Override
 	public List<Userinfo> loginUserInfo(Map userinfomap) throws Exception {
-		SqlSession openSession = sqlSessionFactory.openSession();
-		List<Userinfo> userList = openSession.selectList("loginUserInfo",userinfomap);
-		openSession.close();
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Userinfo> userList = os.selectList("loginUserInfo",userinfomap);
+		os.close();
 		return userList;
 	}
 
 	@Override
 	public List<Userinfo> selectUserByEmail(String user_email) throws Exception {
-		SqlSession openSession = sqlSessionFactory.openSession();
-		List<Userinfo> userList = openSession.selectList("selectUserByEmail",user_email);
-		openSession.close();
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Userinfo> userList = os.selectList("selectUserByEmail",user_email);
+		os.close();
 		return userList;
 	}
 
 	@Override
 	public Userinfo selectByUserpath(String user_path) throws Exception {
-		SqlSession openSession = sqlSessionFactory.openSession();
-		Userinfo userinfo = openSession.selectOne("selectUserByUserpath",user_path);
-		openSession.close();
+		SqlSession os = sqlSessionFactory.openSession();
+		Userinfo userinfo = os.selectOne("selectUserByUserpath",user_path);
+		os.close();
 		return userinfo;
+	}
+
+	@Override
+	public void updateUserimg(Map img) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.update("updateUserimg", img);
+		os.close();
+	}
+
+	@Override
+	public void updateUserBaseinfo(Userinfo user) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.update("updateUserBaseinfo", user);
+		os.close();
+	}
+
+	@Override
+	public int updateUseremail(Map infoMap) {
+		SqlSession os = sqlSessionFactory.openSession();
+		int i = os.update("updateUseremail", infoMap);
+		os.close();
+		return i;
+	}
+	
+	@Override
+	public int updateUserpass(Map infoMap) {
+		SqlSession os = sqlSessionFactory.openSession();
+		int i = os.update("updateUserpass", infoMap);
+		os.close();
+		return i;
 	}
 	
 	
