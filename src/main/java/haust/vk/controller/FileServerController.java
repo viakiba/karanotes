@@ -35,30 +35,35 @@ public class FileServerController {
 	 * @param request
 	 * @return
 	 */
-	@RequestMapping(value="/upload/{filetype}/{token_id}",method=RequestMethod.POST)
-	public @ResponseBody Map FileUpload(@PathVariable String filetype,@PathVariable String token_id, @RequestParam("file") MultipartFile file,HttpServletRequest request){
+	@RequestMapping(value="/upload/{filetype}/{token_id}",method=RequestMethod.POST,consumes={"image/jpeg","image/png","image/jpg"})
+	public @ResponseBody Map FileUpload(@PathVariable String filetype,@PathVariable String token_id, @RequestParam("userimg") MultipartFile file,HttpServletRequest request){
 		Map map = new HashMap();
 		String imgid = null;
 		if("headimg".equals(filetype)){
 			try {
 				imgid = fileUploadUtil.uploadUserImage(file, filetype);
 			} catch (IOException e) {
-				
+				map.put("success", -1);
+				map.put("messcode","7 不可察系统异常" );
 				e.printStackTrace();
+				return map;
 			}
+			map.put("success", 1);
+			map.put("messcode", 2);
+			map.put("imgid", imgid);
 			return map;
-		}
-		
-		if("backimg".equals(filetype)){
+		}else if("backimg".equals(filetype)){
 			try {
 				imgid = fileUploadUtil.uploadUserImage(file, filetype);
 			} catch (IOException e) {
-				
+				map.put("success", -1);
+				map.put("messcode","7 不可察系统异常" );
 				e.printStackTrace();
+				return map;
 			}
 		}
-		
-		
-		return null;
+		map.put("success", -1);
+		map.put("messcode","5" );
+		return map;
 	}
 }

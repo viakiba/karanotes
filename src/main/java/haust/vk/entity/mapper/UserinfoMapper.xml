@@ -18,4 +18,5 @@
 		select * from userinfo where user_path=#{user_path} limit 0,1
 	</select>
 	
+	
 </mapper>
