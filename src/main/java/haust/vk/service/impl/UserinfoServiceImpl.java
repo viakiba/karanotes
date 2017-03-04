@@ -251,7 +251,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 	}
 
 	@Override
-	public Map updateUseremail(Map infoMap) {
+	public Map updateUseremail(Map infoMap) throws Exception {
 		String token_id = infoMap.get("token_id").toString();
 		String user_email = infoMap.get("user_email").toString();
 		String user_password = infoMap.get("user_password").toString();
@@ -274,17 +274,11 @@ public class UserinfoServiceImpl implements UserinfoService{
 		
 		infoMap.put("user_id", user_id);
 		
-		try {
-			int i = userinfoDaoImpl.updateUseremail(infoMap);
-			if(i == 1){
-				infoMap.put("success", 1);
-				infoMap.put("messcode", 2);
-				return infoMap;
-			}
-		} catch (Exception e) {
+		int i = userinfoDaoImpl.updateUseremail(infoMap);
+		
+		if(i == 1){
 			infoMap.put("success", 1);
-			infoMap.put("messcode", "5 不可描述的错误");
-			e.printStackTrace();
+			infoMap.put("messcode", 2);
 			return infoMap;
 		}
 		infoMap.put("success", 1);
@@ -293,7 +287,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 	}
 	
 	@Override
-	public Map updateUserpass(Map infoMap) {
+	public Map updateUserpass(Map infoMap) throws Exception {
 		String token_id = infoMap.get("token_id").toString();
 		String user_password_old = infoMap.get("user_password_old").toString();
 		String user_password_new = infoMap.get("user_password_new").toString();
@@ -316,19 +310,13 @@ public class UserinfoServiceImpl implements UserinfoService{
 		
 		infoMap.put("user_id", user_id);
 		
-		try {
-			int i = userinfoDaoImpl.updateUserpass(infoMap);
-			if(i == 1){
-				infoMap.put("success", 1);
-				infoMap.put("messcode", 2);
-				return infoMap;
-			}
-		} catch (Exception e) {
+		int i = userinfoDaoImpl.updateUserpass(infoMap);
+		if(i == 1){
 			infoMap.put("success", 1);
-			infoMap.put("messcode", "5 不可描述的错误");
-			e.printStackTrace();
+			infoMap.put("messcode", 2);
 			return infoMap;
 		}
+		
 		infoMap.put("success", 1);
 		infoMap.put("messcode", "6 未更新");
 		return infoMap;

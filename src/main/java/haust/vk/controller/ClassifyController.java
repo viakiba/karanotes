@@ -40,7 +40,7 @@ public class ClassifyController {
 		} catch (Exception e) {
 			classifyMapinfo.clear();
 			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 4);
+			classifyMapinfo.put("messcode", "5 不可预见错误");
 			e.printStackTrace();
 		}
 		return classifyMapinfo;

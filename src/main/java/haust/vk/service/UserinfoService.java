@@ -56,11 +56,11 @@ public interface UserinfoService {
 	 * @param infoMap
 	 * @return
 	 */
-	public Map updateUseremail(Map infoMap);
+	public Map updateUseremail(Map infoMap) throws Exception;
 	/**
 	 * 更新用户邮箱
 	 * @param infoMap
 	 * @return
 	 */
-	public Map updateUserpass(Map infoMap);
+	public Map updateUserpass(Map infoMap) throws Exception;
 }

@@ -25,7 +25,7 @@ public class CommentServiceImpl implements CommentService {
 	private CommentDao commentDaoImpl;
 	
 	@Override
-	public Map insertComment(Map commentMap) {
+	public Map insertComment(Map commentMap) throws Exception {
 		String token_id = commentMap.get("token_id").toString();
 		String article_id = commentMap.get("article_id").toString();
 		String comment_content = commentMap.get("comment_content").toString();
@@ -54,15 +54,7 @@ public class CommentServiceImpl implements CommentService {
 		commentinfo.setArticle_id(article_id);
 		commentinfo.setReply_id(reply_id);
 		
-		try {
-			commentDaoImpl.insertComment(commentinfo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			commentMap.clear();
-			commentMap.put("success", -1);
-			commentMap.put("messcode", "5 不可预知的错误");
-			return commentMap;
-		}
+		commentDaoImpl.insertComment(commentinfo);
 		
 		commentMap.clear();
 		commentMap.put("success", 1);
@@ -90,15 +82,7 @@ public class CommentServiceImpl implements CommentService {
 			return commentMap;
 		}
 		
-		try {
-			commentDaoImpl.deleteComment(comment_id);
-		} catch (Exception e) {
-			e.printStackTrace();
-			commentMap.clear();
-			commentMap.put("success", -1);
-			commentMap.put("messcode", "5 不可预知的错误");
-			return commentMap;
-		}
+		commentDaoImpl.deleteComment(comment_id);
 		
 		commentMap.clear();
 		commentMap.put("success", 1);

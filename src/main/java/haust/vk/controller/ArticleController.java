@@ -101,6 +101,11 @@ public class ArticleController {
 		return articleMap;
 	}
 	
+	/**
+	 * 获取文章详情
+	 * @param articleid
+	 * @return
+	 */
 	@RequestMapping(value="/select/{articleid}")
 	public Map selectByArticleid(@PathVariable String articleid){
 		Map articleMap = null;

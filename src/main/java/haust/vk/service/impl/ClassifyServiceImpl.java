@@ -29,7 +29,7 @@ public class ClassifyServiceImpl implements ClassifyService{
 	@Resource
 	private SnowflakeIdUtil snowflakeIdUtil;
 	
-	public Map insertClassify(Map map){
+	public Map insertClassify(Map map) throws Exception{
 		Articleclassify articleclassify = null;
 		String token_id = String.valueOf(map.get("token_id"));
 		String classify_content = String.valueOf(map.get("classify_content"));
@@ -48,26 +48,19 @@ public class ClassifyServiceImpl implements ClassifyService{
 			return map;
 		}
 		
-		try{
-			//查重
-			map.put("user_id", user_id);
-			String classifyByContent = classifyDaoImpl.getClassifyByContentAndUserid(map);
-			if(classifyByContent == null ){
-				//插入
-				long classify_id = snowflakeIdUtil.nextId();
-				articleclassify = new Articleclassify();
-				articleclassify.setClassify_id(String.valueOf(classify_id));
-				articleclassify.setUser_id(user_id);
-				articleclassify.setClassify_content(classifyByContent);
-				classifyDaoImpl.insertClassify(articleclassify);
-				map.clear();
-				map.put("success", 1);
-				return map;
-			}
-		}catch(Exception e){
+		//查重
+		map.put("user_id", user_id);
+		String classifyByContent = classifyDaoImpl.getClassifyByContentAndUserid(map);
+		if(classifyByContent == null ){
+			//插入
+			long classify_id = snowflakeIdUtil.nextId();
+			articleclassify = new Articleclassify();
+			articleclassify.setClassify_id(String.valueOf(classify_id));
+			articleclassify.setUser_id(user_id);
+			articleclassify.setClassify_content(classifyByContent);
+			classifyDaoImpl.insertClassify(articleclassify);
 			map.clear();
-			map.put("success", -1);
-			map.put("messcode", "5 不可预见错误");
+			map.put("success", 1);
 			return map;
 		}
 		map.clear();

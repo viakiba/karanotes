@@ -31,7 +31,7 @@ public class ArticleServiceImpl implements ArticleService{
 	private ArticleDao articleDaoImpl;
 	
 	@Override
-	public Map insertArticle(Map articleMapInfo) {
+	public Map insertArticle(Map articleMapInfo) throws Exception{
 		
 		//标签
 		String articletag = "{\"tag_content\":"+articleMapInfo.get("tag_content").toString()+"}";
@@ -94,18 +94,9 @@ public class ArticleServiceImpl implements ArticleService{
 		article_tag.setUser_id(user_id);
 		article_tag.setTag_content(articletag);
 		//存入数据库
-		try{
-			articleDaoImpl.insertArticletag(article_tag);
-			articleDaoImpl.insertArticleabstract(article_abstract);
-			articleDaoImpl.insertArticlecontent(articlecontentmap);
-		}catch(Exception e){
-			//反馈信息
-			e.printStackTrace();
-			articleMapInfo.clear();
-			articleMapInfo.put("success", "-1");
-			articleMapInfo.put("messcode", "5 不可预见错误");
-			return articleMapInfo;
-		}
+		articleDaoImpl.insertArticletag(article_tag);
+		articleDaoImpl.insertArticleabstract(article_abstract);
+		articleDaoImpl.insertArticlecontent(articlecontentmap);
 		articleMapInfo.clear();
 		articleMapInfo.put("messcode", 4);
 		articleMapInfo.put("success", 1);
@@ -114,7 +105,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Map deleteArticle(Map articlemap) {
+	public Map deleteArticle(Map articlemap) throws Exception {
 
 		String token_id = articlemap.get("token_id").toString();
 		String article_id = articlemap.get("article_id").toString();
@@ -136,16 +127,9 @@ public class ArticleServiceImpl implements ArticleService{
 		}
 		
 		if(userid != null){
-			try{
-				articleDaoImpl.deleteArticleabstract(article_id);
-				articleDaoImpl.deleteArticlecontent(article_id);
-				articleDaoImpl.deleteArticletag(article_id);
-			}catch(Exception e){
-				articlemap.clear();
-				articlemap.put("success", -1);
-				articlemap.put("messcode", "5 不可预见的错误");
-				return articlemap;
-			}
+			articleDaoImpl.deleteArticleabstract(article_id);
+			articleDaoImpl.deleteArticlecontent(article_id);
+			articleDaoImpl.deleteArticletag(article_id);
 		}
 		articlemap.clear();
 		articlemap.put("success", 1);
@@ -154,7 +138,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Map updateArticle(Map articleMapInfo) {
+	public Map updateArticle(Map articleMapInfo) throws Exception {
 		//处理接收的数据   文章标题    分类   标签   正文     用户token_id  article_id
 		//token_id
 		String token_id = articleMapInfo.get("token_id").toString();
@@ -219,17 +203,9 @@ public class ArticleServiceImpl implements ArticleService{
 		article_tag.setUser_id(user_id);
 		article_tag.setTag_content(articletag);
 		//存入数据库
-		try{
-			articleDaoImpl.updateArticletag(article_tag);
-			articleDaoImpl.updateArticleabstract(article_abstract);
-			articleDaoImpl.updateArticlecontent(articlecontentmap);
-		}catch(Exception e){
-			//反馈信息
-			articlecontentmap.clear();
-			articlecontentmap.put("success", -1);
-			articlecontentmap.put("messcode", "5 不可预见的错误");
-			return articlecontentmap;
-		}
+		articleDaoImpl.updateArticletag(article_tag);
+		articleDaoImpl.updateArticleabstract(article_abstract);
+		articleDaoImpl.updateArticlecontent(articlecontentmap);
 		articlecontentmap.clear();
 		articlecontentmap.put("success", 1);
 		articlecontentmap.put("messcode", 4);
@@ -238,14 +214,9 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public List<Map> selectArticleTitle(String articletitleMap) {
+	public List<Map> selectArticleTitle(String articletitleMap) throws Exception {
 		List<Map> articlemap = null;
-		try {
-			articlemap = articleDaoImpl.selectArticleLikeTitle(articletitleMap);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		articlemap = articleDaoImpl.selectArticleLikeTitle(articletitleMap);
 		return articlemap;
 	}
 
@@ -261,7 +232,7 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map selectArticleListByUserpath(String user_path) throws Exception {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 }
