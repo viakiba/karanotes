@@ -106,8 +106,8 @@ public class ArticleController {
 	 * @param articleid
 	 * @return
 	 */
-	@RequestMapping(value="/select/{articleid}")
-	public Map selectByArticleid(@PathVariable String articleid){
+	@RequestMapping(value="/selectdetail/{articleid}")
+	public @ResponseBody Map selectByArticleid(@PathVariable String articleid){
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleDetail(articleid);
@@ -127,11 +127,11 @@ public class ArticleController {
 	 * @param user_path
 	 * @return
 	 */
-	@RequestMapping(value="/{user_path}")
-	public Map selectByUserpath(@PathVariable String user_path){
+	@RequestMapping(value="/selectpath/{userpath}/{beginnum}/{shownum}")
+	public Map selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum){
 		Map articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(user_path);
+			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
 			articleMap = new HashMap();
 			articleMap.clear();
@@ -148,11 +148,11 @@ public class ArticleController {
 	 * @param user_path
 	 * @return
 	 */
-	@RequestMapping(value="/{user_path}")
-	public Map selectByUserfollow(@PathVariable String user_path){
+	@RequestMapping(value="/selectfollowarticle/{userpath}/{beginnum}/{shownum}")
+	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum){
 		Map articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(user_path);
+			articleMap = articleServiceImpl.selectFollowArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
 			articleMap = new HashMap();
 			articleMap.clear();
@@ -170,33 +170,11 @@ public class ArticleController {
 	 * @param classifyid
 	 * @return
 	 */
-	@RequestMapping(value="classify/{user_path}/{classifyid}")
-	public Map selectByClassify(@PathVariable String user_path,@PathVariable String classifyid){
+	@RequestMapping(value="/selectclassify/{userpath}/{classifyid}/{beginnum}/{shownum}")
+	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum){
 		Map articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(user_path);
-		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
-		}
-		return articleMap;
-	}
-	
-	/**
-	 * 通过用户user_path 以及classifyid 获取该分类下的文章列表  分页
-	 * @param user_path
-	 * @param classifyid
-	 * @return
-	 */
-	@RequestMapping(value="follow/{token_id}")
-	public Map selectByTokenid(@PathVariable String token_id){
-		Map articleMap = null;
-		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(token_id);
+			articleMap = articleServiceImpl.selectArticleByUserClassifyArticleList(userpath,classifyid,beginnum,shownum);
 		} catch (Exception e) {
 			articleMap = new HashMap();
 			articleMap.clear();
@@ -214,11 +192,11 @@ public class ArticleController {
 	 * @param classifyid
 	 * @return
 	 */
-	@RequestMapping(value="follow/{token_id}")
-	public Map selectByKeyword(@PathVariable String token_id){
+	@RequestMapping(value="/selecttitle/{keyword}/{beginnum}/{shownum}")
+	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum){
 		Map articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(token_id);
+			articleMap = articleServiceImpl.selectArticleListByKeyword(keyword,beginnum,shownum);
 		} catch (Exception e) {
 			articleMap = new HashMap();
 			articleMap.clear();

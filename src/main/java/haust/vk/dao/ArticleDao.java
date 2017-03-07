@@ -59,10 +59,24 @@ public interface ArticleDao {
 	 */
 	public List<Map> selectArticleLikeTitle(String articletitle) throws Exception;
 	/**
-	 * 
+	 * 更改文章的分类 用文章分类的删除
 	 * @param classify_id
 	 * @throws Exception
 	 */
 	public void updateArticleClassify(Map classifyids) throws Exception;
+	/**
+	 * 获取文章详情   不包括评论
+	 * @param articleid
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectArticleDetail(String articleid) throws Exception;
+	/**
+	 * 获取个人列表   不分类/分类 均可  分页
+	 * @param map
+	 * @return
+	 * @throws Exception
+	 */
+	public List<Articleabstract> selectArticleListByPerson(Map map) throws Exception;
 	
 }

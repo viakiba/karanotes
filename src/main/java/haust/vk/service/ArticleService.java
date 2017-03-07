@@ -26,23 +26,43 @@ public interface ArticleService {
 	 */
 	public Map updateArticle(Map articleMapInfo) throws Exception;
 	/**
-	 * 标题搜索  使用分页
-	 * @param articleMap
-	 * @return
-	 */
-	public List<Map> selectArticleTitle(String articleMap) throws Exception;
-	/**
 	 * 拿到文章的详情内容
 	 * @param articleid
 	 * @return
 	 */
 	public Map selectArticleDetail(String articleid) throws Exception;
 	/**
-	 * 拿到个人文章列表
+	 * 拿到个人文章列表  分页  不分类别
 	 * @param user_path
 	 * @return
 	 * @throws Exception
 	 */
-	public Map selectArticleListByUserpath(String user_path) throws Exception;
+	public Map selectArticleListByUserpath(String user_path,Integer beginnum,Integer shownum) throws Exception;
+	/**
+	 * 分页  获取关注人的列表 时间轴
+	 * @param userpath
+	 * @param beginnum
+	 * @param shownum
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectFollowArticleListByUserpath(String userpath,Integer beginnum, Integer shownum) throws Exception;
+	/**
+	 * 拿到个人文章列表  分页  分类别
+	 * @param userpath
+	 * @param classifyid
+	 * @param beginnum
+	 * @param shownum
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectArticleByUserClassifyArticleList(String userpath,String classifyid, Integer beginnum, Integer shownum) throws Exception;
+	/**
+	 * 通过关键字模糊搜索标题  分页
+	 * @param keyword
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectArticleListByKeyword(String keyword,Integer beginnum, Integer shownum) throws Exception;
 	
 }

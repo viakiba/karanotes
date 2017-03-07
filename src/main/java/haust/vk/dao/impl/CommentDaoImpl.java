@@ -28,4 +28,16 @@ public class CommentDaoImpl implements CommentDao{
 		
 	}
 
+	@Override
+	public void selectCommentNotifyByUserid(String userid) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void selectCommentListByUserid(String userid) throws Exception {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

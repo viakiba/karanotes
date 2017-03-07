@@ -214,24 +214,44 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public List<Map> selectArticleTitle(String articletitleMap) throws Exception {
-		List<Map> articlemap = null;
-		articlemap = articleDaoImpl.selectArticleLikeTitle(articletitleMap);
-		return articlemap;
+	public Map selectArticleDetail(String articleid) throws Exception {
+		Map detail = articleDaoImpl.selectArticleDetail(articleid);
+		//未完成
+		
+		
+		
+		return detail;
 	}
 
 	@Override
-	public Map selectArticleDetail(String articleid) {
-		/**
-		 * 文章简要  文章正文
-		 */
+	public Map selectArticleListByUserpath(String userpath,Integer beginnum,Integer shownum) throws Exception {
+		//未完成  总数
+		Map map = new HashMap();
+		map.put("user_path", userpath);
+		map.put("beginnum", beginnum);
+		map.put("shownum", shownum);
+		List<Articleabstract> list = articleDaoImpl.selectArticleListByPerson(map);
+		return null;
+	}
+	
+	@Override
+	public Map selectArticleByUserClassifyArticleList(String userpath,String classifyid, Integer beginnum, Integer shownum)
+			throws Exception {
+		//未完成
 		
 		return null;
 	}
-
-
+	
 	@Override
-	public Map selectArticleListByUserpath(String user_path) throws Exception {
+	public Map selectFollowArticleListByUserpath(String userpath,Integer beginnum, Integer shownum) throws Exception {
+		//未完成
+		
+		return null;
+	}
+	
+	@Override
+	public Map selectArticleListByKeyword(String keyword,Integer beginnum, Integer shownum) throws Exception {
+		//未完成
 		
 		return null;
 	}

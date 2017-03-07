@@ -95,9 +95,23 @@ public class ArticleDaoImpl implements ArticleDao{
 	@Override
 	public void updateArticleClassify(Map classifyids) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> articleTitle = os.selectList("selectArticleLikeTitle", classifyids);
+		os.update("updateArticleClassify", classifyids);
 		os.close();
 	}
 
+	@Override
+	public Map selectArticleDetail(String articleid) {
+		SqlSession os = sqlSessionFactory.openSession();
+		Map articleTitle = os.selectOne("selectArticleDetail", articleid);
+		os.close();
+		return articleTitle;
+	}
+
+	@Override
+	public List<Articleabstract> selectArticleListByPerson(Map user_path) {
+		
+		return null;
+	}
+	
 	
 }

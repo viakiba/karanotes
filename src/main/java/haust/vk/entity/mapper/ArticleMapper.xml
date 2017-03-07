@@ -64,4 +64,23 @@
 			#{START},#{END}
 	</select>
 	
+	<select id="selectArticleListByPerson" parameterType="string" resultType="haust.vk.entity.Articleabstract">
+		select 
+			article_id,article_title,article_update_time 
+		from 
+			articleabstract
+		where
+			article_title LIKE %#{article_title}%
+		LIMIT
+			#{START},#{END}
+	</select>
+	
+	<select id="selectArticleDetail" parameterType="string" resultType="java.util.Map">
+		select 
+			articleabstract.* ,articleclassify.classify_content,articletag.tag_content 
+		from 
+			articleabstract,articleclassify,articlecontent,articletag 
+		where
+			articleabstract.article_id = #{articleid}ssssssss
+	</select>
 </mapper>

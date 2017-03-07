@@ -17,4 +17,18 @@ public interface CommentDao {
 	 * @throws Exception
 	 */
 	public void deleteComment(String comment_id) throws Exception;
+	
+	/**
+	 * 查询评论通知
+	 * @param userid
+	 * @throws Exception
+	 */
+	public void selectCommentNotifyByUserid(String userid) throws Exception;
+	
+	/**
+	 * 查看文章评论
+	 * @param userid
+	 * @throws Exception
+	 */
+	public void selectCommentListByUserid(String userid) throws Exception;
 }
