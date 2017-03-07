@@ -1,13 +1,18 @@
 package haust.vk.dao.impl;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.annotation.Resource;
 
 import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
+import org.springframework.stereotype.Repository;
 
 import haust.vk.dao.CommentDao;
 import haust.vk.entity.Commentinfo;
 
+@Repository
 public class CommentDaoImpl implements CommentDao{
 	
 	@Resource
@@ -29,15 +34,19 @@ public class CommentDaoImpl implements CommentDao{
 	}
 
 	@Override
-	public void selectCommentNotifyByUserid(String userid) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public List<Map> selectCommentNotifyByUserid(String userid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> mapList = os.selectList("selectCommentNotifyByUserid", userid);
+		os.close();
+		return mapList;
 	}
 
 	@Override
-	public void selectCommentListByUserid(String userid) throws Exception {
-		// TODO Auto-generated method stub
-		
+	public List<Map> selectCommentListByUserid(String userid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> mapList = os.selectList("selectCommentListByUserid", userid);
+		os.close();
+		return mapList;
 	}
 
 }

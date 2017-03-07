@@ -1,5 +1,8 @@
 package haust.vk.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import haust.vk.entity.Articlepraise;
 
 public interface PraiseDao {
@@ -22,12 +25,12 @@ public interface PraiseDao {
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectPraiseNotifyByUserid(String userid) throws Exception;
+	public List<Map> selectPraiseNotifyByUserid(String userid) throws Exception;
 	
 	/**
 	 * 查看点赞
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectPraiseListByUserid(String userid) throws Exception;
+	public List<Map> selectPraiseListByUserid(String userid) throws Exception;
 }

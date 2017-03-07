@@ -8,4 +8,12 @@
 	<delete id="deleteComment" parameterType="string">
 		delete from commentinfo where comment_id = #{comment_id} or reply_id = #{comment_id}
 	</delete>
+	
+	<select id="selectCommentNotifyByUserid" parameterType="string" resultType="java.util.Map">
+	
+	</select>
+	
+	<select id="selectCommentListByUserid" parameterType="string" resultType="java.util.Map">
+	
+	</select>
 </mapper>

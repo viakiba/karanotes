@@ -1,5 +1,8 @@
 package haust.vk.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import haust.vk.entity.Followinfo;
 
 public interface FollowDao {
@@ -23,12 +26,12 @@ public interface FollowDao {
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectFollowNotifyByUserid(String userid) throws Exception;
+	public List<Map> selectFollowNotifyByUserid(String userid) throws Exception;
 	
 	/**
 	 * 查看关注
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectFollowListByUserid(String userid) throws Exception;
+	public List<Map> selectFollowListByUserid(String userid) throws Exception;
 }

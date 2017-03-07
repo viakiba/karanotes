@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="haust.vk.dao.PraiseDao" >
+	
+	<insert id="insertPraise" parameterType="haust.vk.entity.Collectinfo">
+		insert into 
+	</insert>
+	
+	<delete id="deletePraise" parameterType="string">
+		
+	</delete>
+	
+	<select id="selectPraiseNotifyByUserid" parameterType="string"  resultType="java.util.Map">
+		
+	</select>
+	
+	<select id="selectPraiseListByUserid" parameterType="string" resultType="java.util.Map">
+		
+	</select>
+	
+</mapper>

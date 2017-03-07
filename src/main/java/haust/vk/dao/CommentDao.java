@@ -1,5 +1,8 @@
 package haust.vk.dao;
 
+import java.util.List;
+import java.util.Map;
+
 import haust.vk.entity.Commentinfo;
 
 public interface CommentDao {
@@ -23,12 +26,12 @@ public interface CommentDao {
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectCommentNotifyByUserid(String userid) throws Exception;
+	public List<Map> selectCommentNotifyByUserid(String userid) throws Exception;
 	
 	/**
 	 * 查看文章评论
 	 * @param userid
 	 * @throws Exception
 	 */
-	public void selectCommentListByUserid(String userid) throws Exception;
+	public List<Map> selectCommentListByUserid(String userid) throws Exception;
 }
