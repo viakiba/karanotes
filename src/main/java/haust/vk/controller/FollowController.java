@@ -23,9 +23,26 @@ public class FollowController {
 		return null;
 	}
 	
+	/**
+	 * 查看关注人列表
+	 * @param insertinfo
+	 * @return
+	 */
 	@ResponseBody 
 	@RequestMapping(value="/select")
-	public String selectByTokenid(@RequestBody String insertinfo){
+	public String selectFollowList(@RequestBody String insertinfo){
+		
+		return null;
+	}
+	
+	/**
+	 * 查看关注人通知
+	 * @param insertinfo
+	 * @return
+	 */
+	@ResponseBody 
+	@RequestMapping(value="/select")
+	public String selectFollowNotify(@RequestBody String insertinfo){
 		
 		return null;
 	}
