@@ -29,7 +29,7 @@ public class FollowController {
 	 * @return
 	 */
 	@ResponseBody 
-	@RequestMapping(value="/select")
+	@RequestMapping(value="/selectlist")
 	public String selectFollowList(@RequestBody String insertinfo){
 		
 		return null;
@@ -41,7 +41,7 @@ public class FollowController {
 	 * @return
 	 */
 	@ResponseBody 
-	@RequestMapping(value="/select")
+	@RequestMapping(value="/selectnotify")
 	public String selectFollowNotify(@RequestBody String insertinfo){
 		
 		return null;
