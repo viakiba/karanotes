@@ -1,4 +1,4 @@
-package haust.vk.controller;
+package haust.vk.api;
 
 import haust.vk.service.ArticleService;
 import haust.vk.utils.JsonToMap;

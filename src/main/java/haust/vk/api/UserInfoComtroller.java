@@ -1,4 +1,4 @@
-package haust.vk.controller;
+package haust.vk.api;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;

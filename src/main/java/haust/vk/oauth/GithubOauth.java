@@ -17,8 +17,10 @@ import com.alibaba.fastjson.JSON;
 @Controller
 @RequestMapping("oauth")
 public class GithubOauth {
+	
 	private String client_id = "bb6d0dcfc6a909e2ccbf";
 	private String client_secret = "7932c255b62ff6bc3a1bb7a913252907fbf07e01";
+	
 	private String accesstokenurl = "https://github.com/login/oauth/access_token";
 	private String userinfourl = "https://api.github.com/user?access_token=";
 	

@@ -1,4 +1,4 @@
-package haust.vk.controller;
+package haust.vk.api;
 
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;

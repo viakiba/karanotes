@@ -1,4 +1,4 @@
-package haust.vk.controller;
+package haust.vk.api;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
