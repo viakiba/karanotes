@@ -39,7 +39,9 @@ public class NetReqUtil {
 		     	}  
 		     in.close();  
 	     }finally{
-			in.close();
+	    	 if(in != null){
+	    		 in.close();
+	    	 }
 	     }
 	     return json.toString();  
 	 }

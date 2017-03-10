@@ -206,4 +206,32 @@ public class UserInfoComtroller {
 		}
 		return infoMap;
 	}
+	
+	/**
+	 * 找回密码链接 发送邮箱
+	 * @param userpass
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	@RequestMapping(value="/findpass",method=RequestMethod.POST)
+	public @ResponseBody Map findPass(@RequestBody String userpass) throws UnsupportedEncodingException{
+		Map infoMap = null;
+
+
+		return infoMap;
+	}
+	
+	/**
+	 * 找回密码链接    修改接口
+	 * @param userpass
+	 * @return
+	 * @throws UnsupportedEncodingException
+	 */
+	@RequestMapping(value="/updatefindpass",method=RequestMethod.POST)
+	public @ResponseBody Map updatefindPass(@RequestBody String userpass) throws UnsupportedEncodingException{
+		Map infoMap = null;
+
+
+		return infoMap;
+	}
 }
