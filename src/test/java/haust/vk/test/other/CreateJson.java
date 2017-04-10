@@ -32,5 +32,6 @@ public class CreateJson {
 		System.out.println(object2);
 		Articlecontent parseObject2 = JSON.parseObject(object2.toString(), Articlecontent.class);
 		System.out.println(parseObject2.toString());
+		Object a = new Object();
 	}
 }
