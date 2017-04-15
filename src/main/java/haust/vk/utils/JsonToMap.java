@@ -6,9 +6,7 @@ import com.alibaba.fastjson.JSON;
 
 @Component
 public class JsonToMap {
-
-	public Map jsonToMapUtil(String str) throws Exception{
-		str = new String(str.getBytes("ISO-8859-1"),"UTF-8");
+	public static Map jsonToMapUtil(String str) throws Exception{
 		Map map = JSON.parseObject(str, Map.class);
 		return map;
 	}

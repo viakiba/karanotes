@@ -53,8 +53,8 @@
     <!-- 配置事务通知  即让那些方法需要事务 -->
     <tx:advice id="tx" transaction-manager="dataSourceTransactionManager">
     	<tx:attributes>
-    		<tx:method name="select*" read-only="true"/>
-			<tx:method name="*" rollback-for="Throwable"/>
+    		<tx:method name="select*" read-only="true" />
+			<tx:method name="*" rollback-for="Throwable" propagation="NEVER"/>
     	</tx:attributes> 
     </tx:advice>
     

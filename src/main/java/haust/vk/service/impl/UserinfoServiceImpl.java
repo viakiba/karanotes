@@ -322,5 +322,16 @@ public class UserinfoServiceImpl implements UserinfoService{
 		return infoMap;
 	}
 
+	@Override
+	public void updateUserlogo(Map map) {
+		
+		
+	}
+	
+	@Override
+	public void updateUserBacklogo(Map map) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

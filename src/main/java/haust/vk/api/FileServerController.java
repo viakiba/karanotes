@@ -2,11 +2,17 @@ package haust.vk.api;
 
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
+import haust.vk.service.UserinfoService;
+import haust.vk.utils.GetOsversionUtil;
 import haust.vk.utils.SnowflakeIdUtil;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +20,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +32,11 @@ import org.springframework.web.multipart.MultipartFile;
 @Controller
 @RequestMapping(value="file")
 public class FileServerController {
-
+	
+	private static Logger logger = Logger.getLogger(FileServerController.class);
+	
 	@Resource
-	private UserinfoDao userinfoDaoImpl;
+	private UserinfoService userinfoServiceImpl;
 	
 	@Resource
 	private UserloginDao userloginDao;
@@ -35,98 +44,171 @@ public class FileServerController {
 	@Resource
 	private SnowflakeIdUtil snowflakeIdUtil;
 	
+	
 	/**
-	 * 用户头像 用户背景图 老图片未删除
-	 * @param file
-	 * @param json
-	 * @param request
-	 * @return
+	 * 图片上传地址imgtype   文章(article)   用户头像(logo)  用户背景图(backlogo) 
+	 * @Author : viakiba
+	 * @param img
+	 * @param req
+	 * @param resp
+	 * 2017-04-13
+	 * @throws UnsupportedEncodingException 
 	 */
-	@RequestMapping(value="/upload/{filetype}/{token_id}",consumes={"image/jpeg","image/png","image/jpg"})
-	public @ResponseBody Map FileUpload(@PathVariable String filetype,@PathVariable String token_id, @RequestParam("userimg") MultipartFile file,HttpServletRequest request){
-		Map map = new HashMap();
+	@RequestMapping(value = "/imgs/{imgtype}",method=RequestMethod.POST)
+	public void articleImgUpload(@PathVariable("imgtype") String imgtype,@RequestParam("img") MultipartFile img,HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException{
+		
+		resp.setCharacterEncoding("UTF-8");
+		req.setCharacterEncoding("UTF-8");
+		
+		PrintWriter rgw = null;
+		String path =  null;
+		File file = null;
+		Map map = null;
+		String token_id = null;
 		String user_id = null;
-		String imgname = null;
 		
-		try {
-			user_id = userloginDao.selectUseridByTokenid(token_id);
-		} catch (Exception e1) {
-			map.put("success", -1);
-			map.put("messcode",1 );
-			e1.printStackTrace();
-			return map;
-		}
-		
-		if(user_id == null){
-			map.put("success", -1);
-			map.put("messcode",1 );
-			return map;
-		}
-		
-		if("headimg".equals(filetype) & file != null){
+		switch (imgtype) {
+			case "article":
+				long nextId = snowflakeIdUtil.nextId();
+				String name = String.valueOf(nextId)+".png";
+				path = GetOsversionUtil.getBasepath()+"article"+GetOsversionUtil.getOssplit() + name;
+				file = new File(path);
+				try {
+					img.transferTo(file);
+					rgw = resp.getWriter();
+				} catch (IOException e) {
+					logger.error(""+path);
+					e.printStackTrace();
+				}
+				rgw.write(GetOsversionUtil.imgurl+"article/"+name);
+				if(rgw != null){
+					rgw.flush();
+					rgw.close();
+				}
+				break;
+			case "logo":
+				token_id = (String) req.getParameter("token_id");
+				user_id = userloginDao.selectUseridByTokenid(token_id);
+				if(user_id == null){
+					try {
+						rgw = resp.getWriter();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					rgw.write("error");
+					if(rgw != null){
+						rgw.flush();
+						rgw.close();
+					}
+					break;
+				}
+				path = GetOsversionUtil.getBasepath()+"logo"+GetOsversionUtil.getOssplit() + user_id+".png";
+				
+				file = new File(path);
+				try {
+					img.transferTo(file);
+					rgw = resp.getWriter();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				map = new HashMap<>();
+				map.put("user_id",user_id);
+				map.put("user_headimg",user_id+".png");
+				userinfoServiceImpl.updateUserlogo(map);
+				
+				rgw.write(user_id+".png");
+				if(rgw != null){
+					rgw.flush();
+					rgw.close();
+				}
+				break;
+			case "backlogo":
+				token_id = (String) req.getParameter("token_id");
+				user_id = userloginDao.selectUseridByTokenid(token_id);
+				if(user_id == null){
+					try {
+						rgw = resp.getWriter();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					rgw.write("error");
+					if(rgw != null){
+						rgw.flush();
+						rgw.close();
+					}
+					break;
+				}
+				path = GetOsversionUtil.getBasepath()+"backlogo"+GetOsversionUtil.getOssplit() + user_id+".png";
+				
+				file = new File(path);
+				try {
+					img.transferTo(file);
+					rgw = resp.getWriter();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				map = new HashMap<>();
+				map.put("user_id",user_id);
+				map.put("user_background_img",user_id+".png");
+				userinfoServiceImpl.updateUserBacklogo(map);
+				
+				rgw.write(user_id+".png");
+				if(rgw != null){
+					rgw.flush();
+					rgw.close();
+				}
+				break;
+			default:
 			try {
-				imgname = String.valueOf(snowflakeIdUtil.nextId())+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-	            String path = "d:/tomcat7/images/"+filetype+"/" + imgname;  
-	            File localFile = new File(path);
-				file.transferTo(localFile);
-				map.put("headimg", imgname);
+				rgw = resp.getWriter();
 			} catch (IOException e) {
-				map.put("success", -1);
-				map.put("messcode","7 不可察系统异常" );
 				e.printStackTrace();
-				return map;
 			}
-		}else if("backimg".equals(filetype) & file!=null){
-			try {
-				imgname = String.valueOf(snowflakeIdUtil.nextId())+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1);
-	            String path = "d:/tomcat7/images/"+filetype+"/" + imgname;  
-	            File localFile = new File(path);
-				file.transferTo(localFile);
-				map.put("backimg", imgname);
-			} catch (IOException e) {
-				map.put("success", -1);
-				map.put("messcode","7 不可察系统异常" );
-				e.printStackTrace();
-				return map;
-			}
+				rgw.write("error");
+				rgw.close();
+				break;
 		}
-		
-		map.put("user_id", user_id);
-		try {
-			userinfoDaoImpl.updateUserimg(map);
-		} catch (Exception e) {
-			map.clear();
-			map.put("success", 1);
-			map.put("messcode", 2);
-			e.printStackTrace();
-			return map;
-		}
-		map.clear();
-		map.put("success", 1);
-		map.put("messcode", 2);
-		map.put("imgid", imgname);
-		return map;
 	}
 	
-	//文章图片的地址
-	@RequestMapping("/articleimg")
-	public void articleImgUpload(@RequestParam("articleimg") MultipartFile file,HttpServletRequest req, HttpServletResponse resp){
-		PrintWriter rgw = null;
-		long nextId = snowflakeIdUtil.nextId();
-		String name = String.valueOf(nextId)+file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")-1);
-		
-		String path = "D:/tomcat7/images/article/" + name;
-		File file2 = new File(path);
-		resp.setCharacterEncoding("UTF-8");
-		try {
-			file.transferTo(file2);
-			rgw = resp.getWriter();
-		} catch (IOException e) {
-			e.printStackTrace();
+	/**
+	 * 图片下载地址
+	 * @Author : viakiba
+	 * @param imgtype
+	 * @param imgname
+	 * @param req
+	 * @param resp
+	 * @throws IOException
+	 * 2017-04-13
+	 */
+	@RequestMapping(value = "/imgs/{imgtype}/{imgname}",method=RequestMethod.GET)
+	public void articleImgDownload(@PathVariable("imgtype") String imgtype,@PathVariable("imgname") String imgname,HttpServletRequest req, HttpServletResponse resp) throws IOException{
+		String pathname = imgtype;
+		File file = new File(GetOsversionUtil.getBasepath()+imgtype+GetOsversionUtil.getOssplit()+imgname+".png");
+		if(file.exists()){
+			//读取要下载的文件，保存到文件输入流
+			FileInputStream in = new FileInputStream(file);
+			//创建输出流
+			OutputStream out = resp.getOutputStream();
+			//创建缓冲区
+			byte buffer[] = new byte[1024];
+			int len = 0;
+			//循环将输入流中的内容读取到缓冲区当中
+			while((len=in.read(buffer))>0){
+				//输出缓冲区的内容到浏览器，实现文件下载
+				out.write(buffer, 0, len);
+		    }
+			//关闭文件输入流
+			in.close();
+			//关闭输出流
+			out.close();
+		}else{
+			PrintWriter pw = resp.getWriter();
+			pw.write("图片未找到");
+			pw.close();
 		}
-		rgw.write("http://127.0.0.1:8080/images/"+name);
-		//rgw.write("http://viakiba.cn:8080/images/"+name);
-		rgw.flush();
-		rgw.close();
 	}
 }

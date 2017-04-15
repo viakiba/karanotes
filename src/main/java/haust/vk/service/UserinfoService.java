@@ -63,4 +63,18 @@ public interface UserinfoService {
 	 * @return
 	 */
 	public Map updateUserpass(Map infoMap) throws Exception;
+	/**
+	 * 更新用户头像
+	 * @Author : viakiba
+	 * @param map
+	 * 2017-04-14
+	 */
+	public void updateUserlogo(Map map);
+	/**
+	 * 更新背景图
+	 * @Author : viakiba
+	 * @param map
+	 * 2017-04-14
+	 */
+	public void updateUserBacklogo(Map map);
 }
