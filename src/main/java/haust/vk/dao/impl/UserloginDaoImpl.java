@@ -7,6 +7,7 @@ import org.apache.ibatis.session.SqlSessionFactory;
 import org.springframework.stereotype.Repository;
 
 import haust.vk.dao.UserloginDao;
+import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
 
 @Repository
@@ -31,11 +32,11 @@ public class UserloginDaoImpl implements UserloginDao{
 	}
 	
 	@Override
-	public Userlogin selectUserloginByTokenid(String token_id) {
+	public Userinfo selectUserloginByTokenid(String token_id) {
 		SqlSession os = sqlSessionFactory.openSession();
-		Userlogin userlogin = (Userlogin) os.selectOne("selectUserloginByTokenid", token_id);
+		Userinfo userinfo = (Userinfo) os.selectOne("selectUserloginByTokenid", token_id);
 		os.close();
-		return userlogin;
+		return userinfo;
 	}
 
 }

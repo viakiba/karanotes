@@ -81,6 +81,5 @@ public class UserinfoDaoImpl implements UserinfoDao{
 		os.close();
 		return i;
 	}
-	
-	
+
 }

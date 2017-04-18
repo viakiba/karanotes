@@ -15,6 +15,9 @@ import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
+import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
+import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.service.UserinfoService;
 import haust.vk.utils.EncryptUtil;
 import haust.vk.utils.SnowflakeIdUtil;
@@ -39,17 +42,10 @@ public class UserinfoServiceImpl implements UserinfoService{
 		String user_email = userinfoMap.get("user_email").toString();
 		String user_password = userinfoMap.get("user_password").toString();
 		
-		if( user_email == null | user_password == null){
-			userinfoMap.clear();
-			userinfoMap.put("success", -1);
-			userinfoMap.put("messcode", 4);
-			return userinfoMap;
-		}
 		//先进行判断邮箱是否重复
 		List<Userinfo> userlist = userinfoDaoImpl.selectUserByEmail(user_email);
 		if(userlist.size() >0 ){
-			System.out.println("邮箱已经存在");
-			return null;
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
 		
 		//处理用户ID
@@ -86,25 +82,13 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userinfo.put("token_id", String.valueOf(token_id));
 		userinfo.put("user_name", user_email);
 		userinfo.put("user_path", user_path);
-		userinfo.put("success", 1);
-		userinfo.put("messcode", 2);
 		return userinfo;
 	}
 
-	/**
-	 * 登录
-	 */
 	@Override
 	public Map loginUser(Map userinfoMap) throws Exception{
 		String user_email = userinfoMap.get("user_email").toString();
 		String user_password = userinfoMap.get("user_password").toString();
-		
-		if(user_email == null | user_password == null){
-			userinfoMap.clear();
-			userinfoMap.put("messcode", 4);
-			userinfoMap.put("success", -1);
-			return userinfoMap;
-		}
 		
 		user_password = encryptUtil.MD5Encode(user_password);
 		userinfoMap.remove("user_password");
@@ -136,82 +120,55 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userinfoMap.put("user_signature", loginUserInfo.get(0).getUser_signature());
 		userinfoMap.put("user_extra", loginUserInfo.get(0).getUser_extra());
 		
-		userinfoMap.put("messcode",2);
-		userinfoMap.put("success",1);
-		
 		return userinfoMap;
 	}
 	
-	/**
-	 * 检查email唯一性
-	 */
 	@Override
-	public Map selectByEmail(String email) throws Exception {
-		Map map = new HashMap();
+	public Userlogin insertLogin(Userinfo userinfo) throws Exception{
+		String user_email = userinfo.getUser_email();
+		String user_password = userinfo.getUser_password();
+		Map userinfoMap = new HashMap<>();
+		userinfoMap.put("user_email", user_email);
+		userinfoMap.put("user_password", user_password);
+		List<Userinfo> loginUserInfo = userinfoDaoImpl.loginUserInfo(userinfoMap);
+		//设置登陆的id
+		long token_id = snowflakeIdUtil.nextId();
+		//放到数据库中  
+		Userlogin userlogin = new Userlogin();
+		userlogin.setToken_id(String.valueOf(token_id));
+		userlogin.setUser_id(loginUserInfo.get(0).getUser_id());
+		userlogin.setUser_login_time(String.valueOf( new Timestamp( (new Date()).getTime()) ));
+		userloginDaoImpl.insertUserlogin(userlogin);
+		
+		return userlogin;
+	}
+	
+	@Override
+	public Userinfo selectByEmail(String email) throws Exception {
 		List<Userinfo> userlist = userinfoDaoImpl.selectUserByEmail(email);
-		if(userlist == null | userlist.size() == 0){
-			map.put("success", -1);
-			map.put("messcode", 1);
-			return map;
+		if(userlist.size() == 0 | userlist == null){
+			return null;
 		}
-		Userinfo userinfo = userlist.get(0);
-		map.put("success", 1);
-		map.put("messcode", 2);
-		map.put("user_name", userinfo.getUser_name());
-		return map;
+		return userlist.get(0);
 	}
 	
-	/**
-	 * 检查token_id有效性
-	 */
 	@Override
-	public Map selectUserloginByTokenid(String token_id) throws Exception {
-		Map map = new HashMap();
-		
-		if(token_id == null | token_id.length() == 0){
-			map.put("success", -1);
-			map.put("messcode", 1);
-			return map;
-		}
-		
-		Userlogin userlogin = userloginDaoImpl.selectUserloginByTokenid(token_id);
+	public Userinfo selectUserloginByTokenid(String token_id) throws Exception {
+		Userinfo userlogin = userloginDaoImpl.selectUserloginByTokenid(token_id);
 		if(userlogin == null ){
-			map.put("success", -1);
-			map.put("messcode", 1);
-			return map;
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
-		
-		map.put("success", 1);
-		map.put("messcode", 2);
-		map.put("failtime", Integer.valueOf(userlogin.getUser_login_time())+15*24*60*60*1000);
-		return map;
+		return userlogin;
 	}
 	
-	/**
-	 * 检查user_path唯一性
-	 */
 	@Override
-	public Map selectByUserpath(String user_path) throws Exception {
+	public Userinfo selectByUserpath(String user_path) throws Exception {
 		Map map = new HashMap();;
-		if(user_path == null){
-			map.put("success", -1);
-			map.put("messcode", 4);
-			return map;
+		Userinfo userinfo = userinfoDaoImpl.selectByUserpath(user_path);
+		if(userinfo == null){
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 		}
-		
-		Userinfo user_name = userinfoDaoImpl.selectByUserpath(user_path);
-		
-		if(user_name == null){
-			map.put("success", 1);
-			map.put("messcode", 2);
-			return map;
-		}
-		
-		map.put("success", -1);
-		map.put("messcode", 1);
-		map.put("user_name", user_name.getUser_name());
-		
-		return map;
+		return userinfo;
 	}
 
 	@Override
@@ -221,13 +178,6 @@ public class UserinfoServiceImpl implements UserinfoService{
 		String user_sex = userinfo.get("user_sex").toString();
 		String user_path = userinfo.get("user_path").toString();
 		String user_signature = userinfo.get("user_signature").toString();
-		
-		if(token_id == null | user_name == null | user_sex == null | user_path == null  ){
-			userinfo.clear();
-			userinfo.put("success", -1);
-			userinfo.put("messcode", 4);
-			return userinfo;
-		}
 		
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
 		
@@ -253,85 +203,34 @@ public class UserinfoServiceImpl implements UserinfoService{
 	@Override
 	public Map updateUseremail(Map infoMap) throws Exception {
 		String token_id = infoMap.get("token_id").toString();
-		String user_email = infoMap.get("user_email").toString();
-		String user_password = infoMap.get("user_password").toString();
-		
-		if(token_id == null | user_email == null | user_password == null ){
-			infoMap.clear();
-			infoMap.put("success", -1);
-			infoMap.put("messcode", 4);
-			return infoMap;
-		}
-		
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
-		
 		if(user_id == null){
-			infoMap.clear();
-			infoMap.put("success", -1);
-			infoMap.put("messcode", 1);
-			return infoMap;
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
-		
 		infoMap.put("user_id", user_id);
-		
 		int i = userinfoDaoImpl.updateUseremail(infoMap);
-		
-		if(i == 1){
-			infoMap.put("success", 1);
-			infoMap.put("messcode", 2);
-			return infoMap;
-		}
-		infoMap.put("success", 1);
-		infoMap.put("messcode", "6 未更新");
-		return infoMap;
+		return null;
 	}
 	
 	@Override
-	public Map updateUserpass(Map infoMap) throws Exception {
+	public void updateUserpass(Map infoMap) throws Exception {
 		String token_id = infoMap.get("token_id").toString();
-		String user_password_old = infoMap.get("user_password_old").toString();
-		String user_password_new = infoMap.get("user_password_new").toString();
-		
-		if(token_id == null | user_password_old == null | user_password_new == null ){
-			infoMap.clear();
-			infoMap.put("success", -1);
-			infoMap.put("messcode", 4);
-			return infoMap;
-		}
-		
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
-		
 		if(user_id == null){
-			infoMap.clear();
-			infoMap.put("success", -1);
-			infoMap.put("messcode", 1);
-			return infoMap;
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
 		}
-		
 		infoMap.put("user_id", user_id);
-		
-		int i = userinfoDaoImpl.updateUserpass(infoMap);
-		if(i == 1){
-			infoMap.put("success", 1);
-			infoMap.put("messcode", 2);
-			return infoMap;
-		}
-		
-		infoMap.put("success", 1);
-		infoMap.put("messcode", "6 未更新");
-		return infoMap;
+		userinfoDaoImpl.updateUserpass(infoMap);
 	}
 
 	@Override
-	public void updateUserlogo(Map map) {
-		
-		
+	public void updateUserlogo(Map map) throws Exception{
+		userinfoDaoImpl.updateUserimg(map);
 	}
 	
 	@Override
-	public void updateUserBacklogo(Map map) {
-		// TODO Auto-generated method stub
-		
+	public void updateUserBacklogo(Map map) throws Exception{
+		userinfoDaoImpl.updateUserimg(map);
 	}
 	
 }

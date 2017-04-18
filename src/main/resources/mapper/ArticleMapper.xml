@@ -81,6 +81,6 @@
 		from 
 			articleabstract,articleclassify,articlecontent,articletag 
 		where
-			articleabstract.article_id = #{articleid}ssssssss
+			articleabstract.article_id = #{articleid}
 	</select>
 </mapper>

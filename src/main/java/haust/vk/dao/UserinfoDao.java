@@ -62,4 +62,5 @@ public interface UserinfoDao {
 	 * @throws Exception
 	 */
 	public int updateUserpass(Map infoMap) throws Exception;
+
 }

@@ -1,5 +1,6 @@
 package haust.vk.dao;
 
+import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
 
 public interface UserloginDao {
@@ -22,5 +23,5 @@ public interface UserloginDao {
 	 * @param token_id
 	 * @return
 	 */
-	public Userlogin selectUserloginByTokenid(String token_id);
+	public Userinfo selectUserloginByTokenid(String token_id);
 }

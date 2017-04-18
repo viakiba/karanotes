@@ -1,5 +1,7 @@
 package haust.vk.api;
 
+import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.NodescribeErrorInfoEnum;
 import haust.vk.service.ClassifyService;
 import haust.vk.utils.JsonToMap;
 
@@ -7,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -15,111 +19,55 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
-@RequestMapping(value="clssify")
 public class ClassifyController {
 	@Resource
 	private ClassifyService classifyServiceImpl;
-	
 	@Resource
 	private JsonToMap jsonToMap;
 	
-	@RequestMapping(value="/insert",method=RequestMethod.POST)
-	public @ResponseBody Map insertClassify(@RequestBody String classifyInfo){
-		Map classifyMapinfo = null;
-		try {
-			jsonToMap.jsonToMapUtil(classifyInfo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			classifyMapinfo = new HashMap();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 3);
-			return classifyMapinfo;
-		}
+	@RequestMapping(value="/clssify/insert",method=RequestMethod.POST)
+	public @ResponseBody Map insertClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
 		try {
 			classifyMapinfo = classifyServiceImpl.insertClassify(classifyMapinfo);
 		} catch (Exception e) {
-			classifyMapinfo.clear();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", "5 不可预见错误");
-			e.printStackTrace();
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return classifyMapinfo;
 	}
 	
-	@RequestMapping(value="/delete",method=RequestMethod.POST)
-	public @ResponseBody Map deleteClassify(@RequestBody String classifyInfo){
-		Map classifyMapinfo = null;
-		try {
-			classifyMapinfo = jsonToMap.jsonToMapUtil(classifyInfo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			classifyMapinfo = new HashMap();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 3);
-			return classifyMapinfo;
-		}
+	@RequestMapping(value="/clssify/delete",method=RequestMethod.POST)
+	public @ResponseBody Map deleteClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
 		
 		try {
 			classifyMapinfo = classifyServiceImpl.deleteClassify(classifyMapinfo);
 		} catch (Exception e) {
-			e.printStackTrace();
-			classifyMapinfo = new HashMap();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 3);
-			return classifyMapinfo;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		
 		return classifyMapinfo;
 	}
 	
-	@RequestMapping(value="/getall",method=RequestMethod.POST)
-	public @ResponseBody Map getallClassify(@RequestBody String classifyinfo){
-		Map mapInfo = null;
-		try {
-			jsonToMap.jsonToMapUtil(classifyinfo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			mapInfo = new HashMap();
-			mapInfo.put("success", -1);
-			mapInfo.put("messcode", 3);
-			return mapInfo;
-		}
+	@RequestMapping(value="/select/clssify/getall",method=RequestMethod.POST)
+	public @ResponseBody Map getallClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map mapInfo = (Map) req.getAttribute("jsoninfo");
 		try {
 			mapInfo = classifyServiceImpl.getallClassify(mapInfo);
 		} catch (Exception e) {
-			mapInfo.clear();
-			mapInfo.put("success", -1);
-			mapInfo.put("messcode", "5 不可与之错误");
-			e.printStackTrace();
-			return mapInfo;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		
 		return mapInfo;
 	}
 	
-	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public @ResponseBody Map updateClassify(@RequestBody String classifyInfo){
-		Map classifyMapinfo = null;
-		try {
-			jsonToMap.jsonToMapUtil(classifyInfo);
-		} catch (Exception e) {
-			e.printStackTrace();
-			classifyMapinfo = new HashMap();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 3);
-		}
-		
+	@RequestMapping(value="/select/clssify/update",method=RequestMethod.POST)
+	public @ResponseBody Map updateClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
 		try {
 			classifyMapinfo = classifyServiceImpl.updateClassify(classifyMapinfo);
 		} catch (Exception e) {
-			classifyMapinfo.clear();
-			classifyMapinfo.put("success", -1);
-			classifyMapinfo.put("messcode", 4);
-			e.printStackTrace();
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		
 		return classifyMapinfo;
 	}
-	
-	
 }

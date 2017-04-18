@@ -1,14 +1,14 @@
 package haust.vk.api;
 
-import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
+import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.NodescribeErrorInfoEnum;
 import haust.vk.service.UserinfoService;
 import haust.vk.utils.GetOsversionUtil;
 import haust.vk.utils.SnowflakeIdUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -26,40 +26,26 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping(value="file")
 public class FileServerController {
-	
 	private static Logger logger = Logger.getLogger(FileServerController.class);
-	
 	@Resource
 	private UserinfoService userinfoServiceImpl;
-	
 	@Resource
 	private UserloginDao userloginDao;
-	
 	@Resource
 	private SnowflakeIdUtil snowflakeIdUtil;
 	
-	
 	/**
 	 * 图片上传地址imgtype   文章(article)   用户头像(logo)  用户背景图(backlogo) 
-	 * @Author : viakiba
-	 * @param img
-	 * @param req
-	 * @param resp
-	 * 2017-04-13
-	 * @throws UnsupportedEncodingException 
 	 */
 	@RequestMapping(value = "/imgs/{imgtype}",method=RequestMethod.POST)
-	public void articleImgUpload(@PathVariable("imgtype") String imgtype,@RequestParam("img") MultipartFile img,HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException{
-		
+	public void articleImgUpload(@PathVariable("imgtype") String imgtype,@RequestParam("img") MultipartFile img,HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException, GlobalErrorInfoException{
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
-		
 		PrintWriter rgw = null;
 		String path =  null;
 		File file = null;
@@ -115,8 +101,12 @@ public class FileServerController {
 				
 				map = new HashMap<>();
 				map.put("user_id",user_id);
-				map.put("user_headimg",user_id+".png");
-				userinfoServiceImpl.updateUserlogo(map);
+				map.put("headimg",user_id+".png");
+				try {
+					userinfoServiceImpl.updateUserlogo(map);
+				} catch (Exception e1) {
+					throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+				}
 				
 				rgw.write(user_id+".png");
 				if(rgw != null){
@@ -153,9 +143,12 @@ public class FileServerController {
 				
 				map = new HashMap<>();
 				map.put("user_id",user_id);
-				map.put("user_background_img",user_id+".png");
-				userinfoServiceImpl.updateUserBacklogo(map);
-				
+				map.put("backimg",user_id+".png");
+				try {
+					userinfoServiceImpl.updateUserBacklogo(map);
+				} catch (Exception e1) {
+					throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+				}
 				rgw.write(user_id+".png");
 				if(rgw != null){
 					rgw.flush();
@@ -176,13 +169,6 @@ public class FileServerController {
 	
 	/**
 	 * 图片下载地址
-	 * @Author : viakiba
-	 * @param imgtype
-	 * @param imgname
-	 * @param req
-	 * @param resp
-	 * @throws IOException
-	 * 2017-04-13
 	 */
 	@RequestMapping(value = "/imgs/{imgtype}/{imgname}",method=RequestMethod.GET)
 	public void articleImgDownload(@PathVariable("imgtype") String imgtype,@PathVariable("imgname") String imgname,HttpServletRequest req, HttpServletResponse resp) throws IOException{

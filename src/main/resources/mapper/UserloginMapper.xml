@@ -9,7 +9,7 @@
 		select user_id from userlogin where token_id = #{token_id}
 	</select>
 	
-	<select id="selectUserloginByTokenid" parameterType="string" resultType="haust.vk.entity.Userlogin">
-		select * from userlogin where token_id = #{token_id}
+	<select id="selectUserloginByTokenid" parameterType="string" resultType="haust.vk.entity.Userinfo">
+		select * from userinfo where user_id = (select user_id from userlogin where token_id = #{token_id})
 	</select>
 </mapper>

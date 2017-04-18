@@ -3,78 +3,29 @@ package haust.vk.service;
 import java.util.Map;
 
 import haust.vk.entity.Userinfo;
+import haust.vk.entity.Userlogin;
 
 public interface UserinfoService {
 	
-	/**
-	 * 注册
-	 * @param userinfoMap
-	 * @return
-	 * @throws Exception 
-	 */
 	public Map registerUser(Map userinfoMap) throws Exception;
 	
-	/**
-	 * 登录
-	 * @param userinfoMap
-	 * @return
-	 */
 	public Map loginUser(Map userinfoMap) throws Exception;
 	
-	/**
-	 * 查看用户邮箱是否被注册
-	 * @param email
-	 * @return
-	 */
-	public Map selectByEmail(String email) throws Exception;
-	/**
-	 * token_id可用时间检查
-	 * @param token_id
-	 * @return
-	 * @throws Exception
-	 */
-	public Map selectUserloginByTokenid(String token_id) throws Exception;
+	public Userlogin insertLogin(Userinfo userinfo) throws Exception;
 	
-	/**
-	 * user_path唯一性检查
-	 * @param user_path
-	 * @return
-	 * @throws Exception
-	 */
-	public Map selectByUserpath(String user_path) throws Exception;
+	public Userinfo selectByEmail(String email) throws Exception;
 
-	/**
-	 * 修改用户基本信息
-	 * @param user_path
-	 * @return
-	 * @throws Exception
-	 */
+	public Userinfo selectUserloginByTokenid(String token_id) throws Exception;
+	
+	public Userinfo selectByUserpath(String user_path) throws Exception;
+
 	public Map updateUserinfo(Map infoMap) throws Exception;
 	
-	/**
-	 * 更新用户密码
-	 * @param infoMap
-	 * @return
-	 */
 	public Map updateUseremail(Map infoMap) throws Exception;
-	/**
-	 * 更新用户邮箱
-	 * @param infoMap
-	 * @return
-	 */
-	public Map updateUserpass(Map infoMap) throws Exception;
-	/**
-	 * 更新用户头像
-	 * @Author : viakiba
-	 * @param map
-	 * 2017-04-14
-	 */
-	public void updateUserlogo(Map map);
-	/**
-	 * 更新背景图
-	 * @Author : viakiba
-	 * @param map
-	 * 2017-04-14
-	 */
-	public void updateUserBacklogo(Map map);
+
+	public void updateUserpass(Map infoMap) throws Exception;
+
+	public void updateUserlogo(Map map) throws Exception;
+
+	public void updateUserBacklogo(Map map) throws Exception;
 }

@@ -54,7 +54,7 @@ public class GithubOauth {
 			id = (String) map.get("id");
 			//唯一性检查
 			try {
-				map = userinfoServiceImpl.selectByEmail(email);
+				map = (Map) userinfoServiceImpl.selectByEmail(email);
 				Integer success = (Integer) map.get("success");
 				if(success == 1){
 					//有存在  则返回  messcode = 4

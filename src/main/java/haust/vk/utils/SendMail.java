@@ -24,9 +24,9 @@ public class SendMail {
 		private static String KEY_PROPS = "mail.smtp.auth";
 		private static boolean VALUE_PROPS = true;
 		// 发件人用户名、密码
-		private String SEND_USER = "892645423@qq.com";
-		private String SEND_UNAME = "892645423@qq.com";
-		private String SEND_PWD = "sxavlagxjlyabfbe";
+		private static String SEND_USER = "892645423@qq.com";
+		private static String SEND_UNAME = "892645423@qq.com";
+		private static String SEND_PWD = "sxavlagxjlyabfbe";
 		// 建立会话
 		private MimeMessage message;
 		private Session s;
@@ -88,8 +88,8 @@ public class SendMail {
 		}
 		
 //		private static String username="service@Xdailiao.com";
-		private static String username="service@service.xdailiao.com";
-		private static String password="Tuiguang123";
+//		private static String username="service@service.xdailiao.com";
+//		private static String password="Tuiguang123";
 		/**
 		 * ssl加密方式
 		 * 参数解释
@@ -98,11 +98,9 @@ public class SendMail {
 		 * @param num	    数量
 		 * @param url1	    提交链接
 		 */
-	    public static void sendMailSSL(String to_mail,String company,String key,String num,String url1) {
-	    	String content = "Hi，"+company+"</br>"+
-	    					"IC网2折!!!低价处理  "+key+"，数量"+num+" 等一批呆滞电子元件，接受挑选购买。点击查看更多型号：  <a href="+url1+">点击查看</a></br>"+
-	    					"联系方式：</br>&nbsp&nbsp田老师：</br>&nbsp&nbsp&nbsp&nbsp电话:010-82755266</br>&nbsp&nbsp&nbsp&nbspQQ:3330435367"+
-	    					"<h3>废料|呆料 就找小呆料</h3>";
+	    public static void sendMailSSL(String to_mail,String user_name,String code) {
+	    	String content = "Hi，"+user_name+"</br>"+
+	    					"验证码是："+code;
 	    	try {
 	            //设置SSL连接、邮件环境
 	            Security.addProvider(new com.sun.net.ssl.internal.ssl.Provider());  
@@ -119,19 +117,19 @@ public class SendMail {
 	            Session session = Session.getDefaultInstance(props, new Authenticator() {
 	                //身份认证
 	                protected PasswordAuthentication getPasswordAuthentication() {
-	                    return new PasswordAuthentication(username, password);
+	                    return new PasswordAuthentication(SEND_UNAME, SEND_PWD);
 	                }
 	            });
 	            //建立邮件对象
 	            MimeMessage message = new MimeMessage(session);
 	            Address[] addresses = new Address[1];
-	            addresses[0]=new InternetAddress("service@xdailiao.com");
+	            addresses[0]=new InternetAddress(SEND_UNAME);
 	            message.setReplyTo(addresses);
 	            //设置邮件的发件人、收件人、主题   附带发件人名字
 //	            message.setFrom(new InternetAddress("from_mail@qq.com", "optional-personal"));
-	            message.setFrom(new InternetAddress(username));
+	            message.setFrom(new InternetAddress(SEND_UNAME));
 	            message.setRecipients(Message.RecipientType.TO, to_mail);
-	            message.setSubject("IC网2折低价处理 "+key+" 等一批呆滞电子元件");
+	            message.setSubject("验证码");
 	            //文本部分
 	            MimeBodyPart textPart = new MimeBodyPart();
 	            textPart.setContent(content, "text/html;charset=UTF-8");
@@ -148,12 +146,4 @@ public class SendMail {
 	        }
 	    }
 		    
-		/**
-		 * 测试
-		 * @param args
-		 */
-		public static void main(String[] args) {
-			//se.doSendHtmlEmail("邮件头文件名", "邮件内容邮件内容邮件内容邮件内容邮件内件内容", "huangpeng@xdailiao.com");
-			SendMail.sendMailSSL("1139800505@qq.com", "小呆料","AD320","569","http://www.baidu.com");
-		}
 }

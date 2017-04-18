@@ -1,5 +1,10 @@
 package haust.vk.api;
 
+import haust.vk.entity.Userinfo;
+import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
+import haust.vk.exception.code.NodescribeErrorInfoEnum;
+import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
 import haust.vk.service.ArticleService;
 import haust.vk.utils.JsonToMap;
 
@@ -7,203 +12,125 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-import com.alibaba.fastjson.JSON;
-
-@Controller
-@RequestMapping(value="article")
+@RestController
 public class ArticleController {
-	
 	@Resource
 	private ArticleService articleServiceImpl;
 	
-	@Resource
-	private JsonToMap jsonToMap;
-	
-	@RequestMapping(value="/insert",method=RequestMethod.POST)
-	public @ResponseBody Map insertArticle(@RequestBody String article){
-		Map articleMap = null;
+	@RequestMapping(value="/article/insert",method=RequestMethod.POST)
+	public void insertArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMapInfo = (Map) req.getAttribute("jsoninfo");
+		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
 		
-		try {
-			article = new String(article.getBytes("ISO-8859-1"),"UTF-8");
-			articleMap = jsonToMap.jsonToMapUtil(article);
-		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", 2);
-			e.printStackTrace();
+		String article_content = articleMapInfo.get("article_content").toString();
+		String token_id = articleMapInfo.get("token_id").toString();
+		String article_title = articleMapInfo.get("article_title").toString();
+		String classify_id = articleMapInfo.get("classify_id").toString();
+		if( article_content==null || "".equals(article_content) || "null".equals(article_content) || token_id==null || "".equals(token_id) || "null".equals(token_id) || article_title==null || "".equals(article_title) || "null".equals(article_title) || classify_id==null || "".equals(classify_id) || "null".equals(classify_id) ){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		
 		try {
-			articleMap = articleServiceImpl.insertArticle(articleMap);
+			articleMapInfo = articleServiceImpl.insertArticle(articleMapInfo);
 		} catch (Exception e) {
-			articleMap.clear();
-			articleMap.put("success", "-1");
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 	}
 	
-	@RequestMapping(value="/delete",method=RequestMethod.POST)
-	public Map deleteArticle(@RequestBody String deleteinfo){
-		System.out.println(deleteinfo);
-		Map articleMap = null;
-		try {
-			articleMap = jsonToMap.jsonToMapUtil(deleteinfo);
-		} catch (Exception e) {
-			articleMap.put("success", -1);
-			articleMap.put("messcode", 2);
-			e.printStackTrace();
-			return articleMap;
-		}
+	@RequestMapping(value="/article/delete",method=RequestMethod.POST)
+	public void deleteArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMap = (Map) req.getAttribute("jsoninfo");
 		try {
 			articleMap = articleServiceImpl.deleteArticle(articleMap);
 		} catch (Exception e) {
-			e.printStackTrace();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 	}
 	
-	@RequestMapping(value="/update",method=RequestMethod.POST)
-	public Map updateArticle(@RequestBody String deleteinfo){
-		Map articleMap = new HashMap();
-		
+	@RequestMapping(value="/article/update",method=RequestMethod.POST)
+	public Map updateArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMap = (Map) req.getAttribute("jsoninfo");
+		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
+		articleMap.put("user_id", userinfo.getUser_id());
 		try {
-			articleMap = jsonToMap.jsonToMapUtil(deleteinfo);
-		} catch (Exception e1) {
-			articleMap.put("success", -1);
-			articleMap.put("messcode", 2);
-			e1.printStackTrace();
-			return articleMap;
-		}
-		
-		try {
-			articleMap = articleServiceImpl.updateArticle(articleMap);
+			articleServiceImpl.updateArticle(articleMap);
 		} catch (Exception e) {
-			e.printStackTrace();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 	}
 	
-	/**
-	 * 获取文章详情
-	 * @param articleid
-	 * @return
-	 */
-	@RequestMapping(value="/selectdetail/{articleid}")
-	public @ResponseBody Map selectByArticleid(@PathVariable String articleid){
+	@RequestMapping(value="/{articleid}")
+	public @ResponseBody Map selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleDetail(articleid);
 		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return articleMap;
 	}
-	
-	/**
-	 * 基于时间轴的个人文章列表 分页
-	 * @param user_path
-	 * @return
-	 */
-	@RequestMapping(value="/selectpath/{userpath}/{beginnum}/{shownum}")
-	public Map selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum){
+	//zheli
+	@RequestMapping(value="/select/path/{userpath}/{beginnum}/{shownum}")
+	public Map selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return articleMap;
 	}
 	
 	/**
 	 * 基于时间轴的个人关注  文章列表 分页
-	 * @param user_path
-	 * @return
 	 */
-	@RequestMapping(value="/selectfollowarticle/{userpath}/{beginnum}/{shownum}")
-	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum){
+	@RequestMapping(value="/select/followarticle/{userpath}/{beginnum}/{shownum}")
+	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectFollowArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return articleMap;
 	}
 	
 	/**
 	 * 通过用户user_path 以及classifyid 获取该分类下的文章列表  分页
-	 * @param user_path
-	 * @param classifyid
-	 * @return
 	 */
-	@RequestMapping(value="/selectclassify/{userpath}/{classifyid}/{beginnum}/{shownum}")
-	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum){
+	@RequestMapping(value="/select/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
+	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleByUserClassifyArticleList(userpath,classifyid,beginnum,shownum);
 		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return articleMap;
 	}
 	
 	/**
 	 * 基于标题关键字检索文章标题  分页
-	 * @param user_path
-	 * @param classifyid
-	 * @return
 	 */
-	@RequestMapping(value="/selecttitle/{keyword}/{beginnum}/{shownum}")
-	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum){
+	@RequestMapping(value="/select/title/{keyword}/{beginnum}/{shownum}")
+	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleListByKeyword(keyword,beginnum,shownum);
 		} catch (Exception e) {
-			articleMap = new HashMap();
-			articleMap.clear();
-			articleMap.put("success", -1);
-			articleMap.put("messcode", "5 不可预见的错误");
-			e.printStackTrace();
-			return articleMap;
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return articleMap;
 	}

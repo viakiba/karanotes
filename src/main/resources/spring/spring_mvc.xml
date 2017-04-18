@@ -12,6 +12,10 @@
 	
 	<!-- 本配置文件 mvc-dispatcher的DispatcherServlet使用， 提供其相关的Spring MVC配置-->
 	<context:annotation-config />   
+	
+	<!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 -->
+	<mvc:annotation-driven />
+	
 	<bean class="org.springframework.web.servlet.mvc.annotation.AnnotationMethodHandlerAdapter">
 	  <property name="messageConverters">
 	   <list>
@@ -21,14 +25,11 @@
 	   </list>
 	  </property>
  	</bean>
+ 	
 	<!--  注册controller DispatcherServlet上下文， 只管理@Controller类型的bean， 忽略其他型的bean, 如@Service -->
-	<context:component-scan base-package="haust.vk.*">
+	<!-- <context:component-scan base-package="haust.vk.api">
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-	</context:component-scan> 
-	
-	<!-- HandlerMapping, 无需配置， Spring MVC可以默认启动。 DefaultAnnotationHandlerMappingannotation-driven HandlerMapping -->
-	<!-- 扩充了注解驱动，可以将请求参数绑定到控制器参数 -->
-	<mvc:annotation-driven />
+	</context:component-scan>  -->
 	
 	<!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->
 	<!-- 视图解析器 -->
@@ -55,13 +56,34 @@
             </props>  
         </property>  
     </bean>  
-    <!-- 由于web.xml中设置是：由SpringMVC拦截所有请求,于是在读取静态资源文件的时候就会受到影响(说白了就是读不到) -->  
-    <!-- 经过下面的配置，该标签的作用就是：所有页面中引用"/js/**"的资源，都会从"/static/js/"里面进行查找 -->  
-    <!-- 我们可以访问http://IP:8080/xxx/js/my.css和http://IP:8080/xxx/static/js/my.css对比出来 -->  
-    <!-- 
-    <mvc:resources mapping="/js/*.js" location="/static/js/" cache-period="5000"/> 
-    <mvc:resources mapping="/jslayer/*.js" location="/static/js/jslayer/" cache-period="5000"/>  
-     -->
+    
+     <mvc:interceptors>
+    	<mvc:interceptor>
+    		<mvc:mapping path=""/>
+    		<bean class="haust.vk.interceptor.GlobalErrorInfoExceptionInterceptor"></bean>
+    	</mvc:interceptor>
+    	
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**"/>
+    		<mvc:exclude-mapping path="/*"/>
+    		<mvc:exclude-mapping path="/extra/**"/>
+    		<mvc:exclude-mapping path="/select/**"/>
+    		<mvc:exclude-mapping path="/file/**"/>
+    		<bean class="haust.vk.interceptor.JsonFormatInterceptor"></bean>
+    	</mvc:interceptor>
+    	
+    	<mvc:interceptor>
+    		<mvc:mapping path="/**"/>
+    		<mvc:exclude-mapping path="/*"/>
+    		<mvc:exclude-mapping path="/select/**"/>
+    		<mvc:exclude-mapping path="/user/register"/>
+    		<mvc:exclude-mapping path="/extra/**"/>
+    		<mvc:exclude-mapping path="/file/**"/>
+    		<bean class="haust.vk.interceptor.TokenidIntercepter"></bean>
+    	</mvc:interceptor>
+    </mvc:interceptors> 
+    <!-- 由于web.xml中设置是：由SpringMVC拦截所有请求,经过下列配置，进行静态文件的映射 -->  
+    <!-- <mvc:resources mapping="/jslayer/*.js" location="/static/js/jslayer/" cache-period="5000"/>   -->
 </beans>
 
 
