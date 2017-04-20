@@ -3,8 +3,8 @@ package haust.vk.exception.code;
 import haust.vk.exception.interfaces.MesscodeInterface;
 
 public enum SuccessMessageCodeInfoEnum implements MesscodeInterface{
-	SUCCESS_CODE_MESSAGE("1","邮箱可以使用"),
-	FAIL_CODE_MESSAGE("0","邮箱不可以使用");
+	SUCCESS_CODE_MESSAGE("1","通过"),
+	FAIL_CODE_MESSAGE("0","不通过");
 	
 	private String code;
 	private String message;

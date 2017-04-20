@@ -57,7 +57,7 @@ public class FileServerController {
 			case "article":
 				long nextId = snowflakeIdUtil.nextId();
 				String name = String.valueOf(nextId)+".png";
-				path = GetOsversionUtil.getBasepath()+"article"+GetOsversionUtil.getOssplit() + name;
+				path = GetOsversionUtil.basepath+"article"+GetOsversionUtil.ossplit + name;
 				file = new File(path);
 				try {
 					img.transferTo(file);
@@ -89,7 +89,7 @@ public class FileServerController {
 					}
 					break;
 				}
-				path = GetOsversionUtil.getBasepath()+"logo"+GetOsversionUtil.getOssplit() + user_id+".png";
+				path = GetOsversionUtil.basepath+"logo"+GetOsversionUtil.ossplit + user_id+".png";
 				
 				file = new File(path);
 				try {
@@ -131,7 +131,7 @@ public class FileServerController {
 					}
 					break;
 				}
-				path = GetOsversionUtil.getBasepath()+"backlogo"+GetOsversionUtil.getOssplit() + user_id+".png";
+				path = GetOsversionUtil.basepath+"backlogo"+GetOsversionUtil.ossplit + user_id+".png";
 				
 				file = new File(path);
 				try {
@@ -173,7 +173,7 @@ public class FileServerController {
 	@RequestMapping(value = "/imgs/{imgtype}/{imgname}",method=RequestMethod.GET)
 	public void articleImgDownload(@PathVariable("imgtype") String imgtype,@PathVariable("imgname") String imgname,HttpServletRequest req, HttpServletResponse resp) throws IOException{
 		String pathname = imgtype;
-		File file = new File(GetOsversionUtil.getBasepath()+imgtype+GetOsversionUtil.getOssplit()+imgname+".png");
+		File file = new File(GetOsversionUtil.basepath+imgtype+GetOsversionUtil.ossplit+imgname+".png");
 		if(file.exists()){
 			//读取要下载的文件，保存到文件输入流
 			FileInputStream in = new FileInputStream(file);

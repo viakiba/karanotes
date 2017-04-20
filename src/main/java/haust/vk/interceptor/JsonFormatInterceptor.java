@@ -29,6 +29,7 @@ public class JsonFormatInterceptor extends HandlerInterceptorAdapter{
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		JsonRequestWrapper myJsonRequestWrapper = new JsonRequestWrapper(request);
+		logger.info(myJsonRequestWrapper.getBody());
 		Map jsoninfo = null;
 		try{
 			jsoninfo = JSON.parseObject(myJsonRequestWrapper.getBody(), Map.class);

@@ -33,7 +33,7 @@
 	<!-- 更改用户邮箱 -->
 	<update id="updateUseremail" parameterType="haust.vk.entity.Userinfo">
 		update userinfo set 
-			user_name = #{user_name},user_sex = #{user_sex},user_path = #{user_path},user_signature=#{user_signature}
+			user_email = #{user_email}
 		where user_id = #{user_id}
 	</update>
 	<!-- 更改用户密码 -->

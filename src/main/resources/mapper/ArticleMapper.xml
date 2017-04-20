@@ -19,11 +19,11 @@
 	</delete>
 	
 	<delete id="deleteArticlecontent" parameterType="string">
-		delete from articleabstract where article_id = #{article_id}
+		delete from articlecontent where article_id = #{article_id}
 	</delete>
 	
 	<delete id="deleteArticletag" parameterType="string">
-		delete from articleabstract where article_id = #{article_id}
+		delete from articletag where article_id = #{article_id}
 	</delete>
 	
 	<update id="updateArticletag" parameterType="haust.vk.entity.Articletag">

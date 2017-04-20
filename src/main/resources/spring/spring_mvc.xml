@@ -8,7 +8,7 @@
         http://www.springframework.org/schema/context 
         http://www.springframework.org/schema/context/spring-context.xsd
         http://www.springframework.org/schema/mvc
-        http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd">
+        http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 	
 	<!-- 本配置文件 mvc-dispatcher的DispatcherServlet使用， 提供其相关的Spring MVC配置-->
 	<context:annotation-config />   
@@ -26,11 +26,6 @@
 	  </property>
  	</bean>
  	
-	<!--  注册controller DispatcherServlet上下文， 只管理@Controller类型的bean， 忽略其他型的bean, 如@Service -->
-	<!-- <context:component-scan base-package="haust.vk.api">
-		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller" />
-	</context:component-scan>  -->
-	
 	<!-- 配置ViewResolver。 可以用多个ViewResolver。 使用order属性排序。 InternalResourceViewResolver放在最后。 -->
 	<!-- 视图解析器 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -67,7 +62,6 @@
     		<mvc:mapping path="/**"/>
     		<mvc:exclude-mapping path="/*"/>
     		<mvc:exclude-mapping path="/extra/**"/>
-    		<mvc:exclude-mapping path="/select/**"/>
     		<mvc:exclude-mapping path="/file/**"/>
     		<bean class="haust.vk.interceptor.JsonFormatInterceptor"></bean>
     	</mvc:interceptor>
@@ -82,6 +76,17 @@
     		<bean class="haust.vk.interceptor.TokenidIntercepter"></bean>
     	</mvc:interceptor>
     </mvc:interceptors> 
+    
+  <!--  <mvc:cors>
+   		<mvc:mapping path="/**"
+        allowed-origins="*"
+        allowed-methods="GET, HEAD, POST, PUT, DELETE, TRACE, OPTIONS, PATCH"
+        allowed-headers="Access-Control-Request-Headers, Access-Control-Request-Method,Access-Control-Allow-Origin"
+        exposed-headers="" 
+        allow-credentials="false"
+        max-age="123" />
+
+   </mvc:cors> -->
     <!-- 由于web.xml中设置是：由SpringMVC拦截所有请求,经过下列配置，进行静态文件的映射 -->  
     <!-- <mvc:resources mapping="/jslayer/*.js" location="/static/js/jslayer/" cache-period="5000"/>   -->
 </beans>

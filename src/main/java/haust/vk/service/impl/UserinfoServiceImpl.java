@@ -9,8 +9,11 @@ import java.util.UUID;
 
 import javax.annotation.Resource;
 
+import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
+
+import haust.vk.api.UserInfoComtroller;
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Userinfo;
@@ -24,6 +27,8 @@ import haust.vk.utils.SnowflakeIdUtil;
 
 @Service
 public class UserinfoServiceImpl implements UserinfoService{
+	
+	private static Logger logger = Logger.getLogger(UserinfoServiceImpl.class);
 	@Resource
 	private UserinfoDao userinfoDaoImpl;
 	@Resource
@@ -39,8 +44,8 @@ public class UserinfoServiceImpl implements UserinfoService{
 	@Override
 	public Map registerUser(Map userinfoMap) throws Exception{
 		System.out.println("--------------");
-		String user_email = userinfoMap.get("user_email").toString();
-		String user_password = userinfoMap.get("user_password").toString();
+		String user_email = (String) userinfoMap.get("user_email");
+		String user_password = (String) userinfoMap.get("user_password");
 		
 		//先进行判断邮箱是否重复
 		List<Userinfo> userlist = userinfoDaoImpl.selectUserByEmail(user_email);
@@ -87,8 +92,8 @@ public class UserinfoServiceImpl implements UserinfoService{
 
 	@Override
 	public Map loginUser(Map userinfoMap) throws Exception{
-		String user_email = userinfoMap.get("user_email").toString();
-		String user_password = userinfoMap.get("user_password").toString();
+		String user_email = (String) userinfoMap.get("user_email");
+		String user_password = (String) userinfoMap.get("user_password");
 		
 		user_password = encryptUtil.MD5Encode(user_password);
 		userinfoMap.remove("user_password");
@@ -96,29 +101,27 @@ public class UserinfoServiceImpl implements UserinfoService{
 		List<Userinfo> loginUserInfo = userinfoDaoImpl.loginUserInfo(userinfoMap);
 		
 		if(loginUserInfo == null | loginUserInfo.size() <= 0  ){
-			userinfoMap.clear();
-			userinfoMap.put("messcode", 1);
-			userinfoMap.put("success", -1);
-			return userinfoMap;
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
-		
+		Userinfo userinfo = loginUserInfo.get(0);
 		//设置登陆的id
 		long token_id = snowflakeIdUtil.nextId();
 		//放到数据库中  
 		Userlogin userlogin = new Userlogin();
 		userlogin.setToken_id(String.valueOf(token_id));
-		userlogin.setUser_id(loginUserInfo.get(0).getUser_id());
+		userlogin.setUser_id(userinfo.getUser_id());
 		userlogin.setUser_login_time(String.valueOf( new Timestamp( (new Date()).getTime()) ));
 		userloginDaoImpl.insertUserlogin(userlogin);
 		
 		userinfoMap.clear();
 		userinfoMap.put("token_id", String.valueOf(token_id));
-		userinfoMap.put("user_headimg", loginUserInfo.get(0).getUser_headimg());
-		userinfoMap.put("user_email", loginUserInfo.get(0).getUser_email());
-		userinfoMap.put("user_sex", loginUserInfo.get(0).getUser_sex());
-		userinfoMap.put("user_path", loginUserInfo.get(0).getUser_path());
-		userinfoMap.put("user_signature", loginUserInfo.get(0).getUser_signature());
-		userinfoMap.put("user_extra", loginUserInfo.get(0).getUser_extra());
+		userinfoMap.put("user_id", String.valueOf(userinfo.getUser_id()));
+		userinfoMap.put("user_headimg", userinfo.getUser_headimg());
+		userinfoMap.put("user_email", userinfo.getUser_email());
+		userinfoMap.put("user_sex", userinfo.getUser_sex());
+		userinfoMap.put("user_path", userinfo.getUser_path());
+		userinfoMap.put("user_signature", userinfo.getUser_signature());
+		userinfoMap.put("user_extra", userinfo.getUser_extra());
 		
 		return userinfoMap;
 	}
@@ -153,41 +156,35 @@ public class UserinfoServiceImpl implements UserinfoService{
 	}
 	
 	@Override
-	public Userinfo selectUserloginByTokenid(String token_id) throws Exception {
-		Userinfo userlogin = userloginDaoImpl.selectUserloginByTokenid(token_id);
-		if(userlogin == null ){
+	public Userinfo selectUserinfoByTokenid(String token_id) throws Exception {
+		Userinfo userinfo = userloginDaoImpl.selectUserloginByTokenid(token_id);
+		if(userinfo == null ){
 			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
-		return userlogin;
+		return userinfo;
 	}
 	
 	@Override
 	public Userinfo selectByUserpath(String user_path) throws Exception {
-		Map map = new HashMap();;
+		Map map = new HashMap();
 		Userinfo userinfo = userinfoDaoImpl.selectByUserpath(user_path);
-		if(userinfo == null){
-			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
-		}
 		return userinfo;
 	}
 
 	@Override
 	public Map updateUserinfo(Map userinfo) throws Exception {
-		String token_id = userinfo.get("token_id").toString();
-		String user_name = userinfo.get("user_name").toString();
-		String user_sex = userinfo.get("user_sex").toString();
-		String user_path = userinfo.get("user_path").toString();
-		String user_signature = userinfo.get("user_signature").toString();
+		String token_id = (String) userinfo.get("token_id");
+		String user_name = (String) userinfo.get("user_name");
+		String user_sex = (String) userinfo.get("user_sex");
+		String user_path = (String) userinfo.get("user_path");
+		String user_signature = (String) userinfo.get("user_signature");
 		
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
 		
 		if(user_id == null){
-			userinfo.clear();
-			userinfo.put("success", -1);
-			userinfo.put("messcode", 1);
-			return userinfo;
+			logger.info(user_id);
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 		}
-		
 		Userinfo user = new Userinfo();
 		
 		user.setUser_id(user_id);
@@ -202,7 +199,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 
 	@Override
 	public Map updateUseremail(Map infoMap) throws Exception {
-		String token_id = infoMap.get("token_id").toString();
+		String token_id = (String) infoMap.get("token_id");
 		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
 		if(user_id == null){
 			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
@@ -214,12 +211,15 @@ public class UserinfoServiceImpl implements UserinfoService{
 	
 	@Override
 	public void updateUserpass(Map infoMap) throws Exception {
-		String token_id = infoMap.get("token_id").toString();
-		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
-		if(user_id == null){
-			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
-		}
-		infoMap.put("user_id", user_id);
+		String user_password_old = (String) infoMap.get("user_password_old");
+		String user_password_new = (String) infoMap.get("user_password_new");
+		
+		user_password_old = EncryptUtil.MD5Encode(user_password_old);
+		user_password_new = EncryptUtil.MD5Encode(user_password_new);
+		
+		infoMap.put("user_password_old",user_password_old);
+		infoMap.put("user_password_new",user_password_new);
+		
 		userinfoDaoImpl.updateUserpass(infoMap);
 	}
 

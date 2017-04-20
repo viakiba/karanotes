@@ -15,7 +15,7 @@ public interface UserinfoService {
 	
 	public Userinfo selectByEmail(String email) throws Exception;
 
-	public Userinfo selectUserloginByTokenid(String token_id) throws Exception;
+	public Userinfo selectUserinfoByTokenid(String token_id) throws Exception;
 	
 	public Userinfo selectByUserpath(String user_path) throws Exception;
 

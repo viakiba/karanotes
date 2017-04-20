@@ -41,7 +41,7 @@ public class TokenidIntercepter extends HandlerInterceptorAdapter{
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
 		
-		Userinfo userinfo = userinfoServiceImpl.selectUserloginByTokenid(token_id);
+		Userinfo userinfo = userinfoServiceImpl.selectUserinfoByTokenid(token_id);
 		if(userinfo == null){
 			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
 		}

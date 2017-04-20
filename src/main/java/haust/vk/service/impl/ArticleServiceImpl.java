@@ -36,36 +36,23 @@ public class ArticleServiceImpl implements ArticleService{
 	public Map insertArticle(Map articleMapInfo) throws Exception{
 		
 		//标签
-		String articletag = "{\"tag_content\":"+articleMapInfo.get("tag_content").toString()+"}";
-		
-		String article_show_img = articleMapInfo.get("article_show_img").toString();
-		String abstract_content = articleMapInfo.get("abstract_content").toString();
-		String article_content = articleMapInfo.get("article_content").toString();
-		String token_id = articleMapInfo.get("token_id").toString();
-		String article_title = articleMapInfo.get("article_title").toString();
-		String classify_id = articleMapInfo.get("classify_id").toString();
-		
-		//根据tokenid 查找user_id
-		String user_id = userloginDaoImpl.selectUseridByTokenid(token_id);
-		if( user_id==null ){
-			articleMapInfo.clear();
-			articleMapInfo.put("success", -1);
-			articleMapInfo.put("messcode", 1);
-			return articleMapInfo;
-		}
+		String tag = articleMapInfo.get("tag_content").toString();
+		String articletag = "{\"tag_content\":"+((String) tag)+"}";
+		articletag = "{\"tag_content\":"+articleMapInfo.get("tag_content").toString()+"}";
+	
+		String article_show_img = (String) articleMapInfo.get("article_show_img");
+		String abstract_content = (String) articleMapInfo.get("abstract_content");
+		String article_content = (String) articleMapInfo.get("article_content");
+		String token_id = (String) articleMapInfo.get("token_id");
+		String article_title = (String) articleMapInfo.get("article_title");
+		String classify_id = (String) articleMapInfo.get("classify_id");
+		String user_id = (String) articleMapInfo.get("user_id");
 		
 		//简要
 		Articleabstract article_abstract = new Articleabstract();
 		article_abstract.setArticle_title(article_title);
 		article_abstract.setClassify_id(classify_id);
-		if(abstract_content == null | abstract_content.length() == 0){
-			if(article_content.length()>100){
-				article_abstract.setAbstract_content(article_content.substring(0,100) );
-			}else{
-				article_abstract.setAbstract_content(article_content);
-			}
-		}
-		article_abstract.setArticle_attachment(articleMapInfo.get("article_atta").toString());
+		article_abstract.setArticle_attachment((String) articleMapInfo.get("article_atta"));
 		article_abstract.setArticle_show_img(article_show_img);
 		
 		//生成articleid  绑定userid  初始化简介的参数
@@ -81,7 +68,7 @@ public class ArticleServiceImpl implements ArticleService{
 		articlecontentmap.put("article_content", String.valueOf(article_content));
 		//articletag 
 		Articletag article_tag = new Articletag();
-		article_tag.setArticle_id(String.valueOf(article_content));
+		article_tag.setArticle_id(String.valueOf(article_id));
 		article_tag.setUser_id(user_id);
 		article_tag.setTag_content(articletag);
 		//存入数据库
@@ -97,38 +84,30 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map deleteArticle(Map articlemap) throws Exception {
-
-		String token_id = articlemap.get("token_id").toString();
-		String article_id = articlemap.get("article_id").toString();
-		
-		if(token_id==null || "".equals(token_id) || "null".equals(token_id) || article_id==null || "".equals("article_id") || "".equals(article_id)){
-			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
-		}
-		
+		String article_id = (String) articlemap.get("article_id");
 		articleDaoImpl.deleteArticleabstract(article_id);
 		articleDaoImpl.deleteArticlecontent(article_id);
 		articleDaoImpl.deleteArticletag(article_id);
-		
 		return articlemap;
 	}
 
 	@Override
 	public Map updateArticle(Map articleMapInfo) throws Exception {
-		String token_id = articleMapInfo.get("token_id").toString();
-		String article_id = articleMapInfo.get("article_id").toString();
-		String article_title = articleMapInfo.get("article_title").toString();
-		String classify_id = articleMapInfo.get("classify_id").toString();
-		String article_show_img = articleMapInfo.get("article_show_img").toString();
-		String abstract_content = articleMapInfo.get("abstract_content").toString();
-		String article_content = articleMapInfo.get("article_content").toString();
-		String tag_content = articleMapInfo.get("tag_content").toString();
+		String token_id = (String) articleMapInfo.get("token_id");
+		String article_id = (String) articleMapInfo.get("article_id");
+		String article_title = (String) articleMapInfo.get("article_title");
+		String classify_id = (String) articleMapInfo.get("classify_id");
+		String article_show_img = (String) articleMapInfo.get("article_show_img");
+		String abstract_content = (String) articleMapInfo.get("abstract_content");
+		String article_content = (String) articleMapInfo.get("article_content");
+		String tag_content = (String) articleMapInfo.get("tag_content");
 		
 		if(token_id==null || "".equals(token_id) || "null".equals(token_id) || article_id==null || "".equals(article_id) || "null".equals(article_id) || article_title==null || "".equals(article_title) || "null".equals(article_title) || classify_id==null || "".equals(classify_id) || "null".equals(classify_id)|| abstract_content==null || "".equals(abstract_content) || "null".equals(abstract_content) || article_content==null || "".equals(article_content) || "null".equals(article_content) ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
 		
 		//根据tokenid 查找user_id
-		String user_id = articleMapInfo.get("user_id").toString();
+		String user_id = (String) articleMapInfo.get("user_id");
 		
 		//标签
 		String articletag = "{\"tag_content\":"+tag_content+"}";

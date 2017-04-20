@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -26,6 +27,7 @@ import haust.vk.service.UserinfoService;
 import haust.vk.utils.JsonRequestWrapper;
 
 @Controller
+@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
 public class ExtraController {
 	
 	private static Logger logger = Logger.getLogger(ExtraController.class);
@@ -59,17 +61,21 @@ public class ExtraController {
 	/**
 	 * get跨域
 	 */
+	//@CrossOrigin(methods={RequestMethod.GET, RequestMethod.POST})
 	@RequestMapping(value="/extra/checkemails")
-	public @ResponseBody Map checkEmails(String email) throws UnsupportedEncodingException, GlobalErrorInfoException{
+	public @ResponseBody Map checkEmails(HttpServletRequest req,HttpServletResponse resp) throws UnsupportedEncodingException, GlobalErrorInfoException{
+		String email = req.getParameter("email");
+		logger.info(email);
 		Map map = new HashMap<>();
-		map.put("code", email);
-		map.put("message", "不可以");
+		map.put("code", "1");
+		resp.addHeader(" Access-Control-Allow-Origin", "*");
 		return map;
 	}
 	
 	/**
 	 * post  json 跨域测试
 	 */
+	//@CrossOrigin(methods={RequestMethod.GET, RequestMethod.POST})
 	@RequestMapping(value="/extra/checkemailss")
 	public @ResponseBody Map checkEmailss(HttpServletRequest req,HttpServletResponse resp) throws IOException{
 		JsonRequestWrapper json = new JsonRequestWrapper(req);
