@@ -121,8 +121,8 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userinfoMap.put("user_sex", userinfo.getUser_sex());
 		userinfoMap.put("user_path", userinfo.getUser_path());
 		userinfoMap.put("user_signature", userinfo.getUser_signature());
+		userinfoMap.put("user_name", userinfo.getUser_name());
 		userinfoMap.put("user_extra", userinfo.getUser_extra());
-		
 		return userinfoMap;
 	}
 	

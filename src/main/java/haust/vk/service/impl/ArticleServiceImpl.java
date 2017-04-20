@@ -40,7 +40,6 @@ public class ArticleServiceImpl implements ArticleService{
 		String articletag = "{\"tag_content\":"+((String) tag)+"}";
 		articletag = "{\"tag_content\":"+articleMapInfo.get("tag_content").toString()+"}";
 	
-		String article_show_img = (String) articleMapInfo.get("article_show_img");
 		String abstract_content = (String) articleMapInfo.get("abstract_content");
 		String article_content = (String) articleMapInfo.get("article_content");
 		String token_id = (String) articleMapInfo.get("token_id");
@@ -48,12 +47,18 @@ public class ArticleServiceImpl implements ArticleService{
 		String classify_id = (String) articleMapInfo.get("classify_id");
 		String user_id = (String) articleMapInfo.get("user_id");
 		
+		String article_show_img = (String) articleMapInfo.get("article_show_img");
+		if( article_show_img== null || "".equals(article_show_img) || "null".equals(article_show_img)){
+			article_show_img = user_id+".png";
+		}
+		
 		//简要
 		Articleabstract article_abstract = new Articleabstract();
 		article_abstract.setArticle_title(article_title);
 		article_abstract.setClassify_id(classify_id);
 		article_abstract.setArticle_attachment((String) articleMapInfo.get("article_atta"));
 		article_abstract.setArticle_show_img(article_show_img);
+		article_abstract.setAbstract_content(abstract_content);
 		
 		//生成articleid  绑定userid  初始化简介的参数
 		long article_id = snowflakeIdUtil.nextId();
@@ -93,21 +98,18 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map updateArticle(Map articleMapInfo) throws Exception {
-		String token_id = (String) articleMapInfo.get("token_id");
 		String article_id = (String) articleMapInfo.get("article_id");
 		String article_title = (String) articleMapInfo.get("article_title");
 		String classify_id = (String) articleMapInfo.get("classify_id");
 		String article_show_img = (String) articleMapInfo.get("article_show_img");
 		String abstract_content = (String) articleMapInfo.get("abstract_content");
 		String article_content = (String) articleMapInfo.get("article_content");
-		String tag_content = (String) articleMapInfo.get("tag_content");
+		String tag_content = articleMapInfo.get("tag_content").toString();
+		String user_id = (String) articleMapInfo.get("user_id");
 		
-		if(token_id==null || "".equals(token_id) || "null".equals(token_id) || article_id==null || "".equals(article_id) || "null".equals(article_id) || article_title==null || "".equals(article_title) || "null".equals(article_title) || classify_id==null || "".equals(classify_id) || "null".equals(classify_id)|| abstract_content==null || "".equals(abstract_content) || "null".equals(abstract_content) || article_content==null || "".equals(article_content) || "null".equals(article_content) ){
+		if( article_id==null || "".equals(article_id) || "null".equals(article_id) || article_title==null || "".equals(article_title) || "null".equals(article_title) || classify_id==null || "".equals(classify_id) || "null".equals(classify_id)|| abstract_content==null || "".equals(abstract_content) || "null".equals(abstract_content) || article_content==null || "".equals(article_content) || "null".equals(article_content) ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		
-		//根据tokenid 查找user_id
-		String user_id = (String) articleMapInfo.get("user_id");
 		
 		//标签
 		String articletag = "{\"tag_content\":"+tag_content+"}";
@@ -122,6 +124,7 @@ public class ArticleServiceImpl implements ArticleService{
 		article_abstract.setArticle_title(article_title);
 		article_abstract.setClassify_id(classify_id);
 		article_abstract.setArticle_show_img(article_show_img);
+		article_abstract.setAbstract_content(abstract_content);
 		if(abstract_content==null | abstract_content.length() == 0){
 			if(article_content.length()>100){
 				article_abstract.setAbstract_content(article_content.substring(0, 100));
@@ -148,9 +151,6 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map selectArticleDetail(String articleid) throws Exception {
-		if(articleid == null || "".equals(articleid) || "null".equals(articleid)){
-			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
-		}
 		Map detail = articleDaoImpl.selectArticleDetail(articleid);
 		return detail;
 	}

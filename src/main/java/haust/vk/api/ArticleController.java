@@ -71,21 +71,26 @@ public class ArticleController {
 	}
 	
 	@RequestMapping(value="/article/update",method=RequestMethod.POST)
-	public Map updateArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
-		Map articleMap = (Map) req.getAttribute("jsoninfo");
+	public ResultBody updateArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMapInfo = (Map) req.getAttribute("jsoninfo");
 		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
-		articleMap.put("user_id", userinfo.getUser_id());
+		articleMapInfo.put("user_id", userinfo.getUser_id());
 		try {
-			articleServiceImpl.updateArticle(articleMap);
+			articleServiceImpl.updateArticle(articleMapInfo);
 		} catch (Exception e) {
-			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+			logger.debug(e);
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
+		return new ResultBody(new HashMap());
 	}
 	
+	//zheli
 	@RequestMapping(value="/select/article/{articleid}")
 	public @ResponseBody Map selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
 		Map articleMap = null;
+		if(articleid == null || "".equals(articleid) || "null".equals(articleid)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
 		try {
 			articleMap = articleServiceImpl.selectArticleDetail(articleid);
 		} catch (Exception e) {
@@ -93,7 +98,7 @@ public class ArticleController {
 		}
 		return articleMap;
 	}
-	//zheli
+
 	@RequestMapping(value="/select/article/{userpath}/{beginnum}/{shownum}")
 	public Map selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
