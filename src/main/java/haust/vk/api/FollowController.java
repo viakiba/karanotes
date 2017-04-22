@@ -65,12 +65,12 @@ public class FollowController {
 		String tokenid = (String) jsoninfo.get("token_id");
 		String follow_userid = (String) jsoninfo.get("follow_user_id");
 		String follow_id = (String) jsoninfo.get("follow_id");
-		Integer is_eachother = (Integer) jsoninfo.get("is_eachother");
-		String userid = (String) jsoninfo.get("userid");
+		Integer is_eachother = Integer.valueOf( (String) jsoninfo.get("is_eachother"));
+		
 		if("null".equals(tokenid) || "".equals(tokenid) || tokenid == null || "null".equals(follow_id) || "".equals(follow_id) || follow_id == null ||  "null".equals(is_eachother) || "".equals(is_eachother) || is_eachother == null || "null".equals(follow_userid) || "".equals(follow_userid) || follow_userid == null ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		jsoninfo.put("user_id", userid);
+		jsoninfo.put("user_id", userinfo.getUser_id());
 		try {
 			followServiceImpl.deleteFollow(jsoninfo);
 		} catch (Exception e) {

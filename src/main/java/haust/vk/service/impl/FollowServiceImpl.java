@@ -1,5 +1,7 @@
 package haust.vk.service.impl;
 
+import static org.hamcrest.CoreMatchers.is;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,18 +53,22 @@ public class FollowServiceImpl implements FollowService{
 		
 		String follow_userid = (String) jsoninfo.get("follow_user_id");
 		String follow_id = (String) jsoninfo.get("follow_id");
-		Integer is_eachother = (Integer) jsoninfo.get("is_eachother");
-		String userid = (String) jsoninfo.get("userid");
+		Integer is_eachother = Integer.valueOf( (String) jsoninfo.get("is_eachother"));
+		String userid = (String) jsoninfo.get("user_id");
 		//添加关注标识  0 无关注  1 被检索的用户已经关注了用户   2用户已经关注了被检索到的用户   3已经互相关注
-		if(is_eachother == 1){
+		System.out.println(is_eachother);
+		if("3".equals(String.valueOf(is_eachother))){
 			//更新
+			System.out.println("*****************");
 			Map map = new HashMap();
 			map.put("user_id", follow_userid);
 			map.put("follow_user_id", userid);
 			map.put("is_eachother",0);
 			followDaoImpl.updateFollow(map);
+			followDaoImpl.deleteFollow(follow_id);
+		}else{
+			followDaoImpl.deleteFollow(follow_id);
 		}
-		followDaoImpl.deleteFollow(follow_id);
 	}
 	
 	@Override

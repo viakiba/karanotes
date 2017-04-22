@@ -10,7 +10,7 @@
 	</update>
 	
 	<delete id="deleteFollow" parameterType="string">
-		delete followinfo where follow_id = #{follow_id}
+		delete from followinfo where follow_id = #{follow_id}
 	</delete>
 	
 	<select id="selectFollowListByUserid" parameterType="string" resultType="java.util.Map">

@@ -274,14 +274,17 @@ public class UserinfoServiceImpl implements UserinfoService{
 					break;
 				}
 			}
+			temp.put("follow_id", "");
 			for(Map temp1 : listFollowPositive){
 				String temp_user_id = (String) temp1.get("follow_user_id");
+				
 				if(userid.equals(temp_user_id)){
 					if(is_eachother.equals("0")){
 						is_eachother = "2";
 					}else{
 						is_eachother = "3";
 					}
+					temp.put("follow_id", (String) temp1.get("follow_id"));
 					break;
 				}
 			}
