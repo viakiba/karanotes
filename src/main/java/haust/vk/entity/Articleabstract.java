@@ -15,7 +15,6 @@ public class Articleabstract {
 	private String article_attachment;
 	private Date article_create_time;
 	private Date article_update_time;
-	private String extra;
 	
 	public Articleabstract(){}
 
@@ -115,25 +114,12 @@ public class Articleabstract {
 		this.article_update_time = article_update_time;
 	}
 
-	public String getExtra() {
-		return extra;
-	}
-
-	public void setExtra(String extra) {
-		this.extra = extra;
-	}
-
 	@Override
 	public String toString() {
-		return "Articleabstract [article_id=" + article_id + ", article_title="
-				+ article_title + ", article_show_img=" + article_show_img
-				+ ", classify_id=" + classify_id + ", abstract_content="
-				+ abstract_content + ", user_id=" + user_id + ", collect_num="
-				+ collect_num + ", read_num=" + read_num + ", praise_num="
-				+ praise_num + ", article_attachment=" + article_attachment
-				+ ", article_create_time=" + article_create_time
-				+ ", article_update_time=" + article_update_time + ", extra="
-				+ extra + "]";
+		return "Articleabstract [article_id=" + article_id + ", article_title=" + article_title + ", article_show_img="
+				+ article_show_img + ", classify_id=" + classify_id + ", abstract_content=" + abstract_content
+				+ ", user_id=" + user_id + ", collect_num=" + collect_num + ", read_num=" + read_num + ", praise_num="
+				+ praise_num + ", article_attachment=" + article_attachment + ", article_create_time="
+				+ article_create_time + ", article_update_time=" + article_update_time + "]";
 	}
-	
 }

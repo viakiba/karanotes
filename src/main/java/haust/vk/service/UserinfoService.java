@@ -1,5 +1,6 @@
 package haust.vk.service;
 
+import java.util.List;
 import java.util.Map;
 
 import haust.vk.entity.Userinfo;
@@ -28,4 +29,8 @@ public interface UserinfoService {
 	public void updateUserlogo(Map map) throws Exception;
 
 	public void updateUserBacklogo(Map map) throws Exception;
+
+	public List<Map> selectUserListByTokenid(Map infoMap) throws Exception;
+
+	public List<Map> selectUserList(Map infoMap) throws Exception;
 }

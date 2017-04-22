@@ -63,4 +63,6 @@ public interface UserinfoDao {
 	 */
 	public int updateUserpass(Map infoMap) throws Exception;
 
+	public List<Map> selectUserList(Map infomap) throws Exception;
+
 }

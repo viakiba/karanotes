@@ -100,13 +100,36 @@ public class ArticleDaoImpl implements ArticleDao{
 	}
 
 	@Override
-	public Map selectArticleDetail(String articleid) {
+	public Map selectArticleAbstract(String articleid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		Map articleTitle = os.selectOne("selectArticleDetail", articleid);
+		Map articleTitle = os.selectOne("selectArticleAbstract", articleid);
 		os.close();
 		return articleTitle;
 	}
+	
+	@Override
+	public String selectArticleContent(String articleid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		String articleDetail = os.selectOne("selectArticleContent", articleid);
+		os.close();
+		return articleDetail;
+	}
 
+	@Override
+	public String selectArticleTag(String articleid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		String articleTag = os.selectOne("selectArticleTag", articleid);
+		os.close();
+		return articleTag;
+	}
+	
+	@Override
+	public String selectArticleClassify(String classify_id) {
+		SqlSession os = sqlSessionFactory.openSession();
+		String classifyContent = os.selectOne("selectArticleClassify", classify_id);
+		os.close();
+		return classifyContent;
+	}
 	@Override
 	public List<Articleabstract> selectArticleListByPerson(Map user_path) {
 		

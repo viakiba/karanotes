@@ -65,18 +65,24 @@ public interface ArticleDao {
 	 */
 	public void updateArticleClassify(Map classifyids) throws Exception;
 	/**
-	 * 获取文章详情   不包括评论
-	 * @param articleid
-	 * @return
-	 * @throws Exception
-	 */
-	public Map selectArticleDetail(String articleid) throws Exception;
-	/**
 	 * 获取个人列表   不分类/分类 均可  分页
 	 * @param map
 	 * @return
 	 * @throws Exception
 	 */
 	public List<Articleabstract> selectArticleListByPerson(Map map) throws Exception;
+	/**
+	 * 获取文章详情   不包括评论 selectArticleAbstract selectArticleContent selectArticleTag selectArticleClassify
+	 * @param articleid
+	 * @return
+	 * @throws Exception
+	 */
+	public Map selectArticleAbstract(String articleid)  throws Exception;
+
+	public String selectArticleContent(String articleid)  throws Exception;
+
+	public String selectArticleTag(String articleid)  throws Exception;
+
+	public String selectArticleClassify(String classify_id);
 	
 }

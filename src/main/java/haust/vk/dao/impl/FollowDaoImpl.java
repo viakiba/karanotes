@@ -19,9 +19,16 @@ public class FollowDaoImpl implements FollowDao{
 	private SqlSessionFactory sqlSessionFactory;
 	
 	@Override
-	public void insertFollow(Followinfo followinfo) throws Exception {
+	public void insertFollow(Map followinfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertFollow", followinfo);
+		os.close();
+	}
+	
+	@Override
+	public void updateFollow(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.update("updateFollow", map);
 		os.close();
 	}
 
@@ -47,5 +54,12 @@ public class FollowDaoImpl implements FollowDao{
 		os.close();
 		return list;
 	}
-
+	
+	@Override
+	public List<Map> selectFollowListByUseridAndfollowUserid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectFollowListByUseridAndfollowUserid", map);
+		os.close();
+		return list;
+	}
 }

@@ -46,6 +46,7 @@ public class ArticleServiceImpl implements ArticleService{
 		String article_title = (String) articleMapInfo.get("article_title");
 		String classify_id = (String) articleMapInfo.get("classify_id");
 		String user_id = (String) articleMapInfo.get("user_id");
+		String article_attachment = (String) articleMapInfo.get("article_attachment");
 		
 		String article_show_img = (String) articleMapInfo.get("article_show_img");
 		if( article_show_img== null || "".equals(article_show_img) || "null".equals(article_show_img)){
@@ -59,7 +60,10 @@ public class ArticleServiceImpl implements ArticleService{
 		article_abstract.setArticle_attachment((String) articleMapInfo.get("article_atta"));
 		article_abstract.setArticle_show_img(article_show_img);
 		article_abstract.setAbstract_content(abstract_content);
-		
+		if("".equals(article_attachment) || "null".equals(article_attachment) || article_attachment == null){
+			article_attachment = "";
+		}
+		article_abstract.setArticle_attachment(article_attachment);
 		//生成articleid  绑定userid  初始化简介的参数
 		long article_id = snowflakeIdUtil.nextId();
 		
@@ -151,8 +155,21 @@ public class ArticleServiceImpl implements ArticleService{
 
 	@Override
 	public Map selectArticleDetail(String articleid) throws Exception {
-		Map detail = articleDaoImpl.selectArticleDetail(articleid);
-		return detail;
+		String article_content = articleDaoImpl.selectArticleContent(articleid);
+		Map abstractdetail = (Map) articleDaoImpl.selectArticleAbstract(articleid);
+		String tag_content = (String) articleDaoImpl.selectArticleTag(articleid);
+		
+		String classify_id = (String) abstractdetail.get("classify_id");
+		String classify_content = (String) articleDaoImpl.selectArticleClassify(classify_id);
+		
+		System.out.println(tag_content);
+		System.out.println("***************************");
+		System.out.println("{\"tag_content\":".length());
+		abstractdetail.put("article_content", article_content);
+		abstractdetail.put("tag_content", tag_content.substring(16,tag_content.length()-1));
+		abstractdetail.put("classify_content", classify_content);
+		
+		return abstractdetail;
 	}
 
 	@Override

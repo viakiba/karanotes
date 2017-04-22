@@ -1,19 +1,49 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="haust.vk.dao.FollowDao" >
-	<insert id="insertFollow" parameterType="haust.vk.entity.Followinfo">
-		
+<mapper namespace="haust.vk.d ao.FollowDao" >
+	<insert id="insertFollow" parameterType="java.util.Map">
+		insert into followinfo(follow_id,user_id,follow_user_id,is_eachother) values( #{follow_id}, #{user_id}, #{follow_user_id}, #{is_eachother})
 	</insert>
 	
+	<update id="updateFollow" parameterType="java.util.Map">
+		update followinfo set is_eachother = #{is_eachother} where user_id = #{user_id} and follow_user_id = #{follow_user_id}
+	</update>
+	
 	<delete id="deleteFollow" parameterType="string">
-		delete *** where follow_id = #{followid}
+		delete followinfo where follow_id = #{follow_id}
 	</delete>
 	
-	<select id="selectFollowNotifyByUserid" parameterType="string" resultType="java.util.Map">
-		
+	<select id="selectFollowListByUserid" parameterType="string" resultType="java.util.Map">
+		select userinfo.*,followinfo.is_eachother from userinfo,followinfo where user_id = #{user_id} AND followinfo.user_id = userinfo.user_id
 	</select>
 
-	<select id="selectFollowListByUserid" parameterType="string" resultType="java.util.Map">
+	<select id="selectFollowListByUseridAndfollowUserid" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from followinfo where 
+			<choose>
+				<when test="reverse == null">
+					user_id  = #{user_id}
+					and
+					follow_user_id in 
+					<foreach  item="item"  index="index"  collection="listuser_id"  open="("  separator=","  close=")">
+						#{item}
+					</foreach>
+				</when>
+				<otherwise>
+					follow_user_id  = #{user_id}
+					and
+					user_id in 
+					<foreach  item="item"  index="index"  collection="listuser_id"  open="("  separator=","  close=")">
+						#{item}
+					</foreach>
+				</otherwise>
+			</choose>
+	</select>
+	
+	<select id="selectFollowNotifyByUseridHelp" parameterType="string" resultType="java.util.Map">
+		
+	</select>
+	
+	<select id="selectFollowNotifyByUserid" parameterType="string" resultType="java.util.Map">
 		
 	</select>
 </mapper>

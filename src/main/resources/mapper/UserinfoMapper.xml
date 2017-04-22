@@ -3,7 +3,7 @@
 <mapper namespace="haust.vk.dao.UserinfoDao" >
 	<!-- 注册 -->
 	<insert id="registerUserInfo" parameterType="java.util.Map">
-		insert into userinfo(user_id,user_email,user_name,user_password,user_path) values(#{user_id},#{user_email},#{user_name},#{user_password},#{user_path})
+		insert into userinfo(user_id,user_headimg,user_background_img,user_email,user_name,user_password,user_path) values(#{user_id},#{user_headimg},#{user_background_img},#{user_email},#{user_name},#{user_password},#{user_path})
 	</insert>
 	<!-- 登录 -->
 	<select id="loginUserInfo" parameterType="java.util.Map" resultType="haust.vk.entity.Userinfo">
@@ -17,11 +17,27 @@
 	<select id="selectUserByUserpath" parameterType="String" resultType="haust.vk.entity.Userinfo">
 		select * from userinfo where user_path=#{user_path} limit 0,1
 	</select>
+	<!-- 用户列表 -->
+	<select id="selectUserList" parameterType="String" resultType="java.util.Map">
+		select * from userinfo 
+				<if test="keywords != null">
+					where
+					<choose>
+						<when test="is_email != null">
+							user_email like "%${keywords}%"
+						</when>
+						<otherwise>
+							user_name like "%${keywords}%"
+						</otherwise>
+					</choose>
+				</if>
+				limit #{start},#{pagesize}
+	</select>
 	<!-- 更新用户头像/背景图 -->
 	<update id="updateUserimg" parameterType="java.util.Map">
 		update userinfo set 
 			<if test="backimg != null"> user_background_img = #{backimg} </if>
-			<if test="title != null"> user_headimg = #{headimg} </if>
+			<if test="headimg != null"> user_headimg = #{headimg} </if>
 		where user_id = #{user_id}
 	</update>
 	<!-- 更改用户基本信息 -->

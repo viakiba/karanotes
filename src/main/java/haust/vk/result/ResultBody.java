@@ -1,5 +1,7 @@
 package haust.vk.result;
 
+import java.util.HashMap;
+
 import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
 import haust.vk.exception.interfaces.MesscodeInterface;
 
@@ -17,7 +19,7 @@ public class ResultBody {
     /**
      * 响应结果
      */
-    private Object result;
+    private Object result = new HashMap();
 
     public ResultBody(MesscodeInterface errorInfo) {
         this.code = errorInfo.getCode();

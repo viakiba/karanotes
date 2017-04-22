@@ -1,6 +1,7 @@
 package haust.vk.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -13,14 +14,13 @@ import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
 
 
-import haust.vk.api.UserInfoComtroller;
+import haust.vk.dao.FollowDao;
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
 import haust.vk.exception.GlobalErrorInfoException;
 import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
-import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.service.UserinfoService;
 import haust.vk.utils.EncryptUtil;
 import haust.vk.utils.SnowflakeIdUtil;
@@ -37,6 +37,8 @@ public class UserinfoServiceImpl implements UserinfoService{
 	private SnowflakeIdUtil snowflakeIdUtil;
 	@Resource
 	private UserloginDao userloginDaoImpl;
+	@Resource
+	private FollowDao followDaoImpl;
 	
 	/**
 	 * 注册
@@ -69,6 +71,10 @@ public class UserinfoServiceImpl implements UserinfoService{
 		String user_path = user_email.split("@")[0]+UUID.randomUUID().toString().replace("-", "").substring(24);
 		userinfoMap.put("user_path",user_path);
 		
+		//处理用户图像
+		userinfoMap.put("user_headimg", "2.png");
+		userinfoMap.put("user_background_img", "1.png");
+
 		//设置用户信息 邮箱 密码 昵称 博客路径
 		userinfoDaoImpl.registerUserInfo(userinfoMap);
 		
@@ -117,12 +123,13 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userinfoMap.put("token_id", String.valueOf(token_id));
 		userinfoMap.put("user_id", String.valueOf(userinfo.getUser_id()));
 		userinfoMap.put("user_headimg", userinfo.getUser_headimg());
+		userinfoMap.put("user_background_img", userinfo.getUser_background_img());
 		userinfoMap.put("user_email", userinfo.getUser_email());
 		userinfoMap.put("user_sex", userinfo.getUser_sex());
 		userinfoMap.put("user_path", userinfo.getUser_path());
 		userinfoMap.put("user_signature", userinfo.getUser_signature());
 		userinfoMap.put("user_name", userinfo.getUser_name());
-		userinfoMap.put("user_extra", userinfo.getUser_extra());
+		userinfoMap.put("user_github", userinfo.getUser_github());
 		return userinfoMap;
 	}
 	
@@ -223,6 +230,82 @@ public class UserinfoServiceImpl implements UserinfoService{
 		userinfoDaoImpl.updateUserpass(infoMap);
 	}
 
+	//用户列表
+	@Override
+	public List<Map> selectUserListByTokenid(Map infomap) throws Exception {
+		String keyword = (String) infomap.get("keywords");
+		if(keyword == null || "".equals(keyword) || "null".equals(keyword)){
+			infomap.remove(keyword);
+		}else if(keyword.contains("@")){
+			infomap.put("is_email", "1");
+		}
+		String user_id = (String) infomap.get("user_id");
+		List<Map> list = userinfoDaoImpl.selectUserList(infomap);
+		List<String> listUserid = new ArrayList<String>();
+		
+		Map tempMap = null;
+		for (Map temp : list) {
+			String userid = (String) temp.get("user_id");
+			listUserid.add(userid);
+			temp.remove("user_password");
+			if(user_id.equals( (String) temp.get("user_id"))){
+				tempMap = temp;
+			}
+		}
+		System.out.println(list.size());
+		list.remove(tempMap);
+		System.out.println(list.size());
+		Map map = new HashMap<>();
+		map.put("user_id", user_id);
+		map.put("listuser_id", listUserid);
+		//第一步正查
+		List<Map> listFollowPositive = followDaoImpl.selectFollowListByUseridAndfollowUserid(map);
+		//第二步反查
+		map.put("reverse", "1");
+		List<Map> listFollowreverse = followDaoImpl.selectFollowListByUseridAndfollowUserid(map);
+		//添加关注标识  0 无关注  1 被检索的用户已经关注了用户   2用户已经关注了被检索到的用户   3已经互相关注
+		for (Map temp : list) {
+			String userid = (String) temp.get("user_id");
+			String is_eachother = "0";
+			for(Map temp1 : listFollowreverse){
+				String temp_user_id = (String) temp1.get("user_id");
+				if(userid.equals(temp_user_id)){
+					is_eachother = "1";
+					break;
+				}
+			}
+			for(Map temp1 : listFollowPositive){
+				String temp_user_id = (String) temp1.get("follow_user_id");
+				if(userid.equals(temp_user_id)){
+					if(is_eachother.equals("0")){
+						is_eachother = "2";
+					}else{
+						is_eachother = "3";
+					}
+					break;
+				}
+			}
+			temp.put("is_eachother", is_eachother);
+		}
+		return list;
+	}
+	
+	@Override
+	public List<Map> selectUserList(Map infomap) throws Exception {
+		String keyword = (String) infomap.get("keywords");
+		if(keyword == null || "".equals(keyword) || "null".equals(keyword)){
+			infomap.remove(keyword);
+		}else if(keyword.contains("@")){
+			infomap.put("is_email", "1");
+		}
+		List<Map> list = userinfoDaoImpl.selectUserList(infomap);
+		for (Map map : list) {
+			map.remove("user_password");
+		}
+		return list;
+	}
+	
+	
 	@Override
 	public void updateUserlogo(Map map) throws Exception{
 		userinfoDaoImpl.updateUserimg(map);

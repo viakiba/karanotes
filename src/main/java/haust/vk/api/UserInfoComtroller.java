@@ -2,6 +2,7 @@ package haust.vk.api;
 
 import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -20,6 +21,7 @@ import haust.vk.utils.SendMail;
 
 import org.apache.log4j.Logger;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -161,6 +163,48 @@ public class UserInfoComtroller {
 		}
 		Map map = null;
 		return new ResultBody(map);
+	}
+	
+	//用户列表（带搜索）
+	@RequestMapping(value="/select/user/list",method=RequestMethod.POST)
+	public ResultBody userListNotokenid(HttpServletRequest req, HttpServletResponse resp) throws  GlobalErrorInfoException{
+		Map infoMap = (Map) req.getAttribute("jsoninfo");
+		String pagenum = (String) infoMap.get("pagenum");
+		String pagesize = (String) infoMap.get("pagesize");
+		if(pagenum == null || "".equals(pagenum)|| "null".equals(pagenum) || pagesize == null || "".equals(pagesize)|| "null".equals(pagesize)  ){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		try{
+			infoMap.put("pagesize", Integer.valueOf(pagesize));
+			infoMap.put("start", Integer.valueOf(pagenum)*Integer.valueOf(pagesize));
+		}catch (NumberFormatException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		
+		List<Map> list = null;
+		
+		String tokenid = (String) infoMap.get("token_id");
+		if(tokenid == null || "".equals(tokenid) || "null".equals(tokenid) ){
+			try{
+				list = userinfoServiceImpl.selectUserList(infoMap);
+			}catch(Exception e){
+				e.printStackTrace();
+				logger.error("/extra/userlist/{tokenid}", e);
+				throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+			}
+			return new ResultBody(list);
+		}else{
+			try {
+				Userinfo userinfo = userinfoServiceImpl.selectUserinfoByTokenid(tokenid);
+				infoMap.put("user_id", userinfo.getUser_id());
+				list = userinfoServiceImpl.selectUserListByTokenid(infoMap);
+			} catch (Exception e) {
+				e.printStackTrace();
+				logger.error("/extra/userlist/{tokenid}", e);
+				throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+			}
+			return new ResultBody(list);
+		}
 	}
 	
 	@RequestMapping(value="/user/updateuserpass",method=RequestMethod.POST)

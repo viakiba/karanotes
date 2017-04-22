@@ -22,7 +22,7 @@
 		delete from articlecontent where article_id = #{article_id}
 	</delete>
 	
-	<delete id="deleteArticletag" parameterType="string">
+	 <delete id="deleteArticletag" parameterType="string">
 		delete from articletag where article_id = #{article_id}
 	</delete>
 	
@@ -75,12 +75,19 @@
 			#{START},#{END}
 	</select>
 	
-	<select id="selectArticleDetail" parameterType="string" resultType="java.util.Map">
-		select 
-			articleabstract.* ,articleclassify.classify_content,articletag.tag_content 
-		from 
-			articleabstract,articleclassify,articlecontent,articletag 
-		where
-			articleabstract.article_id = #{articleid}
+	<select id="selectArticleAbstract" parameterType="string" resultType="java.util.Map">
+		select * from articleabstract where articleabstract.article_id = #{articleid}
+	</select>
+	
+	<select id="selectArticleContent" parameterType="string" resultType="string">
+		select articlecontent.article_content from articlecontent where articlecontent.article_id = #{articleid}
+	</select>
+	
+	<select id="selectArticleTag" parameterType="string" resultType="string">
+		 select articletag.tag_content from articletag where articletag.article_id = #{articleid}
+	</select>
+	
+	<select id="selectArticleClassify" parameterType="string" resultType="string">
+		select articleclassify.classify_content from articleclassify where articleclassify.classify_id = #{classify_id}
 	</select>
 </mapper>

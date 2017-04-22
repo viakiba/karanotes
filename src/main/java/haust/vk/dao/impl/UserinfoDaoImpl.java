@@ -81,5 +81,13 @@ public class UserinfoDaoImpl implements UserinfoDao{
 		os.close();
 		return i;
 	}
+	
+	@Override
+	public List<Map> selectUserList(Map infomap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> userList = os.selectList("selectUserList",infomap);
+		os.close();
+		return userList;
+	}
 
 }

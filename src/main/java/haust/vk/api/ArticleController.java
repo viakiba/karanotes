@@ -85,8 +85,8 @@ public class ArticleController {
 	}
 	
 	//zheli
-	@RequestMapping(value="/select/article/{articleid}")
-	public @ResponseBody Map selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
+	@RequestMapping(value="/extra/article/{articleid}")
+	public ResultBody selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		if(articleid == null || "".equals(articleid) || "null".equals(articleid)){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
@@ -94,26 +94,28 @@ public class ArticleController {
 		try {
 			articleMap = articleServiceImpl.selectArticleDetail(articleid);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		return new ResultBody(articleMap);
 	}
 
-	@RequestMapping(value="/select/article/{userpath}/{beginnum}/{shownum}")
-	public Map selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
+	//****到这了
+	@RequestMapping(value="/extra/article/{userpath}/{beginnum}/{shownum}")
+	public ResultBody selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		return new ResultBody(articleMap);
 	}
 	
 	/**
 	 * 基于时间轴的个人关注  文章列表 分页
 	 */
-	@RequestMapping(value="/select/article/followarticle/{userpath}/{beginnum}/{shownum}")
+	@RequestMapping(value="/extra/article/followarticle/{userpath}/{beginnum}/{shownum}")
 	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
@@ -127,7 +129,7 @@ public class ArticleController {
 	/**
 	 * 通过用户user_path 以及classifyid 获取该分类下的文章列表  分页
 	 */
-	@RequestMapping(value="/select/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
+	@RequestMapping(value="/extra/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
 	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {
@@ -141,7 +143,7 @@ public class ArticleController {
 	/**
 	 * 基于标题关键字检索文章标题  分页
 	 */
-	@RequestMapping(value="/select/article/title/{keyword}/{beginnum}/{shownum}")
+	@RequestMapping(value="/extra/article/title/{keyword}/{beginnum}/{shownum}")
 	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		try {

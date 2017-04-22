@@ -3,12 +3,14 @@ package haust.vk.api;
 import haust.vk.dao.UserloginDao;
 import haust.vk.exception.GlobalErrorInfoException;
 import haust.vk.exception.code.NodescribeErrorInfoEnum;
+import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
 import haust.vk.service.UserinfoService;
 import haust.vk.utils.GetOsversionUtil;
 import haust.vk.utils.SnowflakeIdUtil;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
@@ -100,6 +102,10 @@ public class FileServerController {
 				}
 				
 				map = new HashMap<>();
+				System.out.println("**********************************");
+				System.out.println(token_id);
+				System.out.println(user_id);
+				System.out.println("**********************************");
 				map.put("user_id",user_id);
 				map.put("headimg",user_id+".png");
 				try {
@@ -159,9 +165,9 @@ public class FileServerController {
 			try {
 				rgw = resp.getWriter();
 			} catch (IOException e) {
-				e.printStackTrace();
+				throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
 			}
-				rgw.write("error");
+				rgw.write("{\"code\":\"0\",\"message\":\"file upload fail\"}");
 				rgw.close();
 				break;
 		}
@@ -169,9 +175,11 @@ public class FileServerController {
 	
 	/**
 	 * 图片下载地址
+	 * @throws GlobalErrorInfoException 
+	 * @throws IOException 
 	 */
 	@RequestMapping(value = "/imgs/{imgtype}/{imgname}",method=RequestMethod.GET)
-	public void articleImgDownload(@PathVariable("imgtype") String imgtype,@PathVariable("imgname") String imgname,HttpServletRequest req, HttpServletResponse resp) throws IOException{
+	public void articleImgDownload(@PathVariable("imgtype") String imgtype,@PathVariable("imgname") String imgname,HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException, IOException{
 		String pathname = imgtype;
 		File file = new File(GetOsversionUtil.basepath+imgtype+GetOsversionUtil.ossplit+imgname+".png");
 		if(file.exists()){
@@ -192,8 +200,10 @@ public class FileServerController {
 			//关闭输出流
 			out.close();
 		}else{
+			resp.setCharacterEncoding("UTF-8");
 			PrintWriter pw = resp.getWriter();
-			pw.write("图片未找到");
+			pw.write("{\"code\":\"0\",\"message\":\"file con not find\"}");
+			pw.flush();
 			pw.close();
 		}
 	}

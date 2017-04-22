@@ -11,7 +11,6 @@ public class Userinfo {
     private String user_sex;          
     private String user_path;          
     private String user_signature;    
-   	private String user_extra;
    
    	public Userinfo(){}
 
@@ -95,23 +94,12 @@ public class Userinfo {
 		this.user_signature = user_signature;
 	}
 
-	public String getUser_extra() {
-		return user_extra;
-	}
-
-	public void setUser_extra(String user_extra) {
-		this.user_extra = user_extra;
-	}
-
 	@Override
 	public String toString() {
-		return "Userinfo [user_id=" + user_id + ", user_headimg="
-				+ user_headimg + ", user_background_img=" + user_background_img
-				+ ", user_email=" + user_email + ", user_name=" + user_name
-				+ ", user_password=" + user_password + ", user_github="
-				+ user_github + ", user_sex=" + user_sex + ", user_path="
-				+ user_path + ", user_signature=" + user_signature
-				+ ", user_extra=" + user_extra + "]";
+		return "Userinfo [user_id=" + user_id + ", user_headimg=" + user_headimg + ", user_background_img="
+				+ user_background_img + ", user_email=" + user_email + ", user_name=" + user_name + ", user_password="
+				+ user_password + ", user_github=" + user_github + ", user_sex=" + user_sex + ", user_path=" + user_path
+				+ ", user_signature=" + user_signature + "]";
 	}
 
 }
