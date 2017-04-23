@@ -10,7 +10,7 @@ public class Articleabstract {
 	private String abstract_content;
 	private String user_id;
 	private int collect_num;
-	private int read_num;
+	private int comment_num;
 	private int praise_num;
 	private String article_attachment;
 	private Date article_create_time;
@@ -74,14 +74,14 @@ public class Articleabstract {
 		this.collect_num = collect_num;
 	}
 
-	public int getRead_num() {
-		return read_num;
+	public void setComment_num(int comment_num) {
+		this.comment_num = comment_num;
 	}
-
-	public void setRead_num(int read_num) {
-		this.read_num = read_num;
+	
+	public int getComment_num() {
+		return comment_num;
 	}
-
+	
 	public int getPraise_num() {
 		return praise_num;
 	}
@@ -118,7 +118,7 @@ public class Articleabstract {
 	public String toString() {
 		return "Articleabstract [article_id=" + article_id + ", article_title=" + article_title + ", article_show_img="
 				+ article_show_img + ", classify_id=" + classify_id + ", abstract_content=" + abstract_content
-				+ ", user_id=" + user_id + ", collect_num=" + collect_num + ", read_num=" + read_num + ", praise_num="
+				+ ", user_id=" + user_id + ", collect_num=" + collect_num + ", comment_num=" + comment_num + ", praise_num="
 				+ praise_num + ", article_attachment=" + article_attachment + ", article_create_time="
 				+ article_create_time + ", article_update_time=" + article_update_time + "]";
 	}
