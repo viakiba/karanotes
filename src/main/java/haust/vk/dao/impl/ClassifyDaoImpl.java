@@ -49,7 +49,7 @@ public class ClassifyDaoImpl implements ClassifyDao{
 	@Override
 	public String getClassifyByContentAndUserid(Map userinfo) {
 		SqlSession os = sqlSessionFactory.openSession();
-		String classifyContent = os.selectOne("getClassifyByContent", userinfo);
+		String classifyContent = os.selectOne("getClassifyByContentAndUserid", userinfo);
 		os.close();
 		return classifyContent;
 	}

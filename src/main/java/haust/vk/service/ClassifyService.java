@@ -1,6 +1,9 @@
 package haust.vk.service;
 
+import java.util.List;
 import java.util.Map;
+
+import haust.vk.entity.Articleclassify;
 
 public interface ClassifyService {
 	
@@ -34,5 +37,5 @@ public interface ClassifyService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map getallClassify(Map map) throws Exception;
+	public List<Articleclassify> getallClassify(String tokenid) throws Exception;
 }

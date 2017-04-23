@@ -11,7 +11,7 @@
 	</delete>
 	
 	<select id="getallClassify" parameterType="java.util.Map" resultType="haust.vk.entity.Articleclassify">
-		select * from articleclassify where user_id = #{user_id} LIMIT 0,10
+		select * from articleclassify where user_id = #{user_id} 
 	</select>
 	
 	<select id="getClassifyByContentAndUserid" parameterType="java.util.Map" resultType="string">

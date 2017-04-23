@@ -1,24 +1,30 @@
 package haust.vk.api;
 
+import haust.vk.entity.Articleclassify;
+import haust.vk.entity.Userinfo;
 import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
 import haust.vk.exception.code.NodescribeErrorInfoEnum;
+import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
+import haust.vk.exception.code.TokenidErrorInfoEnum;
+import haust.vk.result.ResultBody;
 import haust.vk.service.ClassifyService;
 import haust.vk.utils.JsonToMap;
 
-import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class ClassifyController {
 	@Resource
 	private ClassifyService classifyServiceImpl;
@@ -26,48 +32,78 @@ public class ClassifyController {
 	private JsonToMap jsonToMap;
 	
 	@RequestMapping(value="/clssify/insert",method=RequestMethod.POST)
-	public @ResponseBody Map insertClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+	public ResultBody insertClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
+		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
+		
+		String classify_content = String.valueOf(classifyMapinfo.get("classify_content"));
+		if( classify_content == null || "".equals(classify_content) || "null".equals(classify_content)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		
+		classifyMapinfo.put("user_id", userinfo.getUser_id());
+		
 		try {
 			classifyMapinfo = classifyServiceImpl.insertClassify(classifyMapinfo);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return classifyMapinfo;
+		return new ResultBody(classifyMapinfo);
 	}
 	
 	@RequestMapping(value="/clssify/delete",method=RequestMethod.POST)
-	public @ResponseBody Map deleteClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+	public ResultBody deleteClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
-		
+		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
+		String classify_id = String.valueOf(classifyMapinfo.get("classify_id"));
+		if( classify_id == null || "".equals(classify_id) || "null".equals(classify_id)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		if(userinfo.getUser_id().equals(classify_id)){
+			classifyMapinfo.clear();
+			classifyMapinfo.put("operate", "0");
+			return new ResultBody(classifyMapinfo);
+		}
+		classifyMapinfo.put("user_id", userinfo.getUser_id());
 		try {
 			classifyMapinfo = classifyServiceImpl.deleteClassify(classifyMapinfo);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		
-		return classifyMapinfo;
+		return new ResultBody(classifyMapinfo);
 	}
 	
-	@RequestMapping(value="/select/clssify/getall",method=RequestMethod.POST)
-	public @ResponseBody Map getallClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
-		Map mapInfo = (Map) req.getAttribute("jsoninfo");
+	@RequestMapping(value="/extra/clssify/getall/{userid}",method=RequestMethod.GET)
+	public ResultBody getallClassify(@PathVariable String userid) throws GlobalErrorInfoException{
+		List<Articleclassify> list = null;
 		try {
-			mapInfo = classifyServiceImpl.getallClassify(mapInfo);
-		} catch (Exception e) {
+			list = classifyServiceImpl.getallClassify(userid);
+		} catch (GlobalErrorInfoException e) {
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
+		}catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return mapInfo;
+		return new ResultBody(list);
 	}
 	
-	@RequestMapping(value="/select/clssify/update",method=RequestMethod.POST)
-	public @ResponseBody Map updateClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+	@RequestMapping(value="/clssify/update",method=RequestMethod.POST)
+	public ResultBody updateClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map classifyMapinfo = (Map) req.getAttribute("jsoninfo");
+		
+		String classify_id = String.valueOf(classifyMapinfo.get("classify_id"));
+		String classify_content = String.valueOf(classifyMapinfo.get("classify_content"));
+		
+		if( classify_id == null || "".equals(classify_id) || "null".equals(classify_id) || classify_content == null || "".equals(classify_content) || "null".equals(classify_content)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		
 		try {
-			classifyMapinfo = classifyServiceImpl.updateClassify(classifyMapinfo);
+			classifyServiceImpl.updateClassify(classifyMapinfo);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return classifyMapinfo;
+		return new ResultBody(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 	}
 }
