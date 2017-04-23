@@ -232,7 +232,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 
 	//用户列表
 	@Override
-	public List<Map> selectUserListByTokenid(Map infomap) throws Exception {
+	public Map selectUserListByTokenid(Map infomap) throws Exception {
 		String keyword = (String) infomap.get("keywords");
 		if(keyword == null || "".equals(keyword) || "null".equals(keyword)){
 			infomap.remove(keyword);
@@ -241,6 +241,10 @@ public class UserinfoServiceImpl implements UserinfoService{
 		}
 		String user_id = (String) infomap.get("user_id");
 		List<Map> list = userinfoDaoImpl.selectUserList(infomap);
+		
+		
+		String count = userinfoDaoImpl.selectCount(infomap);
+		
 		List<String> listUserid = new ArrayList<String>();
 		
 		Map tempMap = null;
@@ -290,22 +294,32 @@ public class UserinfoServiceImpl implements UserinfoService{
 			}
 			temp.put("is_eachother", is_eachother);
 		}
-		return list;
+		
+		Map resultmap = new HashMap<>();
+		resultmap.put("userlist", list);
+		resultmap.put("count", count);
+		
+		return resultmap;
 	}
 	
 	@Override
-	public List<Map> selectUserList(Map infomap) throws Exception {
+	public Map selectUserList(Map infomap) throws Exception {
 		String keyword = (String) infomap.get("keywords");
 		if(keyword == null || "".equals(keyword) || "null".equals(keyword)){
-			infomap.remove(keyword);
+			infomap.remove("keywords");
 		}else if(keyword.contains("@")){
 			infomap.put("is_email", "1");
 		}
 		List<Map> list = userinfoDaoImpl.selectUserList(infomap);
+		String count = userinfoDaoImpl.selectCount(infomap);
 		for (Map map : list) {
 			map.remove("user_password");
 		}
-		return list;
+		
+		Map map = new HashMap<>();
+		map.put("count", count);
+		map.put("userlist", list);
+		return map;
 	}
 	
 	

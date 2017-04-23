@@ -30,7 +30,7 @@ public interface UserinfoService {
 
 	public void updateUserBacklogo(Map map) throws Exception;
 
-	public List<Map> selectUserListByTokenid(Map infoMap) throws Exception;
+	public Map selectUserListByTokenid(Map infoMap) throws Exception;
 
-	public List<Map> selectUserList(Map infoMap) throws Exception;
+	public Map selectUserList(Map infoMap) throws Exception;
 }

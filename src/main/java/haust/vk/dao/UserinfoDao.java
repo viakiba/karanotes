@@ -65,4 +65,6 @@ public interface UserinfoDao {
 
 	public List<Map> selectUserList(Map infomap) throws Exception;
 
+	public String selectCount(Map infomap) throws Exception;
+
 }

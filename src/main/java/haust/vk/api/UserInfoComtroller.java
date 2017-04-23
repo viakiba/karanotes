@@ -186,24 +186,24 @@ public class UserInfoComtroller {
 		String tokenid = (String) infoMap.get("token_id");
 		if(tokenid == null || "".equals(tokenid) || "null".equals(tokenid) ){
 			try{
-				list = userinfoServiceImpl.selectUserList(infoMap);
+				infoMap = userinfoServiceImpl.selectUserList(infoMap);
 			}catch(Exception e){
 				e.printStackTrace();
 				logger.error("/extra/userlist/{tokenid}", e);
 				throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 			}
-			return new ResultBody(list);
+			return new ResultBody(infoMap);
 		}else{
 			try {
 				Userinfo userinfo = userinfoServiceImpl.selectUserinfoByTokenid(tokenid);
 				infoMap.put("user_id", userinfo.getUser_id());
-				list = userinfoServiceImpl.selectUserListByTokenid(infoMap);
+				infoMap = userinfoServiceImpl.selectUserListByTokenid(infoMap);
 			} catch (Exception e) {
 				e.printStackTrace();
 				logger.error("/extra/userlist/{tokenid}", e);
 				throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 			}
-			return new ResultBody(list);
+			return new ResultBody(infoMap);
 		}
 	}
 	

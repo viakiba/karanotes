@@ -89,5 +89,13 @@ public class UserinfoDaoImpl implements UserinfoDao{
 		os.close();
 		return userList;
 	}
+	
+	@Override
+	public String selectCount(Map infomap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		String count = os.selectOne("selectCount",infomap);
+		os.close();
+		return count;
+	}
 
 }
