@@ -2,6 +2,7 @@ package haust.vk.service.impl;
 
 import static org.hamcrest.CoreMatchers.is;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import haust.vk.dao.FollowDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
+import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.service.FollowService;
 import haust.vk.utils.SnowflakeIdUtil;
 
@@ -59,7 +62,6 @@ public class FollowServiceImpl implements FollowService{
 		System.out.println(is_eachother);
 		if("3".equals(String.valueOf(is_eachother))){
 			//更新
-			System.out.println("*****************");
 			Map map = new HashMap();
 			map.put("user_id", follow_userid);
 			map.put("follow_user_id", userid);
@@ -72,18 +74,55 @@ public class FollowServiceImpl implements FollowService{
 	}
 	
 	@Override
-	public List<Map> selectFollowListByUserid(String tokenid) throws Exception {
+	public List<Map> selectFollowListByUserid(String tokenid) throws GlobalErrorInfoException,Exception {
 		Userinfo userinfo = userLoginDaoImpl.selectUserloginByTokenid(tokenid);
+		if(userinfo == null){
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
+		}
 		String user_id = userinfo.getUser_id();
-		List<Map> list = followDaoImpl.selectFollowListByUserid(user_id);
+		List<Map> listhelp = followDaoImpl.selectFollowListByUseridHelp(user_id);
+		List<String> listuserid = new ArrayList<>();
+		for (Map temp : listhelp) {
+			listuserid.add((String) temp.get("user_id"));
+		}
+		List<Map> list = followDaoImpl.selectFollowListByUserid(listuserid);
+		for (Map map : list) {
+			String temp_user_id = (String) map.get("user_id");
+			for (Map map2 : listhelp) {
+				if( temp_user_id.equals( (String) map2.get("user_id") ) ){
+					String is_eachother = String.valueOf(map2.get("is_eachother"));
+					System.out.println(is_eachother+"***************");
+					if(is_eachother.equals("true")){
+						map.put("is_eachother", "3");
+					}else{
+						map.put("is_eachother", "2");
+					}
+					map.remove("user_password");
+					break;
+				}
+			}
+		}
 		return list;
 	}
 	
 	@Override
-	public List<Map> selectFollowNotifyByUserid(String tokenid) throws Exception {
+	public List<Map> getFollowNotifyByUserid(String tokenid) throws Exception {
 		Userinfo userinfo = userLoginDaoImpl.selectUserloginByTokenid(tokenid);
+		if(userinfo == null){
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
+		}
 		String user_id = userinfo.getUser_id();
-		List<Map> list = followDaoImpl.selectFollowNotifyByUserid(user_id);
+		List<String> listHelp = followDaoImpl.selectFollowNotifyByUseridHelp(user_id);
+		for (String string : listHelp) {
+			System.out.println("***************************");
+			System.out.println(string);
+			System.out.println("***************************");
+		}
+		List<Map> list = followDaoImpl.selectFollowNotifyByUserid(listHelp);
+		followDaoImpl.updateNotifiinfo(user_id);
+		for (Map map : list) {
+			map.remove("user_password");
+		}
 		return list;
 	}
 }

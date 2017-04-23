@@ -19,7 +19,7 @@ public class FaqDaoImpl implements FaqDao{
 	private SqlSessionFactory sqlSessionFactory;
 	
 	@Override
-	public void insertFaq(Faqinfo faqinfo) throws Exception {
+	public void insertFaq(Map faqinfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertFaq", faqinfo);
 		os.close();
@@ -31,6 +31,21 @@ public class FaqDaoImpl implements FaqDao{
 		List<Map> faqList = os.selectList("selectFaqList", map);
 		os.close();
 		return faqList;
+	}
+	
+	@Override
+	public String selectFaqCount() throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		String count = os.selectOne("selectFaqCount");
+		os.close();
+		return count;
+	}
+	
+	@Override
+	public void deleteFaqinfo(String faqid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteFaqinfo",faqid);
+		os.close();
 	}
 
 }

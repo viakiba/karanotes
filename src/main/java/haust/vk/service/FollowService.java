@@ -11,6 +11,6 @@ public interface FollowService {
 
 	public List<Map> selectFollowListByUserid(String tokenid) throws Exception;
 
-	public List<Map> selectFollowNotifyByUserid(String tokenid) throws Exception;
+	public List<Map> getFollowNotifyByUserid(String tokenid) throws Exception;
 
 }

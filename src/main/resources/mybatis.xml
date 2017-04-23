@@ -14,5 +14,6 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="mapper/UserloginMapper.xml" />
 		<mapper resource="mapper/ArticleMapper.xml" />
 		<mapper resource="mapper/FollowMapper.xml" />
+		<mapper resource="mapper/FaqinfoMapper.xml" />
 	</mappers>
 </configuration>

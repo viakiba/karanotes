@@ -13,8 +13,15 @@
 		delete from followinfo where follow_id = #{follow_id}
 	</delete>
 	
+	<select id="selectFollowListByUseridHelp" parameterType="string" resultType="java.util.Map">
+		select * from followinfo where user_id = #{user_id}
+	</select>
+	
 	<select id="selectFollowListByUserid" parameterType="string" resultType="java.util.Map">
-		select userinfo.*,followinfo.is_eachother from userinfo,followinfo where user_id = #{user_id} AND followinfo.user_id = userinfo.user_id
+		select userinfo.* from userinfo where user_id in
+			<foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+				#{item}
+			</foreach>
 	</select>
 
 	<select id="selectFollowListByUseridAndfollowUserid" parameterType="java.util.Map" resultType="java.util.Map">
@@ -39,11 +46,18 @@
 			</choose>
 	</select>
 	
-	<select id="selectFollowNotifyByUseridHelp" parameterType="string" resultType="java.util.Map">
-		
+	<select id="selectFollowNotifyByUseridHelp" parameterType="string" resultType="string">
+		select user_id from followinfo where follow_user_id = #{user_id} and follow_create_time > ( select follow_read_time from notifiinfo where user_id = #{user_id} )
 	</select>
 	
-	<select id="selectFollowNotifyByUserid" parameterType="string" resultType="java.util.Map">
-		
+	<select id="selectFollowNotifyByUserid" resultType="java.util.Map">
+		select * from userinfo where user_id in 
+			<foreach collection="list" item="item" open="(" separator="," close=")" index="index">
+				#{item}
+			</foreach>
 	</select>
+	
+	<update id="updateNotifiinfo" parameterType="string">
+		update notifiinfo set follow_read_time = now() where user_id = #{user_id}
+	</update>
 </mapper>

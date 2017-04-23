@@ -20,6 +20,7 @@ import haust.vk.entity.Userinfo;
 import haust.vk.exception.GlobalErrorInfoException;
 import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
 import haust.vk.exception.code.NodescribeErrorInfoEnum;
+import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.result.ResultBody;
 import haust.vk.service.FollowService;
 
@@ -92,6 +93,10 @@ public class FollowController {
 		List<Map> list = null;
 		try {
 			list = followServiceImpl.selectFollowListByUserid(tokenid);
+		}catch (GlobalErrorInfoException e) {
+			e.printStackTrace();
+			logger.info(e);
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
@@ -103,18 +108,19 @@ public class FollowController {
 	
 	@RequestMapping(value="/extra/follownotify/{tokenid}")
 	public ResultBody selectFollowNotify(@PathVariable String tokenid) throws GlobalErrorInfoException{
-		
 		if("".equals(tokenid) || "null".equals(tokenid) || tokenid == null){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		
 		List<Map> list = null;
-		
 		try {
-			list = followServiceImpl.selectFollowNotifyByUserid(tokenid);
-		} catch (Exception e) {
+			list = followServiceImpl.getFollowNotifyByUserid(tokenid);
+		} catch (GlobalErrorInfoException e) {
 			e.printStackTrace();
 			logger.info(e);
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(list);

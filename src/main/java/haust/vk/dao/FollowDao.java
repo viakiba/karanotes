@@ -13,10 +13,16 @@ public interface FollowDao {
 	
 	public void deleteFollow(String followid) throws Exception;
 	
-	public List<Map> selectFollowNotifyByUserid(String userid) throws Exception;
+	public List<Map> selectFollowNotifyByUserid(List<String> list) throws Exception;
 	
-	public List<Map> selectFollowListByUserid(String userid) throws Exception;
+	public List<Map> selectFollowListByUserid(List<String> listuserid) throws Exception;
 
 	public List<Map> selectFollowListByUseridAndfollowUserid(Map map) throws Exception;
+
+	public List<String> selectFollowNotifyByUseridHelp(String user_id) throws Exception;
+
+	public void updateNotifiinfo(String user_id) throws Exception;
+
+	public List<Map> selectFollowListByUseridHelp(String user_id) throws Exception;
 
 }

@@ -1,11 +1,20 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="haust.vk.dao.FaqDao" >
-	<insert id="insertFaq" parameterType="haust.vk.entity.Faqinfo">
-		insert into faqinfo values(#{},#{},#{},#{});
+	<insert id="insertFaq" parameterType="java.util.Map">
+		insert into faqinfo(faq_id,user_id,faq_content) values(#{faq_id},#{user_id},#{faq_content})
 	</insert>
 	
 	<select id="selectFaqList" parameterType="java.util.Map" resultType="java.util.Map">
-		select * from ;
+		select * from faqinfo limit #{start},#{pagesize}
 	</select>
+	
+	<select id="selectFaqCount"  resultType="string">
+		select count(faq_id) from faqinfo 
+	</select>
+	
+	<delete id="deleteFaqinfo" parameterType="string">
+		delete from faqinfo where faq_id = #{faq_id}
+	</delete>
+	
 </mapper>

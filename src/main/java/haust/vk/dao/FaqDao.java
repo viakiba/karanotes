@@ -6,14 +6,13 @@ import java.util.Map;
 import haust.vk.entity.Faqinfo;
 
 public interface FaqDao {
-	/**
-	 * 增加
-	 */
-	public void insertFaq(Faqinfo faqinfo) throws Exception;
+
+	public void insertFaq(Map faqinfo) throws Exception;
 	
-	/**
-	 * 查看  分页
-	 */
 	public List<Map> selectFaqList(Map map) throws Exception;
+
+	public String selectFaqCount() throws Exception;
+
+	public void deleteFaqinfo(String faqid) throws Exception;
 
 }
