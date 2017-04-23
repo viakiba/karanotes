@@ -91,4 +91,8 @@
 		update userinfo set user_password = #{user_password_new}
 		where user_id = #{user_id} AND user_password = #{user_password_old}
 	</update>
+	
+	<update id="setPasswordByUserid" parameterType="java.util.Map">
+		update userinfo set user_password = #{user_password} where user_id = #{user_id}
+	</update>
 </mapper>

@@ -18,6 +18,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -25,11 +26,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
 public class ClassifyController {
 	@Resource
 	private ClassifyService classifyServiceImpl;
-	@Resource
-	private JsonToMap jsonToMap;
 	
 	@RequestMapping(value="/clssify/insert",method=RequestMethod.POST)
 	public ResultBody insertClassify(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{

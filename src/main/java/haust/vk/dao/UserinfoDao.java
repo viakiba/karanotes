@@ -67,4 +67,6 @@ public interface UserinfoDao {
 
 	public String selectCount(Map infomap) throws Exception;
 
+	public int setPasswordByUserid(Map map) throws Exception;
+
 }

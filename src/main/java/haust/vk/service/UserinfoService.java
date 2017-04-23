@@ -33,4 +33,6 @@ public interface UserinfoService {
 	public Map selectUserListByTokenid(Map infoMap) throws Exception;
 
 	public Map selectUserList(Map infoMap) throws Exception;
+
+	public Map updateUserFindPass(Map jsonmap) throws Exception;
 }

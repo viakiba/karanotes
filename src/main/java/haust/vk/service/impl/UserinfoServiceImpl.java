@@ -145,11 +145,11 @@ public class UserinfoServiceImpl implements UserinfoService{
 		long token_id = snowflakeIdUtil.nextId();
 		//放到数据库中  
 		Userlogin userlogin = new Userlogin();
-		userlogin.setToken_id(String.valueOf(token_id));
+		userlogin.setToken_id("#"+String.valueOf(token_id));
 		userlogin.setUser_id(loginUserInfo.get(0).getUser_id());
 		userlogin.setUser_login_time(String.valueOf( new Timestamp( (new Date()).getTime()) ));
 		userloginDaoImpl.insertUserlogin(userlogin);
-		
+		userlogin.setToken_id(String.valueOf(token_id));
 		return userlogin;
 	}
 	
@@ -229,7 +229,18 @@ public class UserinfoServiceImpl implements UserinfoService{
 		
 		userinfoDaoImpl.updateUserpass(infoMap);
 	}
-
+	
+	 @Override
+	public Map updateUserFindPass(Map jsonmap) throws Exception {
+		String userid = userloginDaoImpl.selectUseridByTokenid("#"+( (String) jsonmap.get("token_id")).trim());
+		jsonmap.put("user_id", userid);
+		
+		int i = userinfoDaoImpl.setPasswordByUserid(jsonmap);
+		jsonmap.clear();
+		jsonmap.put("operate", i);
+		return jsonmap;
+	}
+	 
 	//用户列表
 	@Override
 	public Map selectUserListByTokenid(Map infomap) throws Exception {

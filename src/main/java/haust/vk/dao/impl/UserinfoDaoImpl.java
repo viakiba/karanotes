@@ -98,4 +98,12 @@ public class UserinfoDaoImpl implements UserinfoDao{
 		return count;
 	}
 
+	@Override
+	public int setPasswordByUserid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		int count = os.update("setPasswordByUserid",map);
+		os.close();
+		return count;
+	}
+
 }

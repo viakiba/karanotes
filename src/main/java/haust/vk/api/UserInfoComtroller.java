@@ -17,6 +17,7 @@ import haust.vk.exception.code.NodescribeErrorInfoEnum;
 import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
 import haust.vk.result.ResultBody;
 import haust.vk.service.UserinfoService;
+import haust.vk.utils.EncryptUtil;
 import haust.vk.utils.SendMail;
 
 import org.apache.log4j.Logger;
@@ -230,8 +231,7 @@ public class UserInfoComtroller {
 		return new ResultBody(map);
 	}
 	
-	//mail 发不出去  略
-	@RequestMapping(value="/select/user/findpass",method=RequestMethod.GET)
+	@RequestMapping(value="/extra/user/findpass",method=RequestMethod.GET)
 	public ResultBody findPass(String email) throws GlobalErrorInfoException{
 		if(email == null || "".equals(email)){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
@@ -241,32 +241,31 @@ public class UserInfoComtroller {
 		try {
 			userinfo = userinfoServiceImpl.selectByEmail(email);
 			if(userinfo == null){
-				throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
+				throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 			}
 			Userlogin userlogin = userinfoServiceImpl.insertLogin(userinfo);
-			//SendMail.sendMail(email,userlogin.getToken_id());
+			SendMail.sendEmail(email,userlogin.getToken_id(),userinfo.getUser_name());
 		} catch (Exception e) {
 			logger.error("/select/user/findpass", e);
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return new ResultBody(infoMap);
+		return new ResultBody(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
 	}
 	
-	//mail 发不出去 略
-	@RequestMapping(value="/user/updatefindpass",method=RequestMethod.POST)
-	public @ResponseBody Map updatefindPass(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException, GlobalErrorInfoException{
+	@RequestMapping(value="/select/user/updatefindpass",method=RequestMethod.POST)
+	public ResultBody updatefindPass(HttpServletRequest req, HttpServletResponse resp) throws Exception{
 		Map jsonmap = (Map) req.getAttribute("jsoninfo");
 		String token_id = (String) jsonmap.get("token_id");
-		String user_password_new = (String) jsonmap.get("user_password_new");
-		String user_password_old = (String) jsonmap.get("user_password_old");
-		if(token_id == null || "".equals(token_id) || "null".equals(token_id) || user_password_new == null || "".equals(user_password_new) || "null".equals(user_password_new) || user_password_old == null || "".equals(user_password_old) || "null".equals(user_password_old)){
+		String user_password = (String) jsonmap.get("user_password");
+		if(token_id == null || "".equals(token_id) || "null".equals(token_id) || user_password == null || "".equals(user_password) || "null".equals(user_password) ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
+		jsonmap.put("user_password", EncryptUtil.MD5Encode( user_password ));
 		try {
-			userinfoServiceImpl.updateUserpass(jsonmap);
+			jsonmap = userinfoServiceImpl.updateUserFindPass(jsonmap);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.SUCCESS_CODE_MESSAGE);
+		return new ResultBody(jsonmap);
 	}
 }
