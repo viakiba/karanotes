@@ -3,19 +3,26 @@
 <mapper namespace="haust.vk.dao.PraiseDao" >
 	
 	<insert id="insertPraise" parameterType="java.util.Map">
-		insert into articleparise(praise_id, article_id, user_id, praise_user_id) values(#{praise_id} ,#{article_id} ,#{user_id} ,#{praise_user_id})
+		insert into articlepraise(praise_id, article_id, user_id, praise_user_id) values(#{praise_id} ,#{article_id} ,#{user_id} ,#{praise_user_id})
 	</insert>
 	
 	<delete id="deletePraise" parameterType="string">
-		
+		delete from articlepraise where user_id = #{user_id} and praise_user_id = #{praise_user_id} and article_id = #{article_id}
 	</delete>
 	
-	<select id="selectPraiseNotifyByUserid" parameterType="string"  resultType="java.util.Map">
-		
+	<select id="selectPraiseNotifyNumByUserid" parameterType="string"  resultType="java.util.Map">
+		select count(*) from articlepraise where praise_create_time > (select praise_read_time from notifiinfo where user_id = #{user_id} ) and praise_user_id = #{user_id}
 	</select>
 	
-	<select id="selectPraiseListByUserid" parameterType="string" resultType="java.util.Map">
-		
+	<select id="selectAllPraise" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articlepraise where praise_user_id = #{user_id} order by -praise_id asc limit #{start},#{pagesize}
 	</select>
 	
+	<select id="selectPraiseByUseridAndPraiseUserid" parameterType="java.util.Map" resultType="integer">
+		select count(*) from articlepraise where user_id = #{user_id} and praise_user_id = #{praise_user_id} and article_id = #{article_id}
+	</select>
+	
+	<select id="">
+		select * from articlepraise where author_id = #{user_id} order by -praise_id asc limit #{start},#{pagesize}	
+	</select>
 </mapper>

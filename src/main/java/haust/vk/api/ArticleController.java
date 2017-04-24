@@ -1,5 +1,6 @@
 package haust.vk.api;
 
+import haust.vk.entity.Articleabstract;
 import haust.vk.entity.Userinfo;
 import haust.vk.exception.GlobalErrorInfoException;
 import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
@@ -10,6 +11,7 @@ import haust.vk.service.ArticleService;
 import haust.vk.utils.JsonToMap;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.annotation.Resource;
@@ -84,7 +86,6 @@ public class ArticleController {
 		return new ResultBody(new HashMap());
 	}
 	
-	//zheli
 	@RequestMapping(value="/extra/article/{articleid}")
 	public ResultBody selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
 		Map articleMap = null;
@@ -100,21 +101,19 @@ public class ArticleController {
 		return new ResultBody(articleMap);
 	}
 
-	//****到这了
 	@RequestMapping(value="/extra/article/{userpath}/{beginnum}/{shownum}")
 	public ResultBody selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
-		Map articleMap = null;
+		List<Articleabstract> articleMap = null;
 		try {
 			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,beginnum,shownum);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(articleMap);
 	}
 	
-	/**
-	 * 基于时间轴的个人关注  文章列表 分页
-	 */
+	//.......
 	@RequestMapping(value="/extra/article/followarticle/{userpath}/{beginnum}/{shownum}")
 	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
@@ -126,9 +125,7 @@ public class ArticleController {
 		return articleMap;
 	}
 	
-	/**
-	 * 通过用户user_path 以及classifyid 获取该分类下的文章列表  分页
-	 */
+	//.......
 	@RequestMapping(value="/extra/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
 	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;
@@ -140,9 +137,7 @@ public class ArticleController {
 		return articleMap;
 	}
 	
-	/**
-	 * 基于标题关键字检索文章标题  分页
-	 */
+	//......
 	@RequestMapping(value="/extra/article/title/{keyword}/{beginnum}/{shownum}")
 	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map articleMap = null;

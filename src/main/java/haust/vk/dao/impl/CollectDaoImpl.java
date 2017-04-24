@@ -19,25 +19,25 @@ public class CollectDaoImpl implements CollectDao{
 	private SqlSessionFactory sqlSessionFactory;
 	
 	@Override
-	public void insertCollect(Collectinfo collectinfo) throws Exception {
+	public void insertCollect(Map collectinfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertCollect",collectinfo);
 		os.close();
 	}
 
 	@Override
-	public void deleteCollect(String collectid) throws Exception {
+	public void deleteCollect(Map collectid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.delete("deleteCollect",collectid);
 		os.close();
 	}
 
 	@Override
-	public List<Map> selectCollectNotifyByUserid(String userid) throws Exception {
+	public int selectCollectNotifyByUserid(String userid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> list = os.selectList("selectCollectNotifyByUserid", userid);
+		int i = os.selectOne("selectCollectNotifyByUserid", userid);
 		os.close();
-		return list;
+		return i;
 	}
 
 	@Override
@@ -48,4 +48,19 @@ public class CollectDaoImpl implements CollectDao{
 		return list;
 	}
 	
+	@Override
+	public int selectIsCollect(Map collectMap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		int i = os.selectOne("selectIsCollect", collectMap);
+		os.close();
+		return i;
+	}
+	
+	@Override
+	public List<Map> selectPraiseNotifi(Map collectMap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectCollectListByUserid", collectMap);
+		os.close();
+		return list;
+	}
 }

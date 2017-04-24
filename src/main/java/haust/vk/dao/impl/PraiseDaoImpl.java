@@ -19,14 +19,14 @@ public class PraiseDaoImpl implements PraiseDao{
 	private SqlSessionFactory sqlSessionFactory;
 	
 	@Override
-	public void insertPraise(Articlepraise praiseinfo) throws Exception {
+	public void insertPraise(Map praiseinfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertPraise",praiseinfo);
 		os.close();
 	}
 
 	@Override
-	public void deletePraise(String praiseid) throws Exception {
+	public void deletePraise(Map praiseid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.delete("deletePraise",praiseid);
 		os.close();
@@ -47,5 +47,26 @@ public class PraiseDaoImpl implements PraiseDao{
 		os.close();
 		return list;
 	}
-
+	
+	@Override
+	public int selectPraiseByUseridAndPraiseUserid(Map praiseMap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		int is_praise = os.selectOne("selectPraiseByUseridAndPraiseUserid", praiseMap);
+		os.close();
+		return is_praise;
+	}
+	
+	@Override
+	public int selectPraiseNotifyNumByUserid(String user_id) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		int notifi_praise = os.selectOne("selectPraiseNotifyNumByUserid", user_id);
+		os.close();
+		return notifi_praise;
+	}
+	
+	@Override
+	public List<Map> selectAllPraise(Map praiseMap) throws Exception {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

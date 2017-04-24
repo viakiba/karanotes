@@ -49,7 +49,6 @@ public class CommentServiceImpl implements CommentService {
 		String author_id = (String) commentMap.get("author_id");
 		String comment_content = (String) commentMap.get("comment_content");
 		if( author_id == null || "".equals(author_id) || "null".equals(author_id) || token_id == null || "".equals(token_id) || "null".equals(token_id) || article_id == null || "".equals(article_id) || "null".equals(article_id)|| comment_content == null || "".equals(comment_content) || "null".equals(comment_content)){
-			System.out.println("*******************");
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
 		String user_id = (String) commentMap.get("user_id");

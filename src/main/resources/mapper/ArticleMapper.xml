@@ -70,18 +70,11 @@
 		where
 			article_title LIKE %#{article_title}%
 		LIMIT
-			#{START},#{END}
+			#{START},#{PAGESIZE}
 	</select>
 	
-	<select id="selectArticleListByPerson" parameterType="string" resultType="haust.vk.entity.Articleabstract">
-		select 
-			article_id,article_title,article_update_time 
-		from 
-			articleabstract
-		where
-			article_title LIKE %#{article_title}%
-		LIMIT
-			#{START},#{END}
+	<select id="selectArticleListByPerson" parameterType="java.util.Map" resultType="haust.vk.entity.Articleabstract">
+		select * from articleabstract where user_id = (Select user_id from userinfo where user_path = #{user_path}) ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
 	</select>
 	
 	<select id="selectArticleAbstract" parameterType="string" resultType="java.util.Map">

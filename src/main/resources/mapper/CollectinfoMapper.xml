@@ -2,20 +2,23 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="haust.vk.dao.CollectDao" >
 	
-	<insert id="insertCollect" parameterType="haust.vk.entity.Collectinfo">
-		 
+	<insert id="insertCollect" parameterType="java.util.Map">
+		 insert into collectinfo(collect_id , user_id, author_id, article_id) values(#{collect_id} ,#{user_id} ,#{author_id} ,#{article_id})
 	</insert>
 	
-	<delete id="deleteCollect" parameterType="string">
-		
+	<delete id="deleteCollect" parameterType="java.util.Map">
+		delete from collectinfo where collect_id = #{collect_id} and user_id=#{user_id}
 	</delete>
 	
-	<select id="selectCollectNotifyByUserid" parameterType="string"  resultType="java.util.Map">
-		
+	<select id="selectCollectNotifyByUserid" parameterType="string"  resultType="integer">
+		select count(*) from collectinfo where collect_create_time > (select collect_read_time from notifiinfo where user_id = #{user_id} ) and author_id = #{user_id}
 	</select>
 	
 	<select id="selectCollectListByUserid" parameterType="string" resultType="java.util.Map">
-		
+		select * from collectinfo where user_id = #{user_id} order by -collect_id asc limit #{start},#{pagesize}
 	</select>
 	
+	<select id="selectIsCollect" parameterType="java.util.Map" resultType="integer">
+		select count(collect_id) from collectinfo where  user_id = #{user_id} ,author_id = #{user_id}, article_id = #{user_id}
+	</select>
 </mapper>

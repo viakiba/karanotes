@@ -131,9 +131,11 @@ public class ArticleDaoImpl implements ArticleDao{
 		return classifyContent;
 	}
 	@Override
-	public List<Articleabstract> selectArticleListByPerson(Map user_path) {
-		
-		return null;
+	public List<Articleabstract> selectArticleListByPerson(Map map) {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Articleabstract> list = os.selectList("selectArticleListByPerson", map);
+		os.close();
+		return list;
 	}
 	
 	@Override

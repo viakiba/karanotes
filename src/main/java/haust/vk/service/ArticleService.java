@@ -3,6 +3,8 @@ package haust.vk.service;
 import java.util.List;
 import java.util.Map;
 
+import haust.vk.entity.Articleabstract;
+
 public interface ArticleService {
 	
 	/**
@@ -37,7 +39,7 @@ public interface ArticleService {
 	 * @return
 	 * @throws Exception
 	 */
-	public Map selectArticleListByUserpath(String user_path,Integer beginnum,Integer shownum) throws Exception;
+	public List<Articleabstract> selectArticleListByUserpath(String user_path,Integer beginnum,Integer shownum) throws Exception;
 	/**
 	 * 分页  获取关注人的列表 时间轴
 	 * @param userpath

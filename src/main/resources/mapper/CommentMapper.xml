@@ -16,7 +16,7 @@
 	<select id="selectAllCommentByArticleid" parameterType="string" resultType="java.util.Map">
 		select * from commentinfo where article_id = #{article_id} ORDER BY -comment_id ASC
 	</select>
-	
+
 	<select id="selectAllcommentNotifi" parameterType="java.util.Map" resultType="java.util.Map">
 		select * from commentinfo where author_id = #{user_id} order by -comment_id asc limit #{start},#{pagesize}
 	</select>

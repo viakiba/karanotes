@@ -173,14 +173,14 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	@Override
-	public Map selectArticleListByUserpath(String userpath,Integer beginnum,Integer shownum) throws Exception {
-		//未完成  总数
+	public List<Articleabstract> selectArticleListByUserpath(String userpath,Integer beginnum,Integer shownum) throws Exception {
 		Map map = new HashMap();
+		System.out.println(beginnum+"************"+shownum);
 		map.put("user_path", userpath);
-		map.put("beginnum", beginnum);
-		map.put("shownum", shownum);
+		map.put("start", beginnum * shownum);
+		map.put("pagesize", shownum);
 		List<Articleabstract> list = articleDaoImpl.selectArticleListByPerson(map);
-		return null;
+		return list;
 	}
 	
 	@Override
