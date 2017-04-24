@@ -69,4 +69,8 @@ public interface UserinfoDao {
 
 	public int setPasswordByUserid(Map map) throws Exception;
 
+	public List<Map> selectUSerByListUserid(List<String> list) throws Exception;
+
+	public Userinfo selectUserByUserid(String userid) throws Exception;
+
 }

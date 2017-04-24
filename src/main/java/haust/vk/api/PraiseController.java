@@ -1,6 +1,10 @@
 package haust.vk.api;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,34 +13,27 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
 public class PraiseController {
 	
-	/**
-	 * 点赞
-	 * @return
-	 */
 	@RequestMapping(value="/praise/insert",method=RequestMethod.POST)
-	public String insertPraise(){
+	public String insertPraise(HttpServletRequest req,HttpServletResponse resp){
 		
 		return null;
 	}
 	
-	/**
-	 * 取消点赞
-	 * @return
-	 */
 	@RequestMapping(value="/praise/delete",method=RequestMethod.POST)
-	public String deletePraise(){
+	public String deletePraise(HttpServletRequest req,HttpServletResponse resp){
 		
 		return null;
 	}
 	
-	/**
-	 * 查看点赞通知 分页
-	 * @return
-	 */
-	@RequestMapping(value="/praise/select",method=RequestMethod.POST)
-	public String selectPraiseNotifyByTokenid(){
+	@RequestMapping(value="/extra/praise/selectnum/{tokenid}",method=RequestMethod.GET)
+	public String selectPraiseNotifynum(@PathVariable String tokenid){
 		
 		return null;
 	}
-
+	
+	@RequestMapping(value="/praise/select",method=RequestMethod.POST)
+	public String selectPraiseNotifyByTokenid(HttpServletRequest req,HttpServletResponse resp){
+		
+		return null;
+	}
 }

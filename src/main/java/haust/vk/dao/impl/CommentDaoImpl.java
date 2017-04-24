@@ -19,7 +19,7 @@ public class CommentDaoImpl implements CommentDao{
 	private SqlSessionFactory sqlSessionFactory;
 	
 	@Override
-	public void insertComment(Commentinfo commentInfo) throws Exception {
+	public void insertComment(Map commentInfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertComment", commentInfo);
 		os.close();
@@ -30,23 +30,29 @@ public class CommentDaoImpl implements CommentDao{
 		SqlSession os = sqlSessionFactory.openSession();
 		os.delete("deleteComment", comment_id);
 		os.close();
-		
 	}
 
 	@Override
-	public List<Map> selectCommentNotifyByUserid(String userid) throws Exception {
+	public int selectAllcommentNotifiNum(Map map) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> mapList = os.selectList("selectCommentNotifyByUserid", userid);
+		Integer count = os.selectOne("selectAllcommentNotifiNum", map);
 		os.close();
-		return mapList;
+		return count;
 	}
 
 	@Override
-	public List<Map> selectCommentListByUserid(String userid) throws Exception {
+	public List<Map> selectAllCommentByArticleid(String userid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> mapList = os.selectList("selectCommentListByUserid", userid);
+		List<Map> mapList = os.selectList("selectAllCommentByArticleid", userid);
 		os.close();
 		return mapList;
 	}
-
+	
+	@Override
+	public List<Map> selectAllcommentNotifi(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> mapList = os.selectList("selectAllcommentNotifi", map);
+		os.close();
+		return mapList;
+	}
 }

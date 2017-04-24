@@ -21,6 +21,7 @@ import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
 import haust.vk.exception.GlobalErrorInfoException;
 import haust.vk.exception.code.SuccessMessageCodeInfoEnum;
+import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.service.UserinfoService;
 import haust.vk.utils.EncryptUtil;
 import haust.vk.utils.SnowflakeIdUtil;
@@ -166,7 +167,7 @@ public class UserinfoServiceImpl implements UserinfoService{
 	public Userinfo selectUserinfoByTokenid(String token_id) throws Exception {
 		Userinfo userinfo = userloginDaoImpl.selectUserloginByTokenid(token_id);
 		if(userinfo == null ){
-			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
 		}
 		return userinfo;
 	}

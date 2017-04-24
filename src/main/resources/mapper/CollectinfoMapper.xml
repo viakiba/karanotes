@@ -3,7 +3,7 @@
 <mapper namespace="haust.vk.dao.CollectDao" >
 	
 	<insert id="insertCollect" parameterType="haust.vk.entity.Collectinfo">
-		insert into 
+		 
 	</insert>
 	
 	<delete id="deleteCollect" parameterType="string">

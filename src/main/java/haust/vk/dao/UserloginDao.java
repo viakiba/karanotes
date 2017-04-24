@@ -5,23 +5,10 @@ import haust.vk.entity.Userlogin;
 
 public interface UserloginDao {
 	
-	/**
-	 * 增加记录
-	 * @param userinfomap
-	 * @return
-	 */
-	public void insertUserlogin(Userlogin userlogin);
+	public void insertUserlogin(Userlogin userlogin) throws Exception;
 	
-	/**
-	 * 查找用户id user_id
-	 * @param token_id
-	 * @return
-	 */
-	public String selectUseridByTokenid(String token_id);
-	/**
-	 * 查找userlogin
-	 * @param token_id
-	 * @return
-	 */
-	public Userinfo selectUserloginByTokenid(String token_id);
+	public String selectUseridByTokenid(String token_id) throws Exception;
+
+	public Userinfo selectUserloginByTokenid(String token_id) throws Exception;
+
 }

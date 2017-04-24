@@ -81,8 +81,12 @@ public interface ArticleDao {
 
 	public String selectArticleContent(String articleid)  throws Exception;
 
-	public String selectArticleTag(String articleid)  throws Exception;
+	public String selectArticleTag(String articleid) throws Exception;
 
-	public String selectArticleClassify(String classify_id);
+	public String selectArticleClassify(String classify_id) throws Exception;
+
+	public void updateOneNum(Map commentMap) throws Exception;
+
+	public List<Map> selectArticleAbstractByUserid(String user_id) throws Exception;
 	
 }

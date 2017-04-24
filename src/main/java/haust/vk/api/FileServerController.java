@@ -43,9 +43,10 @@ public class FileServerController {
 	
 	/**
 	 * 图片上传地址imgtype   文章(article)   用户头像(logo)  用户背景图(backlogo) 
+	 * @throws Exception 
 	 */
 	@RequestMapping(value = "/imgs/{imgtype}",method=RequestMethod.POST)
-	public void articleImgUpload(@PathVariable("imgtype") String imgtype,@RequestParam("img") MultipartFile img,HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException, GlobalErrorInfoException{
+	public void articleImgUpload(@PathVariable("imgtype") String imgtype,@RequestParam("img") MultipartFile img,HttpServletRequest req, HttpServletResponse resp) throws Exception{
 		resp.setCharacterEncoding("UTF-8");
 		req.setCharacterEncoding("UTF-8");
 		PrintWriter rgw = null;

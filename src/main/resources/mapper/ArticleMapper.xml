@@ -53,6 +53,15 @@
 		update articlecontent set article_content = #{article_content} where article_id = #{article_id}
 	</update>
 	
+	<update id="updateOneNum" parameterType="java.util.Map">
+		update articleabstract set 
+			<if test=" comment_num != null "> comment_num = #{comment_num}</if>
+			<if test=" collect_num != null "> collect_num = #{collect_num}</if>
+			<if test=" praise_num != null "> praise_num = #{praise_num}</if>
+			where
+				article_id = #{article_id}
+	</update>
+	
 	<select id="selectArticleLikeTitle" parameterType="string" resultType="java.util.Map">
 		select 
 			article_id,article_title,article_update_time 
@@ -77,6 +86,10 @@
 	
 	<select id="selectArticleAbstract" parameterType="string" resultType="java.util.Map">
 		select * from articleabstract where articleabstract.article_id = #{articleid}
+	</select>
+	
+	<select id="selectArticleAbstractByUserid" parameterType="string" resultType="java.util.Map">
+		select * from articleabstract where articleabstract.user_id = #{user_id}
 	</select>
 	
 	<select id="selectArticleContent" parameterType="string" resultType="string">

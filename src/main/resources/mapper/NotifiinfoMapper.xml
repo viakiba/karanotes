@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="haust.vk.dao.NotifiinfoDao" >
+	<select id="selectNotifiByUserid" parameterType="string" resultType="java.util.Map">
+		select * from notifiinfo where user_id = #{user_id}
+	</select>
+	
+	<update id="upadteReadTime" parameterType="java.util.Map">
+		update notifiinfo set 
+			<choose>
+				<when test=" comment_read_time != null">comment_read_time = now()</when>
+				<when test=" follow_read_time != null">follow_read_time = now()</when>
+				<when test=" parise_read_time != null">parise_read_time = now()</when>
+				<otherwise>
+					collect_read_time = now()
+				</otherwise>
+			</choose>
+			where 
+				user_id = #{user_id}
+	</update>
+</mapper>

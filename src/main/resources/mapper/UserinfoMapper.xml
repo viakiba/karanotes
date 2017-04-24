@@ -13,6 +13,10 @@
 	<select id="selectUserByEmail" parameterType="String" resultType="haust.vk.entity.Userinfo">
 		select * from userinfo where user_email=#{user_email} limit 0,1
 	</select>
+	
+	<select id="selectUserByUserid" parameterType="string" resultType="haust.vk.entity.Userinfo">
+		select * from userinfo where user_id = #{user_id}
+	</select>
 	<!-- 查找用户 -->
 	<select id="selectUserByUserpath" parameterType="String" resultType="haust.vk.entity.Userinfo">
 		select * from userinfo where user_path=#{user_path} limit 0,1
@@ -66,6 +70,13 @@
 					</choose>
 				</if>
 				limit #{start},#{pagesize}
+	</select>
+	
+	<select id="selectUSerByListUserid" resultType="java.util.Map">
+		select * from userinfo where user_id in
+			<foreach collection="list" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
 	</select>
 	<!-- 更新用户头像/背景图 -->
 	<update id="updateUserimg" parameterType="java.util.Map">

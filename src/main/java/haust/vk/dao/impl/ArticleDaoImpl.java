@@ -136,5 +136,19 @@ public class ArticleDaoImpl implements ArticleDao{
 		return null;
 	}
 	
+	@Override
+	public void updateOneNum(Map commentMap) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.update("updateOneNum", commentMap);
+		os.close();
+	}
+	
+	@Override
+	public List<Map> selectArticleAbstractByUserid(String user_id) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectArticleAbstractByUserid", user_id);
+		os.close();
+		return list;
+	}
 	
 }

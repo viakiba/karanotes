@@ -105,5 +105,20 @@ public class UserinfoDaoImpl implements UserinfoDao{
 		os.close();
 		return count;
 	}
-
+	
+	@Override
+	public List<Map> selectUSerByListUserid(List<String> list) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> userList = os.selectList("selectUSerByListUserid",list);
+		os.close();
+		return userList;
+	}
+	
+	@Override
+	public Userinfo selectUserByUserid(String userid) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		Userinfo userinfo = os.selectOne("selectUserByUserid",userid);
+		os.close();
+		return userinfo;
+	}
 }

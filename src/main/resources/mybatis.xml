@@ -16,5 +16,9 @@ PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
 		<mapper resource="mapper/FollowMapper.xml" />
 		<mapper resource="mapper/FaqinfoMapper.xml" />
 		<mapper resource="mapper/ClassifyMapper.xml" />
+		<mapper resource="mapper/CollectinfoMapper.xml" />
+		<mapper resource="mapper/CommentMapper.xml" />
+		<mapper resource="mapper/NotifiinfoMapper.xml" />
+		<mapper resource="mapper/PraiseMapper.xml" />
 	</mappers>
 </configuration>

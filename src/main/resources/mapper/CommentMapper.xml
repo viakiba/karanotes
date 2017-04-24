@@ -1,19 +1,24 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="haust.vk.dao.CommentDao" >
-	<insert id="insertComment" parameterType="haust.vk.entity.Commentinfo">
-		insert into commentinfo(comment_id ,user_id ,article_id ,comment_content ,reply_id ) values( #{comment_id}, #{user_id}, #{article_id} , #{comment_content}, #{reply_id})
+	<insert id="insertComment" parameterType="java.util.Map">
+		insert into commentinfo(comment_id ,user_id ,article_id ,comment_content ,reply_id ,author_id) values( #{comment_id}, #{user_id}, #{article_id} , #{comment_content}, #{reply_id}, #{author_id})
 	</insert>
 	
 	<delete id="deleteComment" parameterType="string">
 		delete from commentinfo where comment_id = #{comment_id} or reply_id = #{comment_id}
 	</delete>
 	
-	<select id="selectCommentNotifyByUserid" parameterType="string" resultType="java.util.Map">
-	
+	<select id="selectAllcommentNotifiNum" parameterType="string" resultType="integer">
+		select count(*) from commentinfo where comment_create_time > (select comment_read_time from notifiinfo where user_id = #{user_id} ) and author_id = #{user_id}
 	</select>
 	
-	<select id="selectCommentListByUserid" parameterType="string" resultType="java.util.Map">
-	
+	<select id="selectAllCommentByArticleid" parameterType="string" resultType="java.util.Map">
+		select * from commentinfo where article_id = #{article_id} ORDER BY -comment_id ASC
 	</select>
+	
+	<select id="selectAllcommentNotifi" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from commentinfo where author_id = #{user_id} order by -comment_id asc limit #{start},#{pagesize}
+	</select>
+	
 </mapper>

@@ -7,31 +7,13 @@ import haust.vk.entity.Commentinfo;
 
 public interface CommentDao {
 	
-	/**
-	 * 添加评论
-	 * @param commentInfo
-	 * @throws Exception
-	 */
-	public void insertComment(Commentinfo commentInfo) throws Exception;
+	public void insertComment(Map commentInfo) throws Exception;
 
-	/**
-	 * 删除评论
-	 * @param comment_id
-	 * @throws Exception
-	 */
 	public void deleteComment(String comment_id) throws Exception;
 	
-	/**
-	 * 查询评论通知
-	 * @param userid
-	 * @throws Exception
-	 */
-	public List<Map> selectCommentNotifyByUserid(String userid) throws Exception;
+	public int selectAllcommentNotifiNum(Map map) throws Exception;
 	
-	/**
-	 * 查看文章评论
-	 * @param userid
-	 * @throws Exception
-	 */
-	public List<Map> selectCommentListByUserid(String userid) throws Exception;
+	public List<Map> selectAllCommentByArticleid(String userid) throws Exception;
+	
+	public List<Map> selectAllcommentNotifi(Map map) throws Exception;
 }
