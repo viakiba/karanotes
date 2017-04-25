@@ -153,4 +153,27 @@ public class ArticleDaoImpl implements ArticleDao{
 		return list;
 	}
 	
+	@Override
+	public List<Map> selectArticleByClassifyid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectArticleByClassifyid", map);
+		os.close();
+		return list;
+	}
+	
+	@Override
+	public List<Map> selectArticleBySearch(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectArticleBySearch", map);
+		os.close();
+		return list;
+	}
+	
+	@Override
+	public List<Map> selectArticleByListUserid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectArticleByListUserid", map);
+		os.close();
+		return list;
+	}
 }

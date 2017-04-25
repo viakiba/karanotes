@@ -101,7 +101,7 @@ public class ArticleController {
 		return new ResultBody(articleMap);
 	}
 
-	@RequestMapping(value="/extra/article/{userpath}/{beginnum}/{shownum}")
+	@RequestMapping(value="/extra/articlelist/alllist/{userpath}/{beginnum}/{shownum}")
 	public ResultBody selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		List<Articleabstract> articleMap = null;
 		try {
@@ -113,39 +113,41 @@ public class ArticleController {
 		return new ResultBody(articleMap);
 	}
 	
-	//.......
-	@RequestMapping(value="/extra/article/followarticle/{userpath}/{beginnum}/{shownum}")
-	public Map selectByUserfollow(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
-		Map articleMap = null;
+	@RequestMapping(value="/article/followlist/{userpath}")
+	public ResultBody selectByUserfollow(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map jsoninfo = (Map) req.getAttribute("jsoninfo");
+		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
+		jsoninfo.put("user_id", userinfo.getUser_id());
+		List<Map> list = null;
 		try {
-			articleMap = articleServiceImpl.selectFollowArticleListByUserpath(userpath,beginnum,shownum);
+			list = articleServiceImpl.selectFollowArticleListByUserpath(jsoninfo);
+		}catch (GlobalErrorInfoException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		return new ResultBody(list);
 	}
 	
-	//.......
-	@RequestMapping(value="/extra/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
-	public @ResponseBody Map selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
-		Map articleMap = null;
+	@RequestMapping(value="/extra/articlelist/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
+	public ResultBody selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
+		Map  list = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleByUserClassifyArticleList(userpath,classifyid,beginnum,shownum);
+			list= articleServiceImpl.selectArticleByUserClassifyArticleList(userpath,classifyid,beginnum,shownum);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		return new ResultBody(list);
 	}
 	
-	//......
 	@RequestMapping(value="/extra/article/title/{keyword}/{beginnum}/{shownum}")
-	public Map selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
-		Map articleMap = null;
+	public ResultBody selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum,String userpath) throws GlobalErrorInfoException{
+		List<Map>  articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByKeyword(keyword,beginnum,shownum);
+			articleMap = articleServiceImpl.selectArticleListByKeyword(keyword,beginnum,shownum,userpath);
 		} catch (Exception e) {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return articleMap;
+		return new ResultBody(articleMap);
 	}
 }

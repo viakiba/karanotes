@@ -96,4 +96,23 @@
 	<select id="selectArticleClassify" parameterType="string" resultType="string">
 		select articleclassify.classify_content from articleclassify where articleclassify.classify_id = #{classify_id}
 	</select>
+	
+	<select id="selectArticleByClassifyid" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articleabstract where classify_id = #{classify_id} ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
+	</select>
+	
+	<select id="selectArticleBySearch" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articleabstract where article_title like '%${keywords}%' OR abstract_content like '%#{keywords}%' order by -article_id ASC LIMIT #{start},#{pagesize}
+	</select>
+	
+	<select id="selectArticleByListUserid" parameterType="java.util.Map" resultType="selectArticleByListUserid">
+		select * from articleabstract where user_id in 
+			<foreach collection="followuserlist" index="index" item="item" open="(" separator="," close=")">
+				#{item}
+			</foreach>
+			<if test=" keywords != null">
+				and article_title like '%${keywords}%' and article_abstract like '%${keywords}%' 
+			</if>
+			ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
+	</select>
 </mapper>
