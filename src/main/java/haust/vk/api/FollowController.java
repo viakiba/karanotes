@@ -83,7 +83,7 @@ public class FollowController {
 		
 	}
 	
-	@RequestMapping(value="/extra/followlist/{tokenid}")
+	@RequestMapping(value="/extra/follownotifylist/{tokenid}")
 	public ResultBody selectFollowList(@PathVariable String tokenid) throws GlobalErrorInfoException{
 		
 		if("".equals(tokenid) || "null".equals(tokenid) || tokenid == null){
@@ -114,6 +114,54 @@ public class FollowController {
 		List<Map> list = null;
 		try {
 			list = followServiceImpl.getFollowNotifyByUserid(tokenid);
+		} catch (GlobalErrorInfoException e) {
+			e.printStackTrace();
+			logger.info(e);
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+		}
+		return new ResultBody(list);
+	}
+	
+	@RequestMapping(value="/extra/followlist/{tokenid}/{pagenum}/{pagesize}")
+	public ResultBody selectFollowlist(@PathVariable String tokenid,@PathVariable String pagenum,@PathVariable String pagesize) throws GlobalErrorInfoException{
+		if("".equals(tokenid) || "null".equals(tokenid) || tokenid == null || "".equals(pagesize) || "null".equals(pagesize) || pagesize == null || "".equals(pagenum) || "null".equals(pagenum) || pagenum == null){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		Map map = new HashMap<>();
+		map.put("token_id", tokenid);
+		map.put("pagenum", pagenum);
+		map.put("pagesize", pagesize);
+		List<Map> list = null;
+		try {
+			list = followServiceImpl.getFollowList(map);
+		} catch (GlobalErrorInfoException e) {
+			e.printStackTrace();
+			logger.info(e);
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+		}
+		return new ResultBody(list);
+	}
+	
+	@RequestMapping(value="/extra/fanslist/{tokenid}/{pagenum}/{pagesize}")
+	public ResultBody selectFanslist(@PathVariable String tokenid,@PathVariable String pagenum,@PathVariable String pagesize) throws GlobalErrorInfoException{
+		if("".equals(tokenid) || "null".equals(tokenid) || tokenid == null){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		Map map = new HashMap<>();
+		map.put("token_id", tokenid);
+		map.put("pagenum", pagenum);
+		map.put("pagesize", pagesize);
+		List<Map> list = null;
+		try {
+			list = followServiceImpl.getFollowFansList(map);
 		} catch (GlobalErrorInfoException e) {
 			e.printStackTrace();
 			logger.info(e);

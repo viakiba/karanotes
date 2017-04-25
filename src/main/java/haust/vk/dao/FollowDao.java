@@ -25,4 +25,8 @@ public interface FollowDao {
 
 	public List<Map> selectFollowListByUseridHelp(String user_id) throws Exception;
 
+	public List<Map> selectFansList(Map map) throws Exception;
+
+	public List<Map> selectFollowList(Map user_id) throws Exception;
+
 }

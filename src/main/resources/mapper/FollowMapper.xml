@@ -57,7 +57,15 @@
 			</foreach>
 	</select>
 	
+	<select id="selectFansList" parameterType="string" resultType="java.util.Map">
+		select * from followinfo where follow_user_id = #{user_id} order by -follow_id ASC limit #{start},#{pagesize}
+	</select>
+	
+	<select id="selectFollowList" parameterType="string" resultType="java.util.Map">
+		select * from followinfo where user_id = #{user_id}
+	</select>
+	
 	<update id="updateNotifiinfo" parameterType="string">
-		update notifiinfo set follow_read_time = now() where user_id = #{user_id}
+		update notifiinfo set follow_read_time = now() where user_id = #{user_id} order by -follow_id ASC limit #{start},#{pagesize}
 	</update>
 </mapper>

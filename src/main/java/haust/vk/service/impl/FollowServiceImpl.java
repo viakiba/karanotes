@@ -1,7 +1,5 @@
 package haust.vk.service.impl;
 
-import static org.hamcrest.CoreMatchers.is;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +10,13 @@ import javax.annotation.Resource;
 import org.springframework.stereotype.Service;
 
 import haust.vk.dao.FollowDao;
+import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
+import haust.vk.dao.impl.UserinfoDaoImpl;
 import haust.vk.entity.Userinfo;
 import haust.vk.entity.Userlogin;
 import haust.vk.exception.GlobalErrorInfoException;
+import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
 import haust.vk.exception.code.TokenidErrorInfoEnum;
 import haust.vk.service.FollowService;
 import haust.vk.utils.SnowflakeIdUtil;
@@ -29,6 +30,8 @@ public class FollowServiceImpl implements FollowService{
 	private UserloginDao userLoginDaoImpl;
 	@Resource
 	private SnowflakeIdUtil snowflakeIdUtil;
+	@Resource
+	private UserinfoDao userinfoDaoImpl;
 	
 	@Override
 	public void insertFollow(Map jsoninfo) throws Exception {
@@ -122,6 +125,82 @@ public class FollowServiceImpl implements FollowService{
 		followDaoImpl.updateNotifiinfo(user_id);
 		for (Map map : list) {
 			map.remove("user_password");
+		}
+		return list;
+	}
+	
+	@Override
+	public List<Map> getFollowFansList(Map map) throws Exception {
+		String tokenid = (String) map.get("token_id");
+		String pagenum = (String) map.get("pagenum");
+		String pagesize = (String) map.get("pagesize");
+		Userinfo userinfo = userLoginDaoImpl.selectUserloginByTokenid(tokenid);
+		if(userinfo == null){
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
+		}
+		Integer start = 0;
+		try{
+			start = Integer.valueOf(pagenum) * Integer.valueOf(pagesize);
+		}catch ( NumberFormatException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		String user_id = userinfo.getUser_id();
+		map.clear();
+		map.put("user_id", user_id);
+		map.put("start", start);
+		map.put("pagesize", Integer.valueOf(pagesize));
+		List<Map> list = followDaoImpl.selectFansList(map);
+		for (Map temp : list) {
+			Integer i = (Integer) temp.get("is_eachother");
+			String userid = (String) temp.get("user_id");
+			Userinfo user = userinfoDaoImpl.selectUserByUserid(userid);
+			temp.put("user_id", user.getUser_id());
+			temp.put("user_path", user.getUser_path());
+			temp.put("user_name", user.getUser_name());
+			temp.put("user_headimg", user.getUser_headimg());
+			if(i == 1){
+				temp.put("is_eachother", "3");
+			}else{
+				temp.put("is_eachother", "2");
+			}
+		}
+		return list;
+	}
+	
+	@Override
+	public List<Map> getFollowList(Map map) throws Exception {
+		String tokenid = (String) map.get("token_id");
+		String pagenum = (String) map.get("pagenum");
+		String pagesize = (String) map.get("pagesize");
+		Userinfo userinfo = userLoginDaoImpl.selectUserloginByTokenid(tokenid);
+		if(userinfo == null){
+			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
+		}
+		Integer start = 0;
+		try{
+			start = Integer.valueOf(pagenum) * Integer.valueOf(pagesize);
+		}catch ( NumberFormatException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		String user_id = userinfo.getUser_id();
+		map.clear();
+		map.put("user_id", user_id);
+		map.put("start", start);
+		map.put("pagesize", Integer.valueOf(pagesize));
+		List<Map> list = followDaoImpl.selectFollowList(map);
+		for (Map temp : list) {
+			Integer i = (Integer) temp.get("is_eachother");
+			String userid = (String) temp.get("follow_user_id");
+			Userinfo user = userinfoDaoImpl.selectUserByUserid(userid);
+			temp.put("user_id", user.getUser_id());
+			temp.put("user_path", user.getUser_path());
+			temp.put("user_name", user.getUser_name());
+			temp.put("user_headimg", user.getUser_headimg());
+			if(i == 1){
+				temp.put("is_eachother", "3");
+			}else{
+				temp.put("is_eachother", "2");
+			}
 		}
 		return list;
 	}
