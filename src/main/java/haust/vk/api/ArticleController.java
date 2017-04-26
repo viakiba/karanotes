@@ -34,6 +34,15 @@ public class ArticleController {
 	@Resource
 	private ArticleService articleServiceImpl;
 	
+	/**
+	 * 文章插入
+	 * @Author : viakiba
+	 * @param req
+	 * @param resp
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
 	@RequestMapping(value="/article/insert",method=RequestMethod.POST)
 	public ResultBody insertArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map articleMapInfo = (Map) req.getAttribute("jsoninfo");
@@ -57,6 +66,15 @@ public class ArticleController {
 		return new ResultBody(new HashMap());
 	}
 	
+	/**
+	 * 文章删除
+	 * @Author : viakiba
+	 * @param req
+	 * @param resp
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
 	@RequestMapping(value="/article/delete",method=RequestMethod.POST)
 	public ResultBody deleteArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map articlemap = (Map) req.getAttribute("jsoninfo");
@@ -72,6 +90,15 @@ public class ArticleController {
 		return new ResultBody(new HashMap());
 	}
 	
+	/**
+	 * 文章详情更新
+	 * @Author : viakiba
+	 * @param req
+	 * @param resp
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
 	@RequestMapping(value="/article/update",method=RequestMethod.POST)
 	public ResultBody updateArticle(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map articleMapInfo = (Map) req.getAttribute("jsoninfo");
@@ -86,7 +113,15 @@ public class ArticleController {
 		return new ResultBody(new HashMap());
 	}
 	
-	@RequestMapping(value="/extra/article/{articleid}")
+	/**
+	 * 获取文章详情
+	 * @Author : viakiba
+	 * @param articleid
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
+	@RequestMapping(value="/extra/article/{articleid}",method=RequestMethod.GET)
 	public ResultBody selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
 		Map articleMap = null;
 		if(articleid == null || "".equals(articleid) || "null".equals(articleid)){
@@ -100,12 +135,22 @@ public class ArticleController {
 		}
 		return new ResultBody(articleMap);
 	}
-
-	@RequestMapping(value="/extra/articlelist/alllist/{userpath}/{beginnum}/{shownum}")
-	public ResultBody selectByUserpath(@PathVariable String userpath,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
+	
+	/**
+	 * 分页获取用户自己的文章列表 ASC 不区分类别
+	 * @Author : viakiba
+	 * @param userpath
+	 * @param pagenum
+	 * @param shownum
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
+	@RequestMapping(value="/extra/articlelist/alllist/{userpath}/{pagenum}/{shownum}",method=RequestMethod.GET)
+	public ResultBody selectByUserpath(@PathVariable String userpath,@PathVariable Integer pagenum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		List<Articleabstract> articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,beginnum,shownum);
+			articleMap = articleServiceImpl.selectArticleListByUserpath(userpath,pagenum,shownum);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
@@ -113,7 +158,16 @@ public class ArticleController {
 		return new ResultBody(articleMap);
 	}
 	
-	@RequestMapping(value="/article/followlist/{userpath}")
+	/**
+	 * 关注人及其本身的文章 ASC 顺序的分页列表
+	 * @Author : viakiba
+	 * @param req
+	 * @param resp
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
+	@RequestMapping(value="/article/followlist",method=RequestMethod.POST)
 	public ResultBody selectByUserfollow(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
 		Map jsoninfo = (Map) req.getAttribute("jsoninfo");
 		Userinfo userinfo = (Userinfo) req.getAttribute("userinfo");
@@ -124,12 +178,24 @@ public class ArticleController {
 		}catch (GlobalErrorInfoException e) {
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(list);
 	}
 	
-	@RequestMapping(value="/extra/articlelist/classify/{userpath}/{classifyid}/{beginnum}/{shownum}")
+	/**
+	 * 用户分类下的文章列表 分页
+	 * @Author : viakiba
+	 * @param userpath
+	 * @param classifyid
+	 * @param beginnum
+	 * @param shownum
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
+	@RequestMapping(value="/extra/articlelist/classify/{userpath}/{classifyid}/{beginnum}/{shownum}",method=RequestMethod.GET)
 	public ResultBody selectByClassify(@PathVariable String userpath,@PathVariable String classifyid,@PathVariable Integer beginnum,@PathVariable Integer shownum) throws GlobalErrorInfoException{
 		Map  list = null;
 		try {
@@ -140,12 +206,27 @@ public class ArticleController {
 		return new ResultBody(list);
 	}
 	
-	@RequestMapping(value="/extra/article/title/{keyword}/{beginnum}/{shownum}")
-	public ResultBody selectArticleListByKeyword(@PathVariable String keyword,@PathVariable Integer beginnum,@PathVariable Integer shownum,String userpath) throws GlobalErrorInfoException{
+	/**
+	 * 全站标题检索
+	 * @Author : viakiba
+	 * @param keyword
+	 * @param beginnum
+	 * @param shownum
+	 * @param userpath
+	 * @return
+	 * @throws GlobalErrorInfoException
+	 * 2017-04-26
+	 */
+	@RequestMapping(value="/select/article/title",method=RequestMethod.POST)
+	public ResultBody selectArticleListByKeyword(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map jsoninfo = (Map) req.getAttribute("jsoninfo");
 		List<Map>  articleMap = null;
 		try {
-			articleMap = articleServiceImpl.selectArticleListByKeyword(keyword,beginnum,shownum,userpath);
+			articleMap = articleServiceImpl.selectArticleListByKeyword(jsoninfo);
+		}catch (GlobalErrorInfoException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		} catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(articleMap);

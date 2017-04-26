@@ -2,8 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="haust.vk.dao.ArticleDao" >
 	<insert id="insertArticleabstract" parameterType="haust.vk.entity.Articleabstract">
-		insert into articleabstract(article_id,article_title,article_show_img,classify_id,abstract_content,user_id,article_attachment) 
-				values(#{article_id},#{article_title},#{article_show_img},#{classify_id},#{abstract_content},#{user_id},#{article_attachment})
+		insert into articleabstract(article_id,article_title,article_show_img,classify_id,
+				<if test=" abstract_content != null ">abstract_content</if>
+				user_id,article_attachment) 
+				values(#{article_id},#{article_title},#{article_show_img},#{classify_id},
+				<if test=" abstract_content != null ">#{abstract_content},</if>
+				#{user_id},#{article_attachment})
 	</insert>
 	
 	<insert id="insertArticlecontent" parameterType="java.util.Map">
@@ -102,7 +106,7 @@
 	</select>
 	
 	<select id="selectArticleBySearch" parameterType="java.util.Map" resultType="java.util.Map">
-		select * from articleabstract where article_title like '%${keywords}%' OR abstract_content like '%#{keywords}%' order by -article_id ASC LIMIT #{start},#{pagesize}
+		select * from articleabstract where article_title like '%${keywords}%' OR abstract_content like '%${keywords}%' order by -article_id ASC LIMIT #{start} , #{pagesize}
 	</select>
 	
 	<select id="selectArticleByListUserid" parameterType="java.util.Map" resultType="java.util.Map">
@@ -111,7 +115,7 @@
 				#{item}
 			</foreach>
 			<if test=" keywords != null">
-				and article_title like '%${keywords}%' and article_abstract like '%${keywords}%' 
+				and article_title like '%${keywords}%' OR abstract_content like '%${keywords}%' 
 			</if>
 			ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
 	</select>

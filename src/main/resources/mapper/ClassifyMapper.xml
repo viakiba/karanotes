@@ -21,4 +21,8 @@
 	<update id="updateClassify" parameterType="haust.vk.entity.Articleclassify">
 		update articleclassify set classify_content = #{classify_content} where classify_id = #{classify_id}
 	</update>
+	
+	<select id="selectContentByClassifyid" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articleclassify where classify_id = #{classify_id}
+	</select>
 </mapper>

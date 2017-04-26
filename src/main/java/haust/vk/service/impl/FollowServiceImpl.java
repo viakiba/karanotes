@@ -115,7 +115,10 @@ public class FollowServiceImpl implements FollowService{
 			throw new GlobalErrorInfoException(TokenidErrorInfoEnum.USER_CONNOT_BE_FOUND);
 		}
 		String user_id = userinfo.getUser_id();
-		List<String> listHelp = followDaoImpl.selectFollowNotifyByUseridHelp(user_id);
+		Map temp = new HashMap<>();
+		temp.put("user_id",user_id);
+		temp.put("follow_create_time", "1");
+		List<String> listHelp = followDaoImpl.selectFollowNotifyByUseridHelp(temp);
 		for (String string : listHelp) {
 			System.out.println("***************************");
 			System.out.println(string);

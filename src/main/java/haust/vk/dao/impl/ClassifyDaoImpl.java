@@ -54,4 +54,12 @@ public class ClassifyDaoImpl implements ClassifyDao{
 		return classifyContent;
 	}
 	
+	@Override
+	public Map selectContentByClassifyid(Map map2) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		Map classifyContent = os.selectOne("selectContentByClassifyid", map2);
+		os.close();
+		return classifyContent;
+	}
+	
 }

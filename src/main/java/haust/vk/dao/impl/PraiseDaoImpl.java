@@ -18,13 +18,19 @@ public class PraiseDaoImpl implements PraiseDao{
 	@Resource
 	private SqlSessionFactory sqlSessionFactory;
 	
+	/**
+	 * 新增点赞
+	 */
 	@Override
 	public void insertPraise(Map praiseinfo) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.insert("insertPraise",praiseinfo);
 		os.close();
 	}
-
+	
+	/**
+	 * 取消点赞
+	 */
 	@Override
 	public void deletePraise(Map praiseid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
@@ -32,6 +38,9 @@ public class PraiseDaoImpl implements PraiseDao{
 		os.close();
 	}
 
+	/**
+	 * 
+	 */
 	@Override
 	public List<Map> selectPraiseNotifyByUserid(String userid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
@@ -64,9 +73,14 @@ public class PraiseDaoImpl implements PraiseDao{
 		return notifi_praise;
 	}
 	
+	/**
+	 * 分页 获取所有点赞情况
+	 */
 	@Override
 	public List<Map> selectAllPraise(Map praiseMap) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectAllPraise", praiseMap);
+		os.close();
+		return list;
 	}
 }

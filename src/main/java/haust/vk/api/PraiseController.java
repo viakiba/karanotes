@@ -70,6 +70,7 @@ public class PraiseController {
 		}catch (GlobalErrorInfoException e) {
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		Map map = new HashMap<>();
@@ -88,6 +89,7 @@ public class PraiseController {
 		}catch (GlobalErrorInfoException e) {
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}catch (Exception e) {
+			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(list);

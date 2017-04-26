@@ -1,6 +1,7 @@
 package haust.vk.service.impl;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -10,14 +11,12 @@ import javax.annotation.Resource;
 
 import org.springframework.stereotype.Service;
 
-import com.alibaba.fastjson.JSON;
-
 import haust.vk.dao.ArticleDao;
+import haust.vk.dao.ClassifyDao;
 import haust.vk.dao.FollowDao;
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Articleabstract;
-import haust.vk.entity.Articlecontent;
 import haust.vk.entity.Articletag;
 import haust.vk.entity.Userinfo;
 import haust.vk.exception.GlobalErrorInfoException;
@@ -25,6 +24,11 @@ import haust.vk.exception.code.JsonKeyValueErrorInfoEnum;
 import haust.vk.service.ArticleService;
 import haust.vk.utils.SnowflakeIdUtil;
 
+/**
+ * 文章相关 业务代码
+ * @author viakiba
+ *
+ */
 @Service
 public class ArticleServiceImpl implements ArticleService{
 	
@@ -38,7 +42,12 @@ public class ArticleServiceImpl implements ArticleService{
 	private UserinfoDao userinfoDaoImpl;
 	@Resource
 	private FollowDao followDaoImpl;
+	@Resource
+	private ClassifyDao classifyDaoImpl;
 	
+	/**
+	 * 插入文章
+	 */
 	@Override
 	public Map insertArticle(Map articleMapInfo) throws Exception{
 		
@@ -98,6 +107,9 @@ public class ArticleServiceImpl implements ArticleService{
 		return articleMapInfo;
 	}
 
+	/**
+	 * 删除文章
+	 */
 	@Override
 	public Map deleteArticle(Map articlemap) throws Exception {
 		String article_id = (String) articlemap.get("article_id");
@@ -107,6 +119,9 @@ public class ArticleServiceImpl implements ArticleService{
 		return articlemap;
 	}
 
+	/**
+	 * 更新文章
+	 */
 	@Override
 	public Map updateArticle(Map articleMapInfo) throws Exception {
 		String article_id = (String) articleMapInfo.get("article_id");
@@ -135,7 +150,11 @@ public class ArticleServiceImpl implements ArticleService{
 		article_abstract.setArticle_title(article_title);
 		article_abstract.setClassify_id(classify_id);
 		article_abstract.setArticle_show_img(article_show_img);
-		article_abstract.setAbstract_content(abstract_content);
+		if( abstract_content == null){
+			article_abstract.setAbstract_content("");
+		}else{
+			article_abstract.setAbstract_content(abstract_content);
+		}
 		if(abstract_content==null | abstract_content.length() == 0){
 			if(article_content.length()>100){
 				article_abstract.setAbstract_content(article_content.substring(0, 100));
@@ -159,7 +178,10 @@ public class ArticleServiceImpl implements ArticleService{
 		articleDaoImpl.updateArticlecontent(articlecontentmap);
 		return null;
 	}
-
+	
+	/**
+	 * 获取文章详情
+	 */
 	@Override
 	public Map selectArticleDetail(String articleid) throws Exception {
 		String article_content = articleDaoImpl.selectArticleContent(articleid);
@@ -178,7 +200,10 @@ public class ArticleServiceImpl implements ArticleService{
 		
 		return abstractdetail;
 	}
-
+	
+	/**
+	 * 获取文章列表 个人
+	 */
 	@Override
 	public List<Articleabstract> selectArticleListByUserpath(String userpath,Integer beginnum,Integer shownum) throws Exception {
 		Map map = new HashMap();
@@ -190,6 +215,9 @@ public class ArticleServiceImpl implements ArticleService{
 		return list;
 	}
 	
+	/**
+	 * 获取跟人分类下的文章列表
+	 */
 	@Override
 	public Map selectArticleByUserClassifyArticleList(String userpath,String classifyid, Integer beginnum, Integer shownum)
 			throws Exception {
@@ -200,8 +228,14 @@ public class ArticleServiceImpl implements ArticleService{
 		map.put("start", beginnum * shownum);
 		map.put("pagesize", shownum);
 		List<Map> list = articleDaoImpl.selectArticleByClassifyid(map);
+		for (Map map2 : list) {
+			Map map3 = classifyDaoImpl.selectContentByClassifyid(map2);
+			String classify_content = (String) map3.get("classify_content");
+			map2.put("classify_content", classify_content);
+		}
 		Userinfo selectByUserpath = userinfoDaoImpl.selectByUserpath(userpath);
 		map.clear();
+		selectByUserpath.setUser_password("");
 		map.put("userinfo", selectByUserpath);
 		map.put("articlelist", list);
 		return map;
@@ -219,47 +253,63 @@ public class ArticleServiceImpl implements ArticleService{
 		}catch (NumberFormatException e){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		List<String> followuserlist = followDaoImpl.selectFollowNotifyByUseridHelp(( (String) map.get("user_id")));
 		
-		res.put("start", pagenum*pagesize);
-		res.put("pagesize", pagesize);
-		res.put("followuserlist", followuserlist);
-		if(keyword.trim() != null){
-			res.put("keywords", keyword);
+		String userid = (String) map.get("user_id");
+		List<String> followuserlist = followDaoImpl.selectFollowNotifyByUseridHelp(map);
+		followuserlist.add(userid);
+			if(followuserlist.size() > 0){
+				res.put("start", pagenum*pagesize);
+				res.put("pagesize", pagesize);
+				res.put("followuserlist", followuserlist);
+				if(keyword != null){
+					keyword.trim();
+					res.put("keywords", keyword);
+				}
+				List<Map> list = articleDaoImpl.selectArticleByListUserid(res);
+				//获取文章列表
+				
+				//
+				for (Map temp : list) {
+					System.out.println(temp.toString());
+					String user_id = (String) temp.get("user_id");
+					Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(user_id);
+					temp.put("userinfo", userinfo);
+				}
+				
+				return list;
 		}
-		List<Map> list = articleDaoImpl.selectArticleByListUserid(res);
-		for (Map temp : list) {
-			String user_id = (String) temp.get("user_id");
-			Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(user_id);
-			temp.put("userinfo", userinfo);
-		}
-		return list;
+			List<Map> lists = new ArrayList<>();
+			return lists;
 	}
 	
 	@Override
-	public List<Map> selectArticleListByKeyword(String keyword,Integer beginnum, Integer shownum,String userpath) throws Exception {
-		Map map = new HashMap();
-		System.out.println(beginnum+"************"+shownum);
-		System.out.println(userpath);
-		map.put("user_path", userpath);
-		map.put("start", beginnum * shownum);
-		map.put("pagesize", shownum);
-		map.put("keywords", keyword);
-		
-		List<Map> list = articleDaoImpl.selectArticleBySearch(map);
-		if(userpath != null){
-			Userinfo selectByUserpath = userinfoDaoImpl.selectByUserpath(userpath);
-			for (Map map2 : list) {
-				selectByUserpath.setUser_password("");
-				map2.put("userinfo", selectByUserpath);
-			}
-			return list;
+	public List<Map> selectArticleListByKeyword(Map map) throws GlobalErrorInfoException,Exception {
+		String pagenum = (String) map.get("pagenum");
+		String pagesize = (String) map.get("pagesize");
+		String keyword = (String) map.get("keywords");
+		if( pagesize == null || "".equals(pagesize) || "null".equals(pagesize)||pagenum == null || "".equals(pagenum) || "null".equals(pagenum)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
-		for (Map map2 : list) {
-			String user_id = (String) map.get("user_id");
+		Integer start = 0;
+		
+		try{
+			Integer pagenums = Integer.valueOf(pagenum);
+			Integer pagesizes = Integer.valueOf(pagesize);
+			start = pagenums * pagesizes;
+		}catch(NumberFormatException e){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		map.put("start", start);
+		map.put("pagesize", Integer.valueOf(pagesize));
+		List<Map> list = articleDaoImpl.selectArticleBySearch(map);
+		for (Map temp : list) {
+			String user_id = (String) temp.get("user_id");
+			String classify_id = (String) temp.get("classify_id");
+			Map classify = classifyDaoImpl.selectContentByClassifyid(temp);
+			temp.put("classify_content", ( (String) classify.get("classify_content")));
 			Userinfo selectUserByUserid = userinfoDaoImpl.selectUserByUserid(user_id);
 			selectUserByUserid.setUser_password("");
-			map.put("userinfo", selectUserByUserid);
+			temp.put("userinfo", selectUserByUserid);
 		}
 		return list;
 	}

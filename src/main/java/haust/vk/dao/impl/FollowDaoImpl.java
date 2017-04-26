@@ -40,7 +40,7 @@ public class FollowDaoImpl implements FollowDao{
 	}
 	
 	@Override
-	public List<String> selectFollowNotifyByUseridHelp(String user_id) throws Exception {
+	public List<String> selectFollowNotifyByUseridHelp(Map user_id) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		List<String> list = os.selectList("selectFollowNotifyByUseridHelp", user_id);
 		os.close();

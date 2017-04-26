@@ -10,7 +10,7 @@
 			<choose>
 				<when test=" comment_read_time != null">comment_read_time = now()</when>
 				<when test=" follow_read_time != null">follow_read_time = now()</when>
-				<when test=" parise_read_time != null">parise_read_time = now()</when>
+				<when test=" praise_read_time != null">praise_read_time = now()</when>
 				<otherwise>
 					collect_read_time = now()
 				</otherwise>

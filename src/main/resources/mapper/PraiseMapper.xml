@@ -10,7 +10,7 @@
 		delete from articlepraise where user_id = #{user_id} and praise_user_id = #{praise_user_id} and article_id = #{article_id}
 	</delete>
 	
-	<select id="selectPraiseNotifyNumByUserid" parameterType="string"  resultType="java.util.Map">
+	<select id="selectPraiseNotifyNumByUserid" parameterType="string"  resultType="integer">
 		select count(*) from articlepraise where praise_create_time > (select praise_read_time from notifiinfo where user_id = #{user_id} ) and praise_user_id = #{user_id}
 	</select>
 	

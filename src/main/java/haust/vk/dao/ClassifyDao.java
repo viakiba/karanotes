@@ -40,5 +40,7 @@ public interface ClassifyDao {
 	 * @throws Exception
 	 */
 	public String getClassifyByContentAndUserid(Map userinfo) throws Exception;
+
+	public Map selectContentByClassifyid(Map map2) throws Exception;
 	
 }

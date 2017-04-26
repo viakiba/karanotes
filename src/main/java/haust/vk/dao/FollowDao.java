@@ -19,7 +19,7 @@ public interface FollowDao {
 
 	public List<Map> selectFollowListByUseridAndfollowUserid(Map map) throws Exception;
 
-	public List<String> selectFollowNotifyByUseridHelp(String user_id) throws Exception;
+	public List<String> selectFollowNotifyByUseridHelp(Map user_id) throws Exception;
 
 	public void updateNotifiinfo(String user_id) throws Exception;
 
