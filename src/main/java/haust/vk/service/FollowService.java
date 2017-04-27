@@ -15,6 +15,4 @@ public interface FollowService {
 
 	public List<Map> getFollowList(Map tokenid) throws Exception;
 
-	public List<Map> getFollowFansList(Map map) throws Exception;
-
 }

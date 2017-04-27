@@ -20,4 +20,8 @@ public interface PraiseDao {
 	public int selectPraiseNotifyNumByUserid(String user_id) throws Exception;
 
 	public List<Map> selectAllPraise(Map praiseMap) throws Exception;
+
+	public void deletePraiseByArticleId(String article_id) throws Exception;
+
+	public Map selectPraiseByUseridAndArticleid(Map map) throws Exception;
 }

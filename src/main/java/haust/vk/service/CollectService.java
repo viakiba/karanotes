@@ -13,6 +13,6 @@ public interface CollectService {
 
 	List<Map> selectCollectList(Map collectMap) throws Exception;
 
-	List<Map> selectCollectNotify(Map collectMap) throws Exception;
+	List<Map> getCollectNotify(Map collectMap) throws Exception;
 
 }

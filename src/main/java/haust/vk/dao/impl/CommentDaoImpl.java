@@ -55,4 +55,11 @@ public class CommentDaoImpl implements CommentDao{
 		os.close();
 		return mapList;
 	}
+	
+	@Override
+	public void deleteCommentByArticleid(String article_id) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteCommentByArticleid", article_id);
+		os.close();
+	}
 }

@@ -54,7 +54,7 @@
     <tx:advice id="tx" transaction-manager="dataSourceTransactionManager">
     	<tx:attributes>
     		<tx:method name="select*" read-only="true" />
-			<tx:method name="*" rollback-for="Throwable" propagation="NEVER"/>
+			<tx:method name="*" rollback-for="Throwable"/>
     	</tx:attributes> 
     </tx:advice>
     
@@ -66,10 +66,5 @@
     	<aop:advisor advice-ref="tx" pointcut-ref="serviceOperation"/>
     </aop:config>
     
-    <!-- 注册DAO -->
-    <!-- userDao -->
-   <!--  <bean id="userDao" class="haust.vk.dao.impl.UserDaoImpl">
-    	<property name="sqlSessionFactory" ref="sqlSessionFactory"></property>
-    </bean> -->
 </beans>
 

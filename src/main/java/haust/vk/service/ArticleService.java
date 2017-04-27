@@ -13,7 +13,7 @@ public interface ArticleService {
 
 	public Map updateArticle(Map articleMapInfo) throws Exception;
 
-	public Map selectArticleDetail(String articleid) throws Exception;
+	public Map selectArticleDetail(Map map) throws Exception;
 
 	public List<Articleabstract> selectArticleListByUserpath(String user_path,Integer beginnum,Integer shownum) throws Exception;
 

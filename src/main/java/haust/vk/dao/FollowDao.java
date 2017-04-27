@@ -11,7 +11,7 @@ public interface FollowDao {
 	
 	public void updateFollow(Map map) throws Exception;
 	
-	public void deleteFollow(String followid) throws Exception;
+	public void deleteFollow(Map map) throws Exception;
 	
 	public List<Map> selectFollowNotifyByUserid(List<String> list) throws Exception;
 	

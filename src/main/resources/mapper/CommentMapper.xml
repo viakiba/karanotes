@@ -21,4 +21,7 @@
 		select * from commentinfo where author_id = #{user_id} order by -comment_id asc limit #{start},#{pagesize}
 	</select>
 	
+	<delete id="deleteCommentByArticleid" parameterType="string">
+		delete from commentinfo where article_id = #{article_id}
+	</delete>
 </mapper>

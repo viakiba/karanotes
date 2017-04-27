@@ -33,7 +33,7 @@ public class FollowDaoImpl implements FollowDao{
 	}
 
 	@Override
-	public void deleteFollow(String followid) throws Exception {
+	public void deleteFollow(Map followid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
 		os.delete("deleteFollow",followid);
 		os.close();

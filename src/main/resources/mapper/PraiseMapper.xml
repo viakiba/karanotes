@@ -25,4 +25,12 @@
 	<select id="">
 		select * from articlepraise where author_id = #{user_id} order by -praise_id asc limit #{start},#{pagesize}	
 	</select>
+	
+	<delete id="deletePraiseByArticleId" parameterType="string">
+		delete from articlepraise where article_id = #{article_id}
+	</delete>
+	
+	<select id="selectPraiseByUseridAndArticleid" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articlepraise where article_id = #{article_id} and user_id = #{user_id}
+	</select>
 </mapper>

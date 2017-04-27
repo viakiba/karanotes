@@ -83,4 +83,18 @@ public class PraiseDaoImpl implements PraiseDao{
 		os.close();
 		return list;
 	}
+	
+	@Override
+	public void deletePraiseByArticleId(String article_id) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deletePraiseByArticleId", article_id);
+		os.close();
+	}
+	
+	@Override
+	public Map selectPraiseByUseridAndArticleid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		map = os.selectOne("selectPraiseByUseridAndArticleid", map);
+		return map;
+	}
 }

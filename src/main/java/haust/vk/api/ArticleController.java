@@ -121,14 +121,16 @@ public class ArticleController {
 	 * @throws GlobalErrorInfoException
 	 * 2017-04-26
 	 */
-	@RequestMapping(value="/extra/article/{articleid}",method=RequestMethod.GET)
-	public ResultBody selectByArticleid(@PathVariable String articleid) throws GlobalErrorInfoException{
-		Map articleMap = null;
-		if(articleid == null || "".equals(articleid) || "null".equals(articleid)){
+	@RequestMapping(value="/select/articledetail",method=RequestMethod.POST)
+	public ResultBody selectByArticleid(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMap = (Map) req.getAttribute("jsoninfo");
+		String articleid = (String) articleMap.get("article_id");
+		
+		if(articleid == null || "".equals(articleid) || "null".equals(articleid) ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
 		try {
-			articleMap = articleServiceImpl.selectArticleDetail(articleid);
+			articleMap = articleServiceImpl.selectArticleDetail(articleMap);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);

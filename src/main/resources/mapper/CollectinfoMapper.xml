@@ -7,18 +7,30 @@
 	</insert>
 	
 	<delete id="deleteCollect" parameterType="java.util.Map">
-		delete from collectinfo where collect_id = #{collect_id} and user_id=#{user_id}
+		delete from collectinfo where article_id = #{article_id} and user_id=#{user_id}
 	</delete>
 	
 	<select id="selectCollectNotifyByUserid" parameterType="string"  resultType="integer">
 		select count(*) from collectinfo where collect_create_time > (select collect_read_time from notifiinfo where user_id = #{user_id} ) and author_id = #{user_id}
 	</select>
 	
-	<select id="selectCollectListByUserid" parameterType="string" resultType="java.util.Map">
+	<select id="selectCollectListByUserid" parameterType="java.util.Map" resultType="java.util.Map">
 		select * from collectinfo where user_id = #{user_id} order by -collect_id asc limit #{start},#{pagesize}
 	</select>
 	
 	<select id="selectIsCollect" parameterType="java.util.Map" resultType="integer">
-		select count(collect_id) from collectinfo where  user_id = #{user_id} ,author_id = #{user_id}, article_id = #{user_id}
+		select count(collect_id) from collectinfo where  user_id = #{user_id} AND author_id = #{author_id} AND article_id = #{article_id}
+	</select>
+	
+	<select id="selectCollectNotifi" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from collectinfo where author_id = #{user_id} order by -collect_id asc limit #{start},#{pagesize}
+	</select>
+	
+	<delete id="deleteCollectByArticleid" parameterType="string">
+		delete from collectinfo where article_id = #{article_id}
+	</delete>
+	
+	<select id="selectCollectByUseridAndArticleid" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from collectinfo where article_id = #{article_id} and user_id = #{user_id}
 	</select>
 </mapper>

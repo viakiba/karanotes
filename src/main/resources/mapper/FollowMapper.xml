@@ -6,15 +6,15 @@
 	</insert>
 	
 	<update id="updateFollow" parameterType="java.util.Map">
-		update followinfo set is_eachother = #{is_eachother} where user_id = #{user_id} and follow_user_id = #{follow_user_id}
+		update followinfo set is_eachother = #{is_eachother} where user_id = #{follow_user_id} and follow_user_id = #{user_id}
 	</update>
 	
 	<delete id="deleteFollow" parameterType="string">
-		delete from followinfo where follow_id = #{follow_id}
+		delete from followinfo where user_id = #{user_id} and follow_user_id = #{follow_user_id}
 	</delete>
 	
 	<select id="selectFollowListByUseridHelp" parameterType="string" resultType="java.util.Map">
-		select * from followinfo where user_id = #{user_id}
+		select * from followinfo where follow_user_id = #{user_id} ORDER BY -follow_id
 	</select>
 	
 	<select id="selectFollowListByUserid" parameterType="string" resultType="java.util.Map">

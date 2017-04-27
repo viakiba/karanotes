@@ -16,4 +16,6 @@ public interface CommentDao {
 	public List<Map> selectAllCommentByArticleid(String userid) throws Exception;
 	
 	public List<Map> selectAllcommentNotifi(Map map) throws Exception;
+
+	public void deleteCommentByArticleid(String article_id) throws Exception;
 }

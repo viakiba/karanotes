@@ -26,10 +26,11 @@ public class CollectDaoImpl implements CollectDao{
 	}
 
 	@Override
-	public void deleteCollect(Map collectid) throws Exception {
+	public int deleteCollect(Map collectid) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		os.delete("deleteCollect",collectid);
+		int i = os.delete("deleteCollect",collectid);
 		os.close();
+		return i;
 	}
 
 	@Override
@@ -41,9 +42,9 @@ public class CollectDaoImpl implements CollectDao{
 	}
 
 	@Override
-	public List<Map> selectCollectListByUserid(String userid) throws Exception {
+	public List<Map> selectCollectListByUserid(Map map) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> list = os.selectList("selectCollectListByUserid", userid);
+		List<Map> list = os.selectList("selectCollectListByUserid", map);
 		os.close();
 		return list;
 	}
@@ -57,10 +58,24 @@ public class CollectDaoImpl implements CollectDao{
 	}
 	
 	@Override
-	public List<Map> selectPraiseNotifi(Map collectMap) throws Exception {
+	public List<Map> selectCollectNotifi(Map collectMap) throws Exception {
 		SqlSession os = sqlSessionFactory.openSession();
-		List<Map> list = os.selectList("selectCollectListByUserid", collectMap);
+		List<Map> list = os.selectList("selectCollectNotifi", collectMap);
 		os.close();
 		return list;
+	}
+	
+	@Override
+	public void deleteCollectByArticleid(String article_id) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		os.delete("deleteCollectByArticleid",article_id);
+		os.close();
+	}
+	
+	@Override
+	public Map selectCollectByUseridAndArticleid(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		map = os.selectOne("selectCollectByUseridAndArticleid", map);
+		return map;
 	}
 }

@@ -13,7 +13,10 @@ import org.springframework.stereotype.Service;
 
 import haust.vk.dao.ArticleDao;
 import haust.vk.dao.ClassifyDao;
+import haust.vk.dao.CollectDao;
+import haust.vk.dao.CommentDao;
 import haust.vk.dao.FollowDao;
+import haust.vk.dao.PraiseDao;
 import haust.vk.dao.UserinfoDao;
 import haust.vk.dao.UserloginDao;
 import haust.vk.entity.Articleabstract;
@@ -44,6 +47,12 @@ public class ArticleServiceImpl implements ArticleService{
 	private FollowDao followDaoImpl;
 	@Resource
 	private ClassifyDao classifyDaoImpl;
+	@Resource
+	private PraiseDao praiseDaoImpl;
+	@Resource
+	private CollectDao collectDaoImpl;
+	@Resource
+	private CommentDao commentDaoImpl;
 	
 	/**
 	 * 插入文章
@@ -108,7 +117,7 @@ public class ArticleServiceImpl implements ArticleService{
 	}
 
 	/**
-	 * 删除文章
+	 * 删除文章  缺陷
 	 */
 	@Override
 	public Map deleteArticle(Map articlemap) throws Exception {
@@ -116,6 +125,9 @@ public class ArticleServiceImpl implements ArticleService{
 		articleDaoImpl.deleteArticleabstract(article_id);
 		articleDaoImpl.deleteArticlecontent(article_id);
 		articleDaoImpl.deleteArticletag(article_id);
+		praiseDaoImpl.deletePraiseByArticleId(article_id);
+		collectDaoImpl.deleteCollectByArticleid(article_id);
+		commentDaoImpl.deleteCommentByArticleid(article_id);
 		return articlemap;
 	}
 
@@ -183,21 +195,43 @@ public class ArticleServiceImpl implements ArticleService{
 	 * 获取文章详情
 	 */
 	@Override
-	public Map selectArticleDetail(String articleid) throws Exception {
+	public Map selectArticleDetail(Map map) throws Exception {
+		Userinfo userinfo = userloginDaoImpl.selectUserloginByTokenid( ( (String) map.get("token_id")) );
+		String articleid = (String) map.get("article_id");
+		
 		String article_content = articleDaoImpl.selectArticleContent(articleid);
+		if(article_content == null){
+			return new HashMap<>();
+		}
 		Map abstractdetail = (Map) articleDaoImpl.selectArticleAbstract(articleid);
 		String tag_content = (String) articleDaoImpl.selectArticleTag(articleid);
 		
 		String classify_id = (String) abstractdetail.get("classify_id");
 		String classify_content = (String) articleDaoImpl.selectArticleClassify(classify_id);
-		
-		System.out.println(tag_content);
-		System.out.println("***************************");
-		System.out.println("{\"tag_content\":".length());
 		abstractdetail.put("article_content", article_content);
 		abstractdetail.put("tag_content", tag_content.substring(16,tag_content.length()-1));
 		abstractdetail.put("classify_content", classify_content);
 		
+		if(userinfo != null){
+			map.put("user_id", userinfo.getUser_id());
+			//判断是否点赞
+			Map temp = praiseDaoImpl.selectPraiseByUseridAndArticleid(map);
+			if(temp == null){
+				abstractdetail.put("is_praise", "0");
+			}else{
+				abstractdetail.put("is_praise", "1");
+			}
+			//判断是否收藏
+			temp = collectDaoImpl.selectCollectByUseridAndArticleid(map);
+			if(temp == null){
+				abstractdetail.put("is_collect", "0");
+			}else{
+				abstractdetail.put("is_collect", "1");
+			}
+		}else{
+			abstractdetail.put("is_praise", "0");
+			abstractdetail.put("is_collect", "0");
+		}
 		return abstractdetail;
 	}
 	
