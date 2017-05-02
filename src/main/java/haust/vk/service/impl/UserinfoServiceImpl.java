@@ -254,8 +254,16 @@ public class UserinfoServiceImpl implements UserinfoService{
 		String user_id = (String) infomap.get("user_id");
 		List<Map> list = userinfoDaoImpl.selectUserList(infomap);
 		
-		
 		String count = userinfoDaoImpl.selectCount(infomap);
+		
+		if(list.size()==0){
+			infomap.clear();
+			infomap.put("count", count);
+			infomap.put("userlist", list);
+			return infomap;
+		}
+		
+		
 		
 		List<String> listUserid = new ArrayList<String>();
 		

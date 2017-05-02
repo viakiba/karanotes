@@ -29,7 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins="*",maxAge=3600,methods={RequestMethod.GET, RequestMethod.POST})
 public class UserInfoComtroller {
 	private static Logger logger = Logger.getLogger(UserInfoComtroller.class);
 	@Resource
