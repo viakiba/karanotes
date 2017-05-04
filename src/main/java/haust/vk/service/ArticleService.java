@@ -22,5 +22,7 @@ public interface ArticleService {
 	public Map selectArticleByUserClassifyArticleList(String userpath,String classifyid, Integer beginnum, Integer shownum) throws Exception;
 	
 	public List<Map>  selectArticleListByKeyword(Map map) throws Exception;
+
+	public List<Map> selectIndexArticleList(Map jsoninfo) throws Exception;
 	
 }

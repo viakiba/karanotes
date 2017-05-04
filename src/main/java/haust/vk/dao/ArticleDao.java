@@ -84,5 +84,7 @@ public interface ArticleDao {
 	public List<Map> selectArticleBySearch(Map map) throws Exception;
 
 	public List<Map> selectArticleByListUserid(Map res) throws Exception;
+
+	public List<Map> selectIndexArticleList(Map map) throws Exception;
 	
 }

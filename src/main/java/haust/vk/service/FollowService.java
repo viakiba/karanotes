@@ -5,7 +5,7 @@ import java.util.Map;
 
 public interface FollowService {
 
-	public void insertFollow(Map jsoninfo) throws Exception;
+	public String insertFollow(Map jsoninfo) throws Exception;
 
 	public void deleteFollow(Map jsoninfo) throws Exception;
 

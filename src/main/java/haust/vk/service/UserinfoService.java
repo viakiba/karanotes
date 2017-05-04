@@ -35,4 +35,6 @@ public interface UserinfoService {
 	public Map selectUserList(Map infoMap) throws Exception;
 
 	public Map updateUserFindPass(Map jsonmap) throws Exception;
+
+	public Userinfo selectByUserid(String userid) throws Exception;
 }

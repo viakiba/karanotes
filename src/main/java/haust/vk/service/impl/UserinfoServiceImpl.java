@@ -242,6 +242,11 @@ public class UserinfoServiceImpl implements UserinfoService{
 		return jsonmap;
 	}
 	 
+	 @Override
+	public Userinfo selectByUserid(String userid) throws Exception {
+		Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(userid);
+		return userinfo;
+	}
 	//用户列表
 	@Override
 	public Map selectUserListByTokenid(Map infomap) throws Exception {

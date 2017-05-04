@@ -55,6 +55,27 @@ public class UserInfoComtroller {
 		}
 	}
 	
+	@RequestMapping(value="/extra/user/userinfo",method=RequestMethod.GET)
+	public ResultBody getUserinfo(HttpServletRequest req, HttpServletResponse resp) throws UnsupportedEncodingException, GlobalErrorInfoException{
+		String userid = req.getParameter("userid");
+		logger.info(userid);
+		Userinfo userinfo = null;
+		try{
+			userinfo = userinfoServiceImpl.selectByUserid(userid);
+		}catch(Exception e){
+			logger.error("checkEmail", e);
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+		}
+		logger.info(userinfo);
+		if(userinfo != null){
+			Map map = new HashMap<>();
+			map.put("userinfo", userinfo);
+			return new ResultBody(map);
+		}else{
+			throw new GlobalErrorInfoException(SuccessMessageCodeInfoEnum.FAIL_CODE_MESSAGE);
+		}
+	}
+	
 	@RequestMapping(value="/select/user/register",method=RequestMethod.POST)
 	public ResultBody registerUserinfo(HttpServletRequest req, HttpServletResponse resp) throws Exception{
 		Map userinfoMap = (Map) req.getAttribute("jsoninfo");

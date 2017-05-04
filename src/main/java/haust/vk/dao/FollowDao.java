@@ -29,4 +29,6 @@ public interface FollowDao {
 
 	public List<Map> selectFollowList(Map user_id) throws Exception;
 
+	public List<String> selectFollowNotifyByUseridHelp2(Map map) throws Exception;
+
 }

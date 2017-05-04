@@ -40,7 +40,7 @@ public class FollowServiceImpl implements FollowService{
 	 * 添加关注
 	 */
 	@Override
-	public void insertFollow(Map jsoninfo) throws Exception {
+	public String insertFollow(Map jsoninfo) throws Exception {
 		
 		String follow_userid = (String) jsoninfo.get("follow_user_id");
 		Integer is_eachother = Integer.valueOf( (String) jsoninfo.get("is_eachother"));
@@ -58,6 +58,7 @@ public class FollowServiceImpl implements FollowService{
 		long nextId = snowflakeIdUtil.nextId();
 		jsoninfo.put("follow_id", String.valueOf(nextId));
 		followDaoImpl.insertFollow(jsoninfo);
+		return String.valueOf(nextId);
 	}
 	
 	/**

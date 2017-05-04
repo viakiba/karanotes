@@ -27,7 +27,7 @@ import haust.vk.service.UserinfoService;
 import haust.vk.service.impl.FaqinfoServiceImpl;
 
 @RestController
-@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins="*",maxAge=3600,methods={RequestMethod.GET, RequestMethod.POST})
 public class FaqController {
 	
 	private static Logger logger = Logger.getLogger(FaqController.class);

@@ -50,6 +50,10 @@
 		select user_id from followinfo where follow_user_id = #{user_id}  
 			<if test=" follow_create_time != null"> and follow_create_time > ( select follow_read_time from notifiinfo where user_id = #{user_id} ) </if> 
 	</select>
+		
+	<select id="selectFollowNotifyByUseridHelp2" parameterType="java.util.Map" resultType="string">
+		select follow_user_id from followinfo where user_id = #{user_id}  
+	</select>
 	
 	<select id="selectFollowNotifyByUserid" resultType="java.util.Map">
 		select * from userinfo where user_id in 

@@ -28,7 +28,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins="*",maxAge=3600,methods={RequestMethod.GET, RequestMethod.POST})
 public class ArticleController {
 	private static Logger logger = Logger.getLogger(ArticleController.class);
 	@Resource
@@ -121,14 +121,16 @@ public class ArticleController {
 	 * @throws GlobalErrorInfoException
 	 * 2017-04-26
 	 */
-	@RequestMapping(value="/select/articledetail",method=RequestMethod.POST)
-	public ResultBody selectByArticleid(HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
-		Map articleMap = (Map) req.getAttribute("jsoninfo");
-		String articleid = (String) articleMap.get("article_id");
-		
-		if(articleid == null || "".equals(articleid) || "null".equals(articleid) ){
+	@RequestMapping(value="/extra/articledetail/{article_id}")
+	public ResultBody selectByArticleid(@PathVariable String article_id,String tokenid,HttpServletRequest req,HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map articleMap = new HashMap();
+		//String articleid = (String) articleMap.get("article_id");
+		if(article_id == null || "".equals(article_id.trim()) || "null".equals(article_id) ){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
+		articleMap.put("article_id", article_id);
+		articleMap.put("token_id", tokenid);
+		
 		try {
 			articleMap = articleServiceImpl.selectArticleDetail(articleMap);
 		} catch (Exception e) {
@@ -232,5 +234,23 @@ public class ArticleController {
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
 		return new ResultBody(articleMap);
+	}
+	
+	/**
+	 * 
+	 */
+	@RequestMapping(value="/select/index/articlelist",method=RequestMethod.POST)
+	public ResultBody selectIndexArticleList(HttpServletRequest req, HttpServletResponse resp) throws GlobalErrorInfoException{
+		Map jsoninfo = (Map) req.getAttribute("jsoninfo");
+		List<Map>  list = null;
+		try {
+			list = articleServiceImpl.selectIndexArticleList(jsoninfo);
+		}catch (GlobalErrorInfoException e) {
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
+		}
+		return new ResultBody(list);
 	}
 }

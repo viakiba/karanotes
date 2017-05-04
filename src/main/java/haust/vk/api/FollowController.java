@@ -30,7 +30,7 @@ import haust.vk.service.FollowService;
  *
  */
 @RestController
-@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins="*",maxAge=3600,methods={RequestMethod.GET, RequestMethod.POST})
 public class FollowController {
 	private static Logger logger = Logger.getLogger(FollowController.class);
 	
@@ -53,6 +53,7 @@ public class FollowController {
 		String tokenid = (String) jsoninfo.get("token_id");
 		String follow_userid = (String) jsoninfo.get("follow_user_id");
 		Integer is_eachother = null;
+		String follow_id = null;
 		try{	
 			is_eachother = Integer.valueOf( (String) jsoninfo.get("is_eachother") );
 		}catch( NumberFormatException e){
@@ -63,13 +64,15 @@ public class FollowController {
 		}
 		jsoninfo.put("user_id", userinfo.getUser_id());
 		try {
-			followServiceImpl.insertFollow(jsoninfo);
+			follow_id = followServiceImpl.insertFollow(jsoninfo);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.info(e);
 			throw new GlobalErrorInfoException(NodescribeErrorInfoEnum.NO_DESCRIBE_ERROR);
 		}
-		return new ResultBody(new HashMap());
+		jsoninfo.clear();
+		jsoninfo.put("follow_id", follow_id);
+		return new ResultBody(jsoninfo);
 	}
 	
 	/**

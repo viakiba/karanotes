@@ -140,8 +140,12 @@ public class CollectServiceImpl implements CollectService{
 		if(list.size() > 0){
 			for (Map map : list) {
 				String article_id = (String) map.get("article_id");
+				String author_id = (String) map.get("author_id");
+				Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(author_id);
+				userinfo.setUser_password("");
 				Map selectArticleAbstract = articleDaoImpl.selectArticleAbstract(article_id);
-				selectArticleAbstract.put("collect_create_time", String.valueOf( map.get("collect_create_time") ));
+				selectArticleAbstract.put("userinfo", userinfo);
+				//selectArticleAbstract.put("collect_create_time", String.valueOf( map.get("collect_create_time") ));
 				lists.add(selectArticleAbstract);
 			}
 			return lists;

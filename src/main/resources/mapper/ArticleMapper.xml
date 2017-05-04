@@ -119,4 +119,8 @@
 			</if>
 			ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
 	</select>
+	
+	<select id="selectIndexArticleList" parameterType="java.util.Map" resultType="java.util.Map">
+		select * from articleabstract ORDER BY -article_id ASC LIMIT #{start},#{pagesize}
+	</select>
 </mapper>

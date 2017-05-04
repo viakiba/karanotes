@@ -23,7 +23,7 @@ import haust.vk.result.ResultBody;
 import haust.vk.service.CollectService;
 
 @RestController
-@CrossOrigin(maxAge=800,origins="*",methods={RequestMethod.GET, RequestMethod.POST})
+@CrossOrigin(origins="*",maxAge=3600,methods={RequestMethod.GET, RequestMethod.POST})
 public class CollectController {
 	
 	@Resource

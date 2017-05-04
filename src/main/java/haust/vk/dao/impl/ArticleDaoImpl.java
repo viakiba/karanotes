@@ -176,4 +176,12 @@ public class ArticleDaoImpl implements ArticleDao{
 		os.close();
 		return list;
 	}
+	
+	@Override
+	public List<Map> selectIndexArticleList(Map map) throws Exception {
+		SqlSession os = sqlSessionFactory.openSession();
+		List<Map> list = os.selectList("selectIndexArticleList", map);
+		os.close();
+		return list;
+	}
 }

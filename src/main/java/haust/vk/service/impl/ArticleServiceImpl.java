@@ -72,10 +72,11 @@ public class ArticleServiceImpl implements ArticleService{
 		String classify_id = (String) articleMapInfo.get("classify_id");
 		String user_id = (String) articleMapInfo.get("user_id");
 		String article_attachment = (String) articleMapInfo.get("article_attachment");
-		
+		String selectUseridByTokenid = userloginDaoImpl.selectUseridByTokenid(token_id);
+		Userinfo selectUserByUserid = userinfoDaoImpl.selectUserByUserid(selectUseridByTokenid);
 		String article_show_img = (String) articleMapInfo.get("article_show_img");
 		if( article_show_img== null || "".equals(article_show_img) || "null".equals(article_show_img)){
-			article_show_img = user_id+".png";
+			article_show_img = "http://karanotes.viakiba.cn/karanotes/file/imgs/backlogo/"+selectUserByUserid.getUser_background_img();
 		}
 		
 		//简要
@@ -196,7 +197,15 @@ public class ArticleServiceImpl implements ArticleService{
 	 */
 	@Override
 	public Map selectArticleDetail(Map map) throws Exception {
-		Userinfo userinfo = userloginDaoImpl.selectUserloginByTokenid( ( (String) map.get("token_id")) );
+		String token_id = (String) map.get("token_id");
+		Userinfo userinfo ;
+		
+		if(token_id == null || "".equals(token_id) || "null".equals(token_id)){
+			userinfo = null;
+		}else{
+			userinfo = userloginDaoImpl.selectUserloginByTokenid( token_id );
+		}
+		
 		String articleid = (String) map.get("article_id");
 		
 		String article_content = articleDaoImpl.selectArticleContent(articleid);
@@ -282,15 +291,15 @@ public class ArticleServiceImpl implements ArticleService{
 		Integer pagesize = null;
 		String keyword = (String) map.get("keywords");
 		try{
-			pagenum = Integer.valueOf( (String) map.get("pagenum"));
-		    pagesize = Integer.valueOf((String) map.get("pagesize"));
+			pagenum =  Integer.valueOf( (String) map.get("pagenum") );
+		    pagesize = Integer.valueOf( (String) map.get("pagesize") );
 		}catch (NumberFormatException e){
 			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
 		}
 		
 		String userid = (String) map.get("user_id");
-		List<String> followuserlist = followDaoImpl.selectFollowNotifyByUseridHelp(map);
-		followuserlist.add(userid);
+		List<String> followuserlist = followDaoImpl.selectFollowNotifyByUseridHelp2(map);
+		//followuserlist.add(userid);
 			if(followuserlist.size() > 0){
 				res.put("start", pagenum*pagesize);
 				res.put("pagesize", pagesize);
@@ -307,6 +316,7 @@ public class ArticleServiceImpl implements ArticleService{
 					System.out.println(temp.toString());
 					String user_id = (String) temp.get("user_id");
 					Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(user_id);
+					userinfo.setUser_password("");
 					temp.put("userinfo", userinfo);
 				}
 				
@@ -345,6 +355,39 @@ public class ArticleServiceImpl implements ArticleService{
 			selectUserByUserid.setUser_password("");
 			temp.put("userinfo", selectUserByUserid);
 		}
+		return list;
+	}
+	
+	@Override
+	public List<Map> selectIndexArticleList(Map map) throws Exception {
+		String pagenum = (String) map.get("pagenum");
+		String pagesize = (String) map.get("pagesize");
+		
+		if( pagesize == null || "".equals(pagesize) || "null".equals(pagesize)||pagenum == null || "".equals(pagenum) || "null".equals(pagenum)){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		Integer start = 0;
+		
+		try{
+			Integer pagenums = Integer.valueOf(pagenum);
+			Integer pagesizes = Integer.valueOf(pagesize);
+			start = pagenums * pagesizes;
+		}catch(NumberFormatException e){
+			throw new GlobalErrorInfoException(JsonKeyValueErrorInfoEnum.JSON_KEYVALUE_ERROR);
+		}
+		
+		map.put("start", start);
+		map.put("pagesize", Integer.valueOf(pagesize));
+		
+		List<Map> list = articleDaoImpl.selectIndexArticleList(map);
+		
+		for (Map temp : list) {
+			String user_id = (String) temp.get("user_id");
+			Userinfo userinfo = userinfoDaoImpl.selectUserByUserid(user_id);
+			userinfo.setUser_password("");
+			temp.put("userinfo", userinfo);
+		}
+		
 		return list;
 	}
 }
