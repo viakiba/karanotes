@@ -3,7 +3,7 @@
 <mapper namespace="haust.vk.dao.ArticleDao" >
 	<insert id="insertArticleabstract" parameterType="haust.vk.entity.Articleabstract">
 		insert into articleabstract(article_id,article_title,article_show_img,classify_id,
-				<if test=" abstract_content != null ">abstract_content</if>
+				<if test=" abstract_content != null ">abstract_content,</if>
 				user_id,article_attachment) 
 				values(#{article_id},#{article_title},#{article_show_img},#{classify_id},
 				<if test=" abstract_content != null ">#{abstract_content},</if>
