@@ -1,0 +1,10 @@
+文件硬盘存储位置：
+├─usr
+   ├─local
+    ├─karanotes
+    │  ├─article   :文章图片
+    │  ├─backlogo  ：用户背景图
+    │  ├─logo      ：用户头像
+    │  └─logs      ：系统log
+
+    
